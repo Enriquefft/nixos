@@ -1,13 +1,10 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+# Options: https://search.nixos.org/options
 
-{ inputs, config, pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
 
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     #./suspend.nix
     ./applications.nix
@@ -17,33 +14,37 @@
 
   # use the systemd-boot EFI boot loader.
   boot = {
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
- 
-    # kernelPackages = pkgs.linuxPackages_latest;
+
+    loader = {
+
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
-    # plymouth.enable = true;
+    plymouth.enable = true;
 
   };
 
-#  xdg = {
-#    autostart.enable = true;
-#    portal = {
-#
-#      extraPortals = [
-#        pkgs.xdg-desktop-portal-gtk
-#
-#      ];
-#
-#      enable = true;
-#    };
-#  };
-#
-  networking = {
+  xdg = {
+    autostart.enable = true;
+    portal = {
+      extraPortals = [
+        # https://wiki.hyprland.org/hyprland-wiki/pages/Useful-Utilities/Hyprland-desktop-portal/
+        pkgs.xdg-desktop-portal-gtk
+      ];
+    };
+  };
 
+  networking = {
     hostName = "nixos";
     networkmanager.enable = true;
+    firewall.enable = true;
+
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
 
   };
 
@@ -55,28 +56,27 @@
 
   };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "es_PE.UTF-8/UTF-8" ];
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "en_US.UTF-8/UTF-8" "es_PE.UTF-8/UTF-8" ];
+  };
 
- # qt = {
- #   enable = true;
- #   platformTheme = "gtk2";
- #   style = "gtk2";
- # };
+  console = {
+    font = "Lat2-Terminus16";
+    useXkbConfig = true; # use xkb.options in tty.
+  };
+
+  qt = {
+    enable = true;
+    # TODO: rice xd
+    platformTheme = "gtk2";
+    style = "gtk2";
+  };
 
   hardware = {
 
-pulseaudio.enable = false;
+    pulseaudio.enable = false;
     bluetooth = {
 
       enable = true;
@@ -88,42 +88,42 @@ pulseaudio.enable = false;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    #graphics = {
-      #enable = true;
-      #enable32Bit = true;
-#
-    #};
-#
-    #nvidia = {
-      #modesetting.enable = true;
-#
-      #powerManagement = {
-#
-        #enable = false;
-#
-        #finegrained = true;
-      #};
-#
-      #prime = {
-#
-        #intelBusId = "PCI:0:2:0";
-        #nvidiaBusId = "PCI:1:0:0";
-#
-        #offload = {
-#
-          #enable = true;
-          #enableOffloadCmd = true;
-        #};
-#
-      #};
-#
-      #open = false;
-#
-      #nvidiaSettings = true;
-#
-      #package = config.boot.kernelPackages.nvidiaPackages.stable;
-#
-    #};
+    # TODO: configure nvidia
+    #
+    # graphics = {
+    #   enable = true;
+    #   enable32Bit = true;
+    # };
+    # nvidia = {
+    #   modesetting.enable = true;
+    #
+    #   powerManagement = {
+    #
+    #     enable = false;
+    #
+    #     finegrained = true;
+    #   };
+    #
+    #   prime = {
+    #
+    #     intelBusId = "PCI:0:2:0";
+    #     nvidiaBusId = "PCI:1:0:0";
+    #
+    #     offload = {
+    #
+    #       enable = true;
+    #       enableOffloadCmd = true;
+    #     };
+    #
+    #   };
+    #
+    #   open = false;
+    #
+    #   nvidiaSettings = true;
+    #
+    #   package = config.boot.kernelPackages.nvidiaPackages.stable;
+    #
+    # };
 
   };
 
@@ -133,10 +133,9 @@ pulseaudio.enable = false;
 
     defaultUserShell = pkgs.zsh;
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
     users.hybridz = {
       isNormalUser = true;
-description="Enrique Flores";
+      description = "Enrique Flores";
       extraGroups = [ "wheel" "input" "networkmanager" "audio" "video" ];
     };
 
@@ -149,39 +148,21 @@ description="Enrique Flores";
 
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-
   fonts.packages = with pkgs;
-    [
-
-      (nerdfonts.override { fonts = [ "FiraCode" ]; })
-
-    ];
+    [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
 
   environment = {
-
     localBinInPath = true;
-
     pathsToLink = [ "/share/zsh" ];
 
   };
 
   nixpkgs = {
-
     config = {
       allowUnfree = true;
 
     };
   };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   programs = {
 
@@ -205,7 +186,10 @@ description="Enrique Flores";
     zsh.enable = true;
     firefox = {
       enable = true;
-     # preferences = { "widget.use-xdg-desktop-portal.file-picker" = 1; };
+      preferences = {
+        "widget.use-xdg-desktop-portal.file-picker" = 1;
+        "browser.fullscreen.autohide" = false;
+      };
     };
     waybar = {
       enable = true;
@@ -214,7 +198,6 @@ description="Enrique Flores";
 
   };
 
-  # List services that you want to enable:
   services = {
 
     #udev = {
@@ -223,7 +206,7 @@ description="Enrique Flores";
     #  '';
     #};
 
-    #upower.enable = true;
+    upower.enable = true;
 
     dbus = { enable = true; };
 
@@ -273,26 +256,23 @@ description="Enrique Flores";
       };
     };
 
-    # Configure keymap in X11
-
     # Enable CUPS to print documents.
     printing.enable = true;
-
-    # Enable touchpad support (enabled default in most desktopManager).
 
     # Enable the OpenSSH daemon.
     openssh.enable = true;
 
+    # touchpad support
     libinput.enable = true;
+
+    # Configure keymap in X11
     xserver = {
-xkb = {
-layout= "us";
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
 
-variant = "";
-};
-
-
-};
+    };
 
     pipewire = {
 
@@ -310,27 +290,20 @@ variant = "";
     # prevent overheating on intel CPU
     thermald.enable = true;
 
- #   auto-cpufreq = {
- #     enable = true;
- #     settings = {
- #       battery = {
- #         governor = "powersave";
- #         turbo = "never";
- #       };
-#        charger = {
-#          governor = "powersave";
-#          turbo = "never";
-#        };
-#      };
-#    };
-};
-
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "powersave";
+          turbo = "never";
+        };
+      };
+    };
+  };
 
   security = {
 
@@ -354,11 +327,6 @@ variant = "";
 
     };
   };
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.

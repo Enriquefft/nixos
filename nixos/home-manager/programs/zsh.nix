@@ -28,7 +28,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    loginExtra = "Hyprland";
+    loginExtra = ''[ "$(tty)" = "/dev/tty1" ] && Hyprland'';
 
     shellAliases = rec {
 
