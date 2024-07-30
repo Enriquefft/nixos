@@ -79,6 +79,8 @@
       zsh-fix-hist =
         "strings ${history.path} > ${history.path} && fc -R ${history.path}";
 
+      clone = "git clone";
+
     };
 
     history = {
