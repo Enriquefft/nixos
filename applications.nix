@@ -38,8 +38,6 @@
 
       # Desktop Environment Tools
       xfce.thunar
-      hyprpicker
-      mako
       wl-clipboard
       pavucontrol
       pamixer
@@ -76,7 +74,7 @@
 
       # Hyprland Utilities
       hyprshot
-      hyprpaper
+      hyprpicker
 
       # Miscellaneous
       glib

@@ -1,22 +1,19 @@
 # Options: https://search.nixos.org/options
-
 { inputs, pkgs, ... }:
 
 {
 
   imports = [
     ./hardware-configuration.nix
-    #./suspend.nix
+    ./suspend.nix
     ./applications.nix
     ./nix.nix
     inputs.home-manager.nixosModules.default
   ];
 
-  # use the systemd-boot EFI boot loader.
   boot = {
 
     loader = {
-
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
@@ -191,10 +188,6 @@
         "browser.fullscreen.autohide" = false;
       };
     };
-    waybar = {
-      enable = true;
-
-    };
 
   };
 
@@ -212,11 +205,11 @@
 
     flatpak.enable = true;
 
-    #batteryNotifier = {
-    #  enable = true;
-    #  notifyCapacity = 15;
-    #  suspendCapacity = 4;
-    #};
+    batteryNotifier = {
+      enable = true;
+      notifyCapacity = 15;
+      suspendCapacity = 7;
+    };
 
     blueman.enable = true;
 
