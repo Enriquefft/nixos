@@ -2,14 +2,14 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
 
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./suspend.nix
+    #./suspend.nix
     ./applications.nix
     ./nix.nix
     inputs.home-manager.nixosModules.default
@@ -19,39 +19,30 @@
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-
-    extraModprobeConfig = ''
-      options snd-intel-dspcfg dsp_driver=1
-    '';
-
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = [ "coretemp" ];
+ 
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
     # plymouth.enable = true;
 
-    # initrd.verbose = false;
-    # consoleLogLevel = 0;
-
   };
 
-  xdg = {
-    autostart.enable = true;
-    portal = {
-
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-
-      ];
-
-      # config = { common.default = "gtk"; };
-
-      enable = true;
-    };
-  };
-
+#  xdg = {
+#    autostart.enable = true;
+#    portal = {
+#
+#      extraPortals = [
+#        pkgs.xdg-desktop-portal-gtk
+#
+#      ];
+#
+#      enable = true;
+#    };
+#  };
+#
   networking = {
 
-    hostName = "hybridz_nixos";
+    hostName = "nixos";
     networkmanager.enable = true;
 
   };
@@ -77,14 +68,15 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  qt = {
-    enable = true;
-    platformTheme = "gtk2";
-    style = "gtk2";
-  };
+ # qt = {
+ #   enable = true;
+ #   platformTheme = "gtk2";
+ #   style = "gtk2";
+ # };
 
   hardware = {
 
+pulseaudio.enable = false;
     bluetooth = {
 
       enable = true;
@@ -96,42 +88,42 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-
-    };
-
-    nvidia = {
-      modesetting.enable = true;
-
-      powerManagement = {
-
-        enable = false;
-
-        finegrained = true;
-      };
-
-      prime = {
-
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-
-        offload = {
-
-          enable = true;
-          enableOffloadCmd = true;
-        };
-
-      };
-
-      open = false;
-
-      nvidiaSettings = true;
-
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-    };
+    #graphics = {
+      #enable = true;
+      #enable32Bit = true;
+#
+    #};
+#
+    #nvidia = {
+      #modesetting.enable = true;
+#
+      #powerManagement = {
+#
+        #enable = false;
+#
+        #finegrained = true;
+      #};
+#
+      #prime = {
+#
+        #intelBusId = "PCI:0:2:0";
+        #nvidiaBusId = "PCI:1:0:0";
+#
+        #offload = {
+#
+          #enable = true;
+          #enableOffloadCmd = true;
+        #};
+#
+      #};
+#
+      #open = false;
+#
+      #nvidiaSettings = true;
+#
+      #package = config.boot.kernelPackages.nvidiaPackages.stable;
+#
+    #};
 
   };
 
@@ -144,6 +136,7 @@
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.hybridz = {
       isNormalUser = true;
+description="Enrique Flores";
       extraGroups = [ "wheel" "input" "networkmanager" "audio" "video" ];
     };
 
@@ -176,10 +169,6 @@
 
   nixpkgs = {
 
-    overlays = [
-      inputs.nix-xilinx.overlay
-
-    ];
     config = {
       allowUnfree = true;
 
@@ -216,7 +205,7 @@
     zsh.enable = true;
     firefox = {
       enable = true;
-      preferences = { "widget.use-xdg-desktop-portal.file-picker" = 1; };
+     # preferences = { "widget.use-xdg-desktop-portal.file-picker" = 1; };
     };
     waybar = {
       enable = true;
@@ -228,23 +217,23 @@
   # List services that you want to enable:
   services = {
 
-    udev = {
-      extraRules = ''
-        ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
-      '';
-    };
+    #udev = {
+    #  extraRules = ''
+    #    ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
+    #  '';
+    #};
 
-    upower.enable = true;
+    #upower.enable = true;
 
     dbus = { enable = true; };
 
     flatpak.enable = true;
 
-    batteryNotifier = {
-      enable = true;
-      notifyCapacity = 15;
-      suspendCapacity = 4;
-    };
+    #batteryNotifier = {
+    #  enable = true;
+    #  notifyCapacity = 15;
+    #  suspendCapacity = 4;
+    #};
 
     blueman.enable = true;
 
@@ -290,47 +279,52 @@
     printing.enable = true;
 
     # Enable touchpad support (enabled default in most desktopManager).
-    libinput.enable = true;
 
     # Enable the OpenSSH daemon.
     openssh.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+
+    libinput.enable = true;
+    xserver = {
+xkb = {
+layout= "us";
+
+variant = "";
+};
+
+
+};
 
     pipewire = {
 
       enable = true;
-      audio.enable = true;
 
       pulse.enable = true;
-
-      wireplumber.enable = true;
 
       alsa = {
         enable = true;
         support32Bit = true;
       };
-      jack.enable = true;
 
     };
 
     # prevent overheating on intel CPU
     thermald.enable = true;
 
-    auto-cpufreq = {
-      enable = true;
-      settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "powersave";
-          turbo = "never";
-        };
-      };
-    };
+ #   auto-cpufreq = {
+ #     enable = true;
+ #     settings = {
+ #       battery = {
+ #         governor = "powersave";
+ #         turbo = "never";
+ #       };
+#        charger = {
+#          governor = "powersave";
+#          turbo = "never";
+#        };
+#      };
+#    };
+};
 
-  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -384,7 +378,7 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system = {
     # autoUpgrade.enable = true;
-    stateVersion = "23.11"; # DONT TOUCH
+    stateVersion = "24.05"; # DONT TOUCH
   };
 
 }

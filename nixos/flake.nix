@@ -3,28 +3,22 @@
 
   inputs = {
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     nix-index-database = {
-
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {
-      url = "github:nix-community/nixvim";
-
-    };
-
-    nix-xilinx = {
-      # Recommended if you also override the default nixpkgs flake, common among
-      # nixos-unstable users:
+      #url = "github:nix-community/nixvim";
+     url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
-      url = "gitlab:doronbehar/nix-xilinx";
+
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -33,7 +27,7 @@
 
     {
 
-      nixosConfigurations.hybridznixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix

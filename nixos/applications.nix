@@ -14,7 +14,6 @@
     systemPackages = with pkgs; [
 
       gparted
-      stow
 
       xfce.thunar
 
@@ -32,7 +31,10 @@
       killall
 
       discord
-      vesktop
+
+hwinfo
+
+pciutils
 
       mako
 
@@ -78,9 +80,6 @@
       pavucontrol
 
       libreoffice-qt
-      hunspell
-      hunspellDicts.en_US
-      hunspellDicts.es_PE
     ];
   };
 }
