@@ -54,9 +54,9 @@
       up = "doas nixos-rebuild switch";
 
       # Config aliases
-      nix-conf = "vim ~/etc/nixos/configuration.nix";
-      nix-apps = "vim ~/etc/nixos/applications.nix";
-      zsh-conf = "vim ~/etc/nixos/home-manager/programs/zsh.nix";
+      nix-conf = "vim /etc/nixos/configuration.nix";
+      nix-apps = "vim /etc/nixos/applications.nix";
+      zsh-conf = "vim /etc/nixos/home-manager/programs/zsh.nix";
 
       flake-init =
         "nix flake new -t github:enriquefft/flake-template#dev-shell";

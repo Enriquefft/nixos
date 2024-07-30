@@ -20,8 +20,6 @@
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
-    plymouth.enable = true;
-
   };
 
   xdg = {

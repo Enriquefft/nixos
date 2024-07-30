@@ -2,6 +2,7 @@
 
   programs.waybar = {
     enable = true;
+    systemd.enable = true; # Automatically start with the system
 
     settings = {
 
