@@ -7,6 +7,7 @@
     ./hardware-configuration.nix
     ./suspend.nix
     ./applications.nix
+    ./scripts.nix
     ./nix.nix
     inputs.home-manager.nixosModules.default
   ];
@@ -21,6 +22,11 @@
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   };
+
+  systemd.tmpfiles.rules = [
+    # give hybridz read+write permits on /etc/nixos
+    "A+       /etc/nixos -    -    -     -           u:hybridz:rwx"
+  ];
 
   xdg = {
     autostart.enable = true;

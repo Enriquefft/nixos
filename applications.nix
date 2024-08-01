@@ -2,7 +2,6 @@
 
 {
 
-  # TODO: Fix pkgs listing
   environment = rec {
 
     # Generates a text file listing all installed system packages, sorted and unique.
