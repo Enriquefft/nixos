@@ -14,10 +14,15 @@
 
     systemPackages = with pkgs; [
 
-      # System Utilities
-      gparted
+      # System information
       hwinfo
       pciutils
+      lshw
+      dmidecode
+      inxi
+
+      # System Utilities
+      gparted
       killall
       wget
       vim

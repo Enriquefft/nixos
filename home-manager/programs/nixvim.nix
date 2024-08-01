@@ -3,14 +3,14 @@
 {
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    ./autocommands.nix
-    ./completion.nix
-    ./keymappings.nix
-    ./options.nix
-    ./plugins
-    ./filetype.nix
-    ./todo.nix
-    ./extra.nix
+    ./nixvim/autocommands.nix
+    ./nixvim/completion.nix
+    ./nixvim/keymappings.nix
+    ./nixvim/options.nix
+    ./nixvim/plugins
+    ./nixvim/filetype.nix
+    ./nixvim/todo.nix
+    ./nixvim/extra.nix
   ];
 
   home.shellAliases.v = "nvim";

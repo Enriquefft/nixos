@@ -5,7 +5,7 @@
 
     settings = {
       # Monitor configuration
-      monitor = ",preferred,auto,1.6";
+      monitor = ",preferred,auto,1.5";
 
       # Applications to execute once at startup
       exec-once = [ "firefox" ];
