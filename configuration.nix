@@ -1,5 +1,5 @@
 # Options: https://search.nixos.org/options
-{ inputs, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
 
@@ -19,15 +19,16 @@
       efi.canTouchEfiVariables = true;
     };
 
-    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
-    plymouth = {
-      enable = true;
-      font =
-        "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
-      themePackages = [ pkgs.catppuccin-plymouth ];
-      theme = "catppuccin-macchiato";
-    };
+    # kernelParams = [ "quiet" "splash" ];
+    # plymouth = {
+    #   enable = true;
+    #   font =
+    #     "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
+    #   themePackages = [ pkgs.catppuccin-plymouth ];
+    #   theme = "catppuccin-macchiato";
+    # };
 
   };
 
@@ -60,9 +61,9 @@
   # Set your time zone.
   time.timeZone = "America/Lima";
   location = {
+    # Hardcoded location settings saves the need for geolocation services.
     latitude = -12.11;
     longitude = -76.98;
-
   };
 
   # Select internationalisation properties.
@@ -97,29 +98,24 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    # TODO: configure nvidia
-    #
-    # graphics = {
-    #   enable = true;
-    #   enable32Bit = true;
-    # };
+    opengl = { enable = true; };
     # nvidia = {
     #   modesetting.enable = true;
     #
     #   powerManagement = {
-    #
     #     enable = false;
-    #
-    #     finegrained = true;
+    #     # finegrained = false;
     #   };
     #
     #   prime = {
+    #
+    #     # NVIDIA PRIME Sync
+    #     sync.enable = false;
     #
     #     intelBusId = "PCI:0:2:0";
     #     nvidiaBusId = "PCI:1:0:0";
     #
     #     offload = {
-    #
     #       enable = true;
     #       enableOffloadCmd = true;
     #     };
@@ -136,7 +132,10 @@
 
   };
 
-  powerManagement.enable = true;
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "powersave";
+  };
 
   users = {
 
@@ -175,6 +174,17 @@
 
   programs = {
 
+    steam = {
+
+      enable = true;
+      remotePlay.openFirewall =
+        true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall =
+        true; # Open ports in the firewall for Source Dedicated Server
+      localNetworkGameTransfers.openFirewall =
+        true; # Open ports in the firewall for Steam Local Network Game Transfers
+    };
+
     dconf.enable = true;
 
     command-not-found.enable = false;
@@ -192,7 +202,13 @@
 
     };
 
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+
+      # disable when using home-manager: https://github.com/nix-community/home-manager/issues/108
+      enableCompletion = false;
+
+    };
     firefox = {
       enable = true;
       preferences = {
@@ -270,8 +286,11 @@
     # touchpad support
     libinput.enable = true;
 
+    displayManager.sddm.wayland.enable = true;
+
     # Configure keymap in X11
     xserver = {
+      videoDrivers = [ "nvidia" ];
       xkb = {
         layout = "us";
         variant = "";

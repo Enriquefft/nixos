@@ -5,7 +5,7 @@
 
     settings = {
 
-      handle_leading_whitespace = true;
+      handle_leading_whitespace = false;
 
       lsp = {
         diagnostic_update_events = [ "BufWritePost" "InsertLeave" ];
