@@ -39,14 +39,13 @@
       tree
       fastfetch
       gnumake
+      unzip
 
       # Desktop Environment Tools
       xfce.thunar
       wl-clipboard
       pavucontrol
       pamixer
-
-      # Security
 
       # Media Applications
       vlc
@@ -68,15 +67,13 @@
       zed-editor
       pgcli
       gh
+      unityhub
+
+      # Academia Tools
+      obsidian
 
       # Design Tools
       figma-linux
-
-      # Unity Hub
-      unityhub
-
-      # Archive Tools
-      unzip
 
       # Hyprland Utilities
       hyprshot

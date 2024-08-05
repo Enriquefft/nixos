@@ -29,7 +29,6 @@
       width = 300;
     };
 
-
   };
 
   xdg = { enable = true; };
@@ -122,8 +121,8 @@
       extraConfig = {
         init.defaultBranch = "main";
         safe.directory = "/etc/nixos";
-
       };
+      ignores = [ ".direnv" ];
 
     };
 
