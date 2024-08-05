@@ -8,6 +8,7 @@
     ./lualine.nix
     ./barbar.nix
     ./startify.nix
+    ./obsidian.nix
   ];
 
   programs.nixvim = {

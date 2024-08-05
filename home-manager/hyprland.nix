@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -8,7 +8,8 @@
       monitor = ",preferred,auto,1.6";
 
       # Applications to execute once at startup
-      exec-once = [ "firefox" ];
+      # exec pkgs.polkit
+      exec-once = [ "firefox" "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1" ];
 
       # Input configuration
       input = {

@@ -10,6 +10,7 @@
     ./programs/wofi.nix
     ./programs/kitty.nix
     ./programs/nixvim.nix
+    ./programs/wallpaper.nix
     ./coursor.nix
 
   ];
@@ -27,6 +28,8 @@
       padding = "10";
       width = 300;
     };
+
+
   };
 
   xdg = { enable = true; };

@@ -40,11 +40,11 @@
   xdg = {
     autostart.enable = true;
     portal = {
-      extraPortals = [
-        # https://wiki.hyprland.org/hyprland-wiki/pages/Useful-Utilities/Hyprland-desktop-portal/
-        pkgs.xdg-desktop-portal-gtk
-      ];
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
     };
+
   };
 
   networking = {
@@ -98,7 +98,12 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    opengl = { enable = true; };
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+
+    };
     # nvidia = {
     #   modesetting.enable = true;
     #
@@ -112,6 +117,7 @@
     #     # NVIDIA PRIME Sync
     #     sync.enable = false;
     #
+    #     # get bus id from `nix shell nixpkgs#pciutils -c lspci | grep ' VGA '`
     #     intelBusId = "PCI:0:2:0";
     #     nvidiaBusId = "PCI:1:0:0";
     #
@@ -163,6 +169,11 @@
     localBinInPath = true;
     pathsToLink = [ "/share/zsh" ];
 
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+        "/home/hybridz/.steam/root/compatibilitytools.d";
+    };
   };
 
   nixpkgs = {
@@ -177,6 +188,7 @@
     steam = {
 
       enable = true;
+      gamescopeSession.enable = true;
       remotePlay.openFirewall =
         true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall =
@@ -184,6 +196,7 @@
       localNetworkGameTransfers.openFirewall =
         true; # Open ports in the firewall for Steam Local Network Game Transfers
     };
+    gamemode.enable = true;
 
     dconf.enable = true;
 
@@ -212,7 +225,7 @@
     firefox = {
       enable = true;
       preferences = {
-        "widget.use-xdg-desktop-portal.file-picker" = 1;
+        # "widget.use-xdg-desktop-portal.file-picker" = 1;
         "browser.fullscreen.autohide" = false;
       };
     };
@@ -290,7 +303,7 @@
 
     # Configure keymap in X11
     xserver = {
-      videoDrivers = [ "nvidia" ];
+      # videoDrivers = [ "nvidia" ];
       xkb = {
         layout = "us";
         variant = "";
@@ -308,6 +321,7 @@
         enable = true;
         support32Bit = true;
       };
+      jack.enable = true;
 
     };
 
@@ -330,6 +344,8 @@
   };
 
   security = {
+
+    polkit.enable = true;
 
     rtkit.enable = true;
 

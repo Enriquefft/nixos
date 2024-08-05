@@ -46,6 +46,8 @@
       pavucontrol
       pamixer
 
+      # Security
+
       # Media Applications
       vlc
       obs-studio
@@ -83,6 +85,15 @@
       # Miscellaneous
       glib
       xdg-utils
+      libnotify
+      gnome.adwaita-icon-theme
+
+      # Gaming
+      mangohud
+      protonup
+      lutris
+      heroic
+      bottles
     ];
   };
 }
