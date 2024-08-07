@@ -4,6 +4,7 @@
 
   nixpkgs.overlays = [
 
+    inputs.nix-xilinx.overlay
 
   ];
 

@@ -5,12 +5,14 @@
 
     settings = {
       # Monitor configuration
-      monitor = ",preferred,auto,1.6";
+      monitor = ",preferred,auto,1";
 
       # Applications to execute once at startup
       # exec pkgs.polkit
-      exec-once = [ "firefox" "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1" ];
-
+      exec-once = [
+        "firefox"
+        "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+      ];
       # Input configuration
       input = {
         kb_layout = "us";

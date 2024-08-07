@@ -21,9 +21,16 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-xilinx = {
+      # Recommended if you also override the default nixpkgs flake, common among nixos-unstable users:
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "gitlab:doronbehar/nix-xilinx";
+    };
+
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, nix-xilinx, ... }@inputs:
 
     {
 

@@ -2,6 +2,13 @@
   programs.nixvim = {
 
     plugins = {
+
+      # Rust Development
+      rustaceanvim = {
+        enable = true;
+
+      };
+
       lsp = {
         enable = true;
 
@@ -95,9 +102,6 @@
 
           # Infrastructure as Code
           # terraformls.enable = true; # Terraform language server
-
-          # Rust Development
-          # rust-analyzer.enable = true; # Rust language server
 
           # Zig Development
           zls.enable = true; # Zig programming language server
