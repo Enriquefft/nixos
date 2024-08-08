@@ -5,8 +5,7 @@
 
     settings = {
       # Monitor configuration
-      monitor = ",preferred,auto,1";
-
+      monitor = ",1920x1080@144,0x0,1.6";
       # Applications to execute once at startup
       # exec pkgs.polkit
       exec-once = [

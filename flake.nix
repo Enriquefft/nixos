@@ -22,17 +22,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-xilinx = {
-      # Recommended if you also override the default nixpkgs flake, common among nixos-unstable users:
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "gitlab:doronbehar/nix-xilinx";
-    };
+    nix-xilinx = { url = "gitlab:doronbehar/nix-xilinx"; };
 
   };
 
-  outputs = { self, nixpkgs, nix-xilinx, ... }@inputs:
+  outputs =
 
-    {
+    { self, nixpkgs, nix-xilinx, ... }@inputs: {
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
@@ -40,7 +36,7 @@
           ./configuration.nix
           inputs.home-manager.nixosModules.default
           inputs.nix-index-database.nixosModules.nix-index
-          (import ./overlays)
+          (import ./overlays nix-xilinx)
         ];
       };
     };

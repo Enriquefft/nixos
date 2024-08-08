@@ -84,6 +84,7 @@
       xdg-utils
       libnotify
       gnome.adwaita-icon-theme
+      solaar
 
       # Gaming
       mangohud
