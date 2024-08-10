@@ -68,6 +68,8 @@
       pgcli
       gh
       unityhub
+      awscli2
+      openssl
 
       # Academia Tools
       obsidian
