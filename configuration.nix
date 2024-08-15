@@ -16,7 +16,16 @@
 
     loader = {
       systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+      efi = {
+
+      efiSysMountPoint = "/boot";
+
+      canTouchEfiVariables = true;};
+
+      # grub = {
+      #   enable = true;
+      #   efiSupport = true;
+      # };
     };
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;

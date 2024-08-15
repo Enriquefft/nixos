@@ -87,6 +87,7 @@
       libnotify
       gnome.adwaita-icon-theme
       solaar
+      ventoy-full
 
       # Gaming
       mangohud
@@ -94,6 +95,8 @@
       lutris
       heroic
       bottles
+
+    xournal
     ];
   };
 }
