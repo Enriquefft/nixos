@@ -22,21 +22,26 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-xilinx = { url = "gitlab:doronbehar/nix-xilinx"; };
+    nix-xilinx = {
+      url = "gitlab:doronbehar/nix-xilinx";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
   outputs =
 
-    { self, nixpkgs, nix-xilinx, ... }@inputs: {
+    { self, nixpkgs, nix-xilinx, ... }@inputs:
+    let flake-overlays = [ nix-xilinx.overlay ];
+
+    in {
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
           inputs.home-manager.nixosModules.default
           inputs.nix-index-database.nixosModules.nix-index
-          (import ./overlays nix-xilinx)
+          (import ./configuration.nix flake-overlays)
         ];
       };
     };

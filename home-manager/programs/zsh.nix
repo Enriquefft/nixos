@@ -59,12 +59,13 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "doas nixos-rebuild switch";
+      up = "doas nixos-rebuild switch --option eval-cache false";
 
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";
       nix-apps = "vim /etc/nixos/applications.nix";
       zsh-conf = "vim /etc/nixos/home-manager/programs/zsh.nix";
+      hypr-conf = "vim /etc/nixos/home-manager/hyprland.nix";
 
       # TODO: move to dev shells
       compile =

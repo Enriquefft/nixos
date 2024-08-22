@@ -1,4 +1,5 @@
 # Options: https://search.nixos.org/options
+flake-overlays:
 { config, inputs, pkgs, ... }:
 
 {
@@ -18,9 +19,10 @@
       systemd-boot.enable = true;
       efi = {
 
-      efiSysMountPoint = "/boot";
+        efiSysMountPoint = "/boot";
 
-      canTouchEfiVariables = true;};
+        canTouchEfiVariables = true;
+      };
 
       # grub = {
       #   enable = true;
@@ -221,6 +223,16 @@
       allowUnfree = true;
 
     };
+
+    # overlays = let
+    #   nix-xilinx = import (builtins.fetchTarball {
+    #     url =
+    #       "https://gitlab.com/doronbehar/nix-xilinx/-/archive/master/nix-xilinx-master.tar.gz";
+    #     sha256 = "sha256:0mx0ahvvydiaxw5n2xfhdd36kj8kdnx4in0bfvqzpnmjkafd911q";
+    #   });
+    # in [ nix-xilinx.overlay ];
+    overlays = flake-overlays;
+
   };
 
   programs = {

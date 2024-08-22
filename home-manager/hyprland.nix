@@ -5,13 +5,16 @@
 
     settings = {
       # Monitor configuration
-      monitor = ",1920x1080@144,0x0,1.6";
+      monitor = ",preferred,auto,1.6";
+
       # Applications to execute once at startup
-      # exec pkgs.polkit
       exec-once = [
         "firefox"
         "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       ];
+
+      xwayland = { force_zero_scaling = true; };
+
       # Input configuration
       input = {
         kb_layout = "us";
@@ -103,13 +106,6 @@
         "$mainMod SHIFT, 8, movetoworkspace, 8"
         "$mainMod SHIFT, 9, movetoworkspace, 9"
         "$mainMod SHIFT, 0, movetoworkspace, 10"
-        # Volume control
-        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        # Brightness control
-        ", XF86MonBrightnessDown, exec, light -U 5"
-        ", XF86MonBrightnessUp, exec, light -A 5"
         # Workspace switching with scroll
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
@@ -117,6 +113,15 @@
         "$mainMod, PRINT, exec, hyprshot -m window"
         ", PRINT, exec, hyprshot -m output"
         "$shiftMod, PRINT, exec, hyprshot -m region"
+      ];
+      binde = [
+        # Volume control
+        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        # Brightness control
+        ", XF86MonBrightnessDown, exec, light -U 5"
+        ", XF86MonBrightnessUp, exec, light -A 5"
       ];
 
       # Mouse bindings

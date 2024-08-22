@@ -31,7 +31,20 @@
 
   };
 
-  xdg = { enable = true; };
+  xdg = {
+    desktopEntries = {
+
+      Vivado = {
+        name = "Vivado";
+        exec = ''
+          sh -c "nix run gitlab:doronbehar/nix-xilinx#vivado"
+        '';
+        terminal = false;
+        categories = [ "Utility" "Development" "IDE" ];
+      };
+    };
+    enable = true;
+  };
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
