@@ -32,18 +32,36 @@
   };
 
   xdg = {
-    desktopEntries = {
-
-      Vivado = {
-        name = "Vivado";
-        exec = ''
-          sh -c "nix run gitlab:doronbehar/nix-xilinx#vivado"
-        '';
-        terminal = false;
-        categories = [ "Utility" "Development" "IDE" ];
-      };
-    };
     enable = true;
+    mime.enable = true;
+    mimeApps = {
+      defaultApplications = { "pdf" = "firefox.desktop"; };
+      enable = true;
+    };
+    userDirs = {
+      createDirectories = true;
+
+      enable = true;
+    };
+
+    portal = {
+
+      # enable = true;
+      # extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      # config = { common = { default = "xdg-desktop-portal-hyprland"; }; };
+    };
+
+    desktopEntries = {
+      #
+      # Vivado = {
+      #   name = "vivado";
+      #   exec = ''
+      #     sh -c "nix run gitlab:doronbehar/nix-xilinx#vivado"
+      #   '';
+      #   terminal = false;
+      #   categories = [ "Utility" "Development" "IDE" ];
+      # };
+    };
   };
 
   # Home Manager needs a bit of information about you and the paths it should

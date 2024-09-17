@@ -14,7 +14,6 @@
         modules-left = [ "hyprland/workspaces" ];
         modules-center = [ "hyprland/window" ];
         modules-right = [
-          "idle_inhibitor"
           "pulseaudio"
           "network"
           "cpu"
@@ -56,14 +55,6 @@
           format-icons = {
             locked = "";
             unlocked = "";
-          };
-        };
-
-        "idle_inhibitor" = {
-          format = "{icon}";
-          format-icons = {
-            activated = "";
-            deactivated = "";
           };
         };
 
@@ -147,7 +138,7 @@
     style = ''
       * {
         /* `otf-font-awesome` is required to be installed for icons */
-        font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+        /* font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif; */
         font-size: 13px;
       }
 

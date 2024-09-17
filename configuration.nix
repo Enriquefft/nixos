@@ -16,7 +16,7 @@ flake-overlays:
   boot = {
 
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = { enable = true; };
       efi = {
 
         efiSysMountPoint = "/boot";
@@ -40,7 +40,6 @@ flake-overlays:
     #   themePackages = [ pkgs.catppuccin-plymouth ];
     #   theme = "catppuccin-macchiato";
     # };
-
   };
 
   systemd.tmpfiles.rules = [
@@ -70,7 +69,13 @@ flake-overlays:
   };
 
   # Set your time zone.
-  time.timeZone = "America/Lima";
+
+  time = {
+
+    timeZone = "America/Lima";
+    hardwareClockInLocalTime = true;
+  };
+
   location = {
     # Hardcoded location settings saves the need for geolocation services.
     latitude = -12.11;
@@ -192,7 +197,8 @@ flake-overlays:
     users.hybridz = {
       isNormalUser = true;
       description = "Enrique Flores";
-      extraGroups = [ "wheel" "input" "networkmanager" "audio" "video" ];
+      extraGroups =
+        [ "wheel" "input" "networkmanager" "audio" "video" "docker" ];
     };
 
   };
@@ -399,6 +405,11 @@ flake-overlays:
         };
       };
     };
+  };
+
+  virtualisation = {
+    docker = { enable = true; };
+
   };
 
   security = {

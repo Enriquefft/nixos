@@ -43,7 +43,6 @@
 
       # Desktop Environment Tools
       xfce.thunar
-      wl-clipboard
       pavucontrol
       pamixer
 
@@ -64,7 +63,7 @@
       libreoffice-qt
 
       # Development Tools
-      zed-editor
+      # zed-editor
       pgcli
       gh
       unityhub

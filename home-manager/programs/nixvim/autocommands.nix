@@ -15,11 +15,17 @@
 
     # Use *.v for verilog instead of vlang.
     {
-
       event = "BufWinEnter";
       pattern = "*.v";
       command = "set filetype=verilog";
+    }
 
+    # Use *.ebnf for Extended Backus-Naur Form.
+    # EBNF is a notation for describing formal grammars.
+    {
+      event = "BufWinEnter";
+      pattern = "*.ebnf";
+      command = "set filetype=ebnf";
     }
 
   ];

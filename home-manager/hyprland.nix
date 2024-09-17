@@ -21,7 +21,7 @@
         kb_options = "caps:swapescape";
         follow_mouse = "1";
         touchpad = { natural_scroll = "no"; };
-        sensitivity = "0";
+        sensitivity = "-0.2";
       };
 
       # Decoration settings
@@ -110,9 +110,11 @@
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
         # Screenshot keybindings
-        "$mainMod, PRINT, exec, hyprshot -m window"
-        ", PRINT, exec, hyprshot -m output"
-        "$shiftMod, PRINT, exec, hyprshot -m region"
+        ", PRINT, exec, hyprshot -m output --current --clipboard-only" # screenshot monitor
+        "$mainMod, PRINT, exec, hyprshot -m region --clipboard-only" # screenshot region
+        "$shiftMod, PRINT, exec, hyprshot -m output --current" # screenshot monitor & save
+        "$mainMod&$shiftMod, PRINT, exec, hyprshot -m region" # screenshot region & save
+
       ];
       binde = [
         # Volume control

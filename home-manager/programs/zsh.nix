@@ -77,6 +77,8 @@
       airplane =
         "nmcli radio wifi off; nmcli radio bluetooth off; nmcli radio wwan off";
 
+      docker-rm = "docker rmi $(docker images -a)";
+
       svim = "sudoedit";
 
       zsh-fix-hist =
