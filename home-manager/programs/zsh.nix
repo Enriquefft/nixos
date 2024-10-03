@@ -44,6 +44,7 @@
 
       ".." = "cd ..";
       "..." = "cd ../..";
+      "...." = "cd ../../..";
 
       ls =
         "${pkgs.eza}/bin/exa --color=auto --group-directories-first --classify";
@@ -69,9 +70,9 @@
 
       # TODO: move to dev shells
       compile =
-        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -ferror-limit=1 -fsanitize=address -g";
+        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -Wno-padded -fsanitize=address -g";
       compilemain =
-        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -ferror-limit=1 -fsanitize=address -g *.cpp -o main";
+        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -fsanitize=address -g *.cpp -o main";
 
       con = "nmcli connection up";
       airplane =

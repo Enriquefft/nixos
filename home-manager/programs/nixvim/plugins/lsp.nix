@@ -40,7 +40,7 @@
           # C/C++ Language Servers
           clangd = {
             enable = true; # Provides features for C/C++ development using LLVM
-            settings.capabilities = { offsetEncoding = "utf-16"; };
+            cmd = [ "clangd" "--offset-encoding=utf-16" ];
 
           };
 
