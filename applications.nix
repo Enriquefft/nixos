@@ -41,6 +41,9 @@
       gnumake
       unzip
 
+      # ZSA Keyboard
+      keymapp
+
       # Desktop Environment Tools
       xfce.thunar
       pavucontrol

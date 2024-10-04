@@ -76,9 +76,13 @@
         "$mainMod, E, exec, dolphin"
         "$mainMod, V, togglefloating,"
         "$mainMod, D, exec, wofi --show drun"
-        "$mainMod, S, togglesplit,"
         "$mainMod, X, pin,"
         "$mainMod, F, fullscreen"
+        # Move focus with arrow keys on DVORAK
+        "$mainMod, H, movefocus, l"
+        "$mainMod, S, movefocus, r"
+        "$mainMod, N, movefocus, u"
+        "$mainMod, T, movefocus, d"
         # Move focus with arrow keys
         "$mainMod, H, movefocus, l"
         "$mainMod, L, movefocus, r"

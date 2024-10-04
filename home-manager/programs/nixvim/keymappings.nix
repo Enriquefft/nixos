@@ -32,6 +32,17 @@
         "<leader>h" = "<C-w>h";
         "<leader>l" = "<C-w>l";
 
+        # inoremap <C-M-h> <Left>
+        # inoremap <C-M-j> <Down>
+        # inoremap <C-M-k> <Up>
+        # inoremap <C-M-l> <Right>
+
+        # Remap movement keys for dvorak
+        h = "h";
+        t = "j";
+        n = "k";
+        s = "l";
+
         # Press 'H', 'L' to jump to start/end of a line (first/last character)
         L = "$";
         H = "^";
