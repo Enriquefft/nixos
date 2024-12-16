@@ -23,11 +23,6 @@ flake-overlays:
 
         canTouchEfiVariables = true;
       };
-
-      # grub = {
-      #   enable = true;
-      #   efiSupport = true;
-      # };
     };
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
@@ -47,15 +42,15 @@ flake-overlays:
     "A+       /etc/nixos -    -    -     -           u:hybridz:rwx"
   ];
 
-  xdg = {
-    autostart.enable = true;
-    portal = {
-      enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-    };
-
-  };
+  # xdg = {
+  #   autostart.enable = true;
+  #   portal = {
+  #     enable = true;
+  #     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  #
+  #   };
+  #
+  # };
 
   networking = {
     hostName = "nixos";
@@ -125,11 +120,9 @@ flake-overlays:
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [ onevpl-intel-gpu ];
+      extraPackages = with pkgs; [ vpl-gpu-rt ];
 
     };
     # nvidia = {
@@ -183,6 +176,7 @@ flake-overlays:
   users = {
 
     defaultUserShell = pkgs.zsh;
+    groups = { plugdev = { }; };
 
     users.hybridz = {
       isNormalUser = true;
@@ -209,8 +203,8 @@ flake-overlays:
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-        "/home/hybridz/.steam/root/compatibilitytools.d";
+      # STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+      #   "/home/hybridz/.steam/root/compatibilitytools.d";
     };
   };
 
@@ -236,7 +230,7 @@ flake-overlays:
     steam = {
 
       enable = true;
-      gamescopeSession.enable = true;
+      # gamescopeSession.enable = true;
       remotePlay.openFirewall =
         true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall =
@@ -244,7 +238,7 @@ flake-overlays:
       localNetworkGameTransfers.openFirewall =
         true; # Open ports in the firewall for Steam Local Network Game Transfers
     };
-    gamemode.enable = true;
+    # gamemode.enable = false;
 
     dconf.enable = true;
 
@@ -257,6 +251,7 @@ flake-overlays:
     light = { enable = true; };
 
     hyprland = {
+      withUWSM = true;
 
       enable = true;
       xwayland.enable = true;
@@ -369,14 +364,15 @@ flake-overlays:
     # touchpad support
     libinput.enable = true;
 
-    displayManager.sddm.wayland.enable = true;
+    # displayManager.sddm.wayland.enable = true;
 
     # Configure keymap in X11
     xserver = {
       # videoDrivers = [ "nvidia" ];
       xkb = {
         layout = "us";
-        variant = "";
+        variant = "intl";
+        options = "caps:swapescape";
       };
 
     };

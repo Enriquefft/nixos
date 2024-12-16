@@ -37,11 +37,11 @@
         # inoremap <C-M-k> <Up>
         # inoremap <C-M-l> <Right>
 
-        # Remap movement keys for dvorak
-        h = "h";
-        t = "j";
-        n = "k";
-        s = "l";
+        # Remap movement keys for Colemak-DH
+        # h = "h";
+        # t = "j";
+        # n = "k";
+        # s = "l";
 
         # Press 'H', 'L' to jump to start/end of a line (first/last character)
         L = "$";
@@ -74,7 +74,7 @@
         "K" = ":m '<-2<CR>gv=gv";
         "J" = ":m '>+1<CR>gv=gv";
       };
-    in config.nixvim.helpers.keymaps.mkKeymaps { options.silent = true; }
+    in config.lib.nixvim.keymaps.mkKeymaps { options.silent = true; }
     (normal ++ visual);
   };
 }

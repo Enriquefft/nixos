@@ -26,7 +26,11 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    loginExtra = ''[ "$(tty)" = "/dev/tty1" ] && Hyprland'';
+    loginExtra = ''
+      if uwsm check may-start; then
+          exec uwsm start hyprland.desktop
+      fi
+    '';
 
     initExtraFirst = # bash
       ''

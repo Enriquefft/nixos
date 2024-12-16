@@ -6,14 +6,13 @@
       nixvimInjections = true;
 
       folding = true;
-      # settings reworked on unstable branch
-      #settings = {
-      #highlight.enable = true;
-      #indent.enable = true;
-      indent = true;
-      incrementalSelection.enable = true;
-      ensureInstalled = "all";
-      #};
+
+      settings = {
+        highlight.enable = true;
+        indent = { enable = true; };
+        incremental_selection.enable = true;
+        # ensure_installed = "all";
+      };
     };
 
     refactoring = { enable = true; };

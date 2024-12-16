@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
   programs.nixvim = {
 
     plugins = {
@@ -35,12 +35,13 @@
         servers = {
 
           # NIX
-          nil-ls.enable = true;
+          nil_ls.enable = true;
 
           # C/C++ Language Servers
           clangd = {
             enable = true; # Provides features for C/C++ development using LLVM
             cmd = [ "clangd" "--offset-encoding=utf-16" ];
+            package = pkgs.llvmPackages_19.clang-tools;
 
           };
 
@@ -59,7 +60,7 @@
           texlab.enable = true; # Comprehensive LaTeX support
 
           # Lua Development
-          lua-ls.enable = true; # Language server for Lua
+          lua_ls.enable = true; # Language server for Lua
 
           # Go Development
           gopls.enable = true; # Official Go language server
@@ -70,7 +71,7 @@
           # HTML/XHTML/XML Development
           html.enable = true; # Basic HTML support
           htmx.enable = true; # Enhances HTML with AJAX and WebSockets
-          emmet-ls.enable = true; # Emmet support for faster HTML/CSS coding
+          emmet_ls.enable = true; # Emmet support for faster HTML/CSS coding
           # CSS Styling
           cssls.enable = true; # Language server for CSS
 
@@ -85,7 +86,7 @@
           };
 
           # JavaScript/TypeScript Development
-          tsserver.enable = true; # TypeScript/JavaScript language server
+          ts_ls.enable = true; # TypeScript/JavaScript language server
           tailwindcss.enable = true; # Tailwind CSS IntelliSense
           eslint.enable = true; # ESLint integration for linting JS/TS code
 
@@ -112,10 +113,10 @@
           jsonls.enable = true; # JSON language server
 
           # VHDL Hardware Description Language
-          vhdl-ls.enable = true; # VHDL language server
+          vhdl_ls.enable = true; # VHDL language server
 
           # Typo Checking
-          typos-lsp.enable = true; # Los false-positive typo checking
+          typos_lsp.enable = true; # Los false-positive typo checking
           ltex = {
             enable = true; # Strict grammar and spell checking
             settings = {

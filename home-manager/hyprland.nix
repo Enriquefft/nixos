@@ -2,6 +2,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
+    systemd.enable = false;
 
     settings = {
       # Monitor configuration
@@ -9,8 +10,8 @@
 
       # Applications to execute once at startup
       exec-once = [
-        "firefox"
-        "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+        "uwsm app -- firefox"
+        "uwsm app -- ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       ];
 
       xwayland = { force_zero_scaling = true; };
@@ -18,10 +19,17 @@
       # Input configuration
       input = {
         kb_layout = "us";
+        # kb_variant = "intl";
         kb_options = "caps:swapescape";
         follow_mouse = "1";
+        mouse_refocus = "false";
         touchpad = { natural_scroll = "no"; };
         sensitivity = "-0.2";
+      };
+
+      cursor = {
+        no_warps = true;
+
       };
 
       # Decoration settings
@@ -32,10 +40,14 @@
           size = "3";
           passes = "1";
         };
-        drop_shadow = "yes";
-        shadow_range = "4";
-        shadow_render_power = "3";
-        "col.shadow" = "rgba(1a1a1aee)";
+        shadow = {
+          enabled = false;
+          # drop_shadow = "yes";
+          # shadow_range = "4";
+          # shadow_render_power = "3";
+          # "col.shadow" = "rgba(1a1a1aee)";
+
+        };
       };
 
       # Animation settings
@@ -70,12 +82,12 @@
       # Keybindings
       bind = [
         # General keybindings
-        "$mainMod, Q, exec, kitty"
+        "$mainMod, Q, exec, uwsm app -- kitty"
         "$mainMod, C, killactive,"
         "$mainMod, M, exit,"
-        "$mainMod, E, exec, dolphin"
+        "$mainMod, E, exec, uwsm app -- dolphin"
         "$mainMod, V, togglefloating,"
-        "$mainMod, D, exec, wofi --show drun"
+        "$mainMod, D, exec, uwsm app -- wofi --show drun"
         "$mainMod, X, pin,"
         "$mainMod, F, fullscreen"
         # Move focus with arrow keys on DVORAK

@@ -4,7 +4,7 @@
     name = "Adwaita";
     # in nixpkgs unstable
     #package = pkgs.adwaita-icon-theme;
-    package = pkgs.gnome.adwaita-icon-theme;
+    package = pkgs.adwaita-icon-theme;
     size = 32;
   };
 }

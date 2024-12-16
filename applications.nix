@@ -14,6 +14,9 @@
 
     systemPackages = with pkgs; [
 
+      postman
+      unrar-wrapper
+
       # System information
       hwinfo
       pciutils
@@ -40,6 +43,8 @@
       fastfetch
       gnumake
       unzip
+      p7zip
+      csvlens
 
       # ZSA Keyboard
       keymapp
@@ -69,7 +74,7 @@
       # zed-editor
       pgcli
       gh
-      unityhub
+      # unityhub
       awscli2
       openssl
 
@@ -87,7 +92,7 @@
       glib
       xdg-utils
       libnotify
-      gnome.adwaita-icon-theme
+      adwaita-icon-theme
       solaar
       ventoy-full
 
@@ -97,8 +102,9 @@
       lutris
       heroic
       bottles
+      cockatrice
 
-    xournal
+      xournal
     ];
   };
 }

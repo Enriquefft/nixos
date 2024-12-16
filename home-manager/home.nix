@@ -46,22 +46,22 @@
 
     portal = {
 
-      # enable = true;
-      # extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-      # config = { common = { default = "xdg-desktop-portal-hyprland"; }; };
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config = { common = { default = "xdg-desktop-portal-hyprland"; }; };
     };
 
-    desktopEntries = {
-      #
-      # Vivado = {
-      #   name = "vivado";
-      #   exec = ''
-      #     sh -c "nix run gitlab:doronbehar/nix-xilinx#vivado"
-      #   '';
-      #   terminal = false;
-      #   categories = [ "Utility" "Development" "IDE" ];
-      # };
-    };
+    # desktopEntries = {
+    #
+    #   Vivado = {
+    #     name = "vivado";
+    #     exec = ''
+    #       sh -c "nix run gitlab:doronbehar/nix-xilinx#vivado"
+    #     '';
+    #     terminal = false;
+    #     categories = [ "Utility" "Development" "IDE" ];
+    #   };
+    # };
   };
 
   # Home Manager needs a bit of information about you and the paths it should

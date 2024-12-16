@@ -4,19 +4,14 @@ let
 
   fontFamily = "FiraCode Nerd Font";
 
-in
-
-
-{
+in {
   programs.kitty = {
 
     enable = true;
     font.name = fontFamily;
-    theme = "Solarized Dark";
+    themeFile = "Solarized_Dark";
 
-    settings = {
-      enable_audio_bell = false;
-    };
+    settings = { enable_audio_bell = false; };
 
     shellIntegration.enableZshIntegration = true;
 

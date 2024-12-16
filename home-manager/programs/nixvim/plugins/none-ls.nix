@@ -8,8 +8,11 @@
     sources = {
       formatting = {
         nixfmt.enable = true;
-        prettierd.enable = true;
-        clang_format.enable = true;
+        prettierd = {
+          disableTsServerFormatter = true;
+          enable = true;
+        };
+        clang_format.enable = false;
         cmake_format.enable = true;
         verible_verilog_format.enable = true;
       };
