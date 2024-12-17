@@ -47,8 +47,9 @@
     portal = {
 
       enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-      config = { common = { default = "xdg-desktop-portal-hyprland"; }; };
+      extraPortals =
+        [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+      configPackages = [ pkgs.hyprland ];
     };
 
     # desktopEntries = {
@@ -131,7 +132,8 @@
   #  /etc/profiles/per-user/hybridz/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    NIXOS_OZONE_WL = "1";
+
   };
 
   programs = {

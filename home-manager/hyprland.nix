@@ -2,7 +2,12 @@
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
-    systemd.enable = false;
+    systemd = {
+
+      enable = false;
+      variables = [ "--all" ];
+
+    };
 
     settings = {
       # Monitor configuration

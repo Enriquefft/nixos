@@ -103,6 +103,7 @@
       heroic
       bottles
       cockatrice
+            prismlauncher
 
       xournal
     ];

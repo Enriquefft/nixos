@@ -42,16 +42,6 @@ flake-overlays:
     "A+       /etc/nixos -    -    -     -           u:hybridz:rwx"
   ];
 
-  # xdg = {
-  #   autostart.enable = true;
-  #   portal = {
-  #     enable = true;
-  #     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  #
-  #   };
-  #
-  # };
-
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
