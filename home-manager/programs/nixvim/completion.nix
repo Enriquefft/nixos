@@ -4,8 +4,6 @@
 
     plugins = {
 
-      copilot-cmp.enable = true;
-
       luasnip.enable = true;
 
       lspkind = {

@@ -9,21 +9,25 @@
     ./barbar.nix
     ./startify.nix
     ./obsidian.nix
+    ./avante.nix
   ];
 
   programs.nixvim = {
-
 
     colorschemes.gruvbox.enable = true;
 
     plugins = {
 
-    markdown-preview.enable = true;
+      markdown-preview.enable = true;
 
       copilot-lua = {
         enable = true;
-        panel.enabled = false;
-        suggestion.enabled = false;
+        autoLoad = true;
+        settings = {
+
+          panel = { enabled = false; };
+          suggestion = { enabled = false; };
+        };
       };
 
       gitsigns = {
@@ -34,9 +38,12 @@
         };
       };
       nvim-autopairs.enable = true;
-      nvim-colorizer = {
+      colorizer = {
         enable = true;
-        userDefaultOptions.names = false;
+        settings = {
+          user_default_options.names = false;
+
+        };
       };
       oil.enable = true;
       trim = {

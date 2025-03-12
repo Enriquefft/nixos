@@ -28,8 +28,11 @@
 
     loginExtra = ''
       if uwsm check may-start; then
-          exec uwsm start hyprland.desktop
+          exec uwsm start -S hyprland-uwsm.desktop
       fi
+      # if uwsm check may-start && uwsm select; then
+      #     exec systemd-cat -t uwsm_start uwsm start default
+      # fi
     '';
 
     initExtraFirst = # bash
@@ -64,7 +67,7 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "doas nixos-rebuild switch --option eval-cache false";
+      up = "nixos-rebuild switch --option eval-cache false --use-remote-sudo";
 
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";

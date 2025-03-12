@@ -70,7 +70,7 @@
 
           # HTML/XHTML/XML Development
           html.enable = true; # Basic HTML support
-          htmx.enable = true; # Enhances HTML with AJAX and WebSockets
+          # htmx.enable = true; # Enhances HTML with AJAX and WebSockets
           emmet_ls.enable = true; # Emmet support for faster HTML/CSS coding
           # CSS Styling
           cssls.enable = true; # Language server for CSS
@@ -89,6 +89,7 @@
           ts_ls.enable = true; # TypeScript/JavaScript language server
           tailwindcss.enable = true; # Tailwind CSS IntelliSense
           eslint.enable = true; # ESLint integration for linting JS/TS code
+          biome.enable = true;
 
           # Svelte/Volar/Prism
           # svelte.enable = true;       # Svelte language support

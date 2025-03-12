@@ -2,12 +2,11 @@
 
   programs.waybar = {
     enable = true;
-    systemd.enable = true; # Automatically start with the system
 
     settings = {
 
       bar = {
-        layer = "top";
+        layer = "bottom";
         position = "top";
         height = 30;
         spacing = 5;

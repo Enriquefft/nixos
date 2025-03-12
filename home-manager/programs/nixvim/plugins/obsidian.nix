@@ -6,10 +6,6 @@ settings = {
         name = "Hermes";
         path = "~/Documents/Hermes";
       }
-      {
-        name = "Arqui";
-        path = "~/Documents/Arqui";
-      }
     ];
     new_notes_location = "current_dir";
     completion = {

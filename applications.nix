@@ -16,6 +16,7 @@
 
       postman
       unrar-wrapper
+      openvpn
 
       # System information
       hwinfo
@@ -43,8 +44,11 @@
       fastfetch
       gnumake
       unzip
+      zip
       p7zip
       csvlens
+      mlocate
+      lsof
 
       # ZSA Keyboard
       keymapp
@@ -65,7 +69,7 @@
 
       # Communication Tools
       discord
-      element-desktop-wayland
+      element-desktop
 
       # Office Suite
       libreoffice-qt
@@ -77,6 +81,7 @@
       # unityhub
       awscli2
       openssl
+      # biome
 
       # Academia Tools
       obsidian
@@ -95,6 +100,8 @@
       adwaita-icon-theme
       solaar
       ventoy-full
+      certbot-full
+      pymol
 
       # Gaming
       mangohud
@@ -102,10 +109,16 @@
       lutris
       heroic
       bottles
-      cockatrice
-            prismlauncher
+      # cockatrice
+      prismlauncher
+      # modrinth-app
+      # ferium
+      pokemmo-installer
+      # lime3ds
+      # ryujinx
 
       xournal
+
     ];
   };
 }

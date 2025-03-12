@@ -16,6 +16,7 @@
       # Applications to execute once at startup
       exec-once = [
         "uwsm app -- firefox"
+        "uwsm app -- waybar"
         "uwsm app -- ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       ];
 
@@ -24,8 +25,8 @@
       # Input configuration
       input = {
         kb_layout = "us";
-        # kb_variant = "intl";
-        kb_options = "caps:swapescape";
+        kb_variant = "intl";
+        kb_options = "compose:rctrl";
         follow_mouse = "1";
         mouse_refocus = "false";
         touchpad = { natural_scroll = "no"; };
@@ -89,7 +90,7 @@
         # General keybindings
         "$mainMod, Q, exec, uwsm app -- kitty"
         "$mainMod, C, killactive,"
-        "$mainMod, M, exit,"
+        "$mainMod, M, exec, uwsm stop,"
         "$mainMod, E, exec, uwsm app -- dolphin"
         "$mainMod, V, togglefloating,"
         "$mainMod, D, exec, uwsm app -- wofi --show drun"

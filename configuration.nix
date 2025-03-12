@@ -48,8 +48,10 @@ flake-overlays:
     firewall.enable = true;
 
     # Open ports in the firewall.
-    # networking.firewall.allowedTCPPorts = [ ... ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
+    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedUDPPorts = [ 80 443 ];
+
+    nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   };
 
@@ -102,7 +104,7 @@ flake-overlays:
     bluetooth = {
 
       enable = true;
-      # powerOnBoot = true;
+      powerOnBoot = false;
     };
 
     cpu.intel.updateMicrocode = true;
@@ -181,6 +183,7 @@ flake-overlays:
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users.hybridz = import ./home-manager/home.nix;
+    verbose = true;
 
   };
 
@@ -193,8 +196,8 @@ flake-overlays:
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      # STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-      #   "/home/hybridz/.steam/root/compatibilitytools.d";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+        "\${HOME}/.steam/root/compatibilitytools.d";
     };
   };
 
@@ -220,7 +223,7 @@ flake-overlays:
     steam = {
 
       enable = true;
-      # gamescopeSession.enable = true;
+      gamescopeSession.enable = true;
       remotePlay.openFirewall =
         true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall =
@@ -228,7 +231,8 @@ flake-overlays:
       localNetworkGameTransfers.openFirewall =
         true; # Open ports in the firewall for Steam Local Network Game Transfers
     };
-    # gamemode.enable = false;
+
+    gamemode.enable = false;
 
     dconf.enable = true;
 
@@ -266,6 +270,26 @@ flake-overlays:
   };
 
   services = {
+
+    keyd = {
+      enable = true;
+
+      keyboards = {
+        default = {
+          ids = [ "*" ];
+          settings = {
+            main = {
+              capslock = "esc";
+
+              escape = "capslock";
+              f5 = "2";
+
+            };
+          };
+        };
+      };
+
+    };
 
     envfs.enable = true;
 
@@ -383,6 +407,28 @@ flake-overlays:
 
     # prevent overheating on intel CPU
     thermald.enable = true;
+
+    # tlp = {
+    #   enable = true;
+    #   settings = {
+    #     # Platform
+    #     PLATFORM_PROFILE_ON_BAT = "powersave";
+    #     PLATFORM_PROFILE_ON_AC = "powersave";
+    #     CPU_ENERGY_PERF_POLICY_ON_AC="power";
+    #     CPU_ENERGY_PERF_POLICY_ON_BAT="power";
+    #
+    #     # Processor
+    #     # CPU_SCALING_MAX_FREQ_ON_AC = 1600000;
+    #     # CPU_SCALING_MAX_FREQ_ON_BAT = 600000;
+    #     CPU_BOOST_ON_BAT = 0;
+    #     CPU_BOOST_ON_AC = 0;
+    #     CPU_HWP_DYN_BOOST_ON_BAT = 0;
+    #     CPU_HWP_DYN_BOOST_ON_AC = 0;
+    #
+    #     START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
+    #     STOP_CHARGE_THRESH_BAT0 = 85; # 80 and above it stops charging
+    #   };
+    # };
 
     auto-cpufreq = {
       enable = true;
