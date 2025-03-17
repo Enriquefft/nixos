@@ -61,6 +61,7 @@
       # Media Applications
       vlc
       obs-studio
+      gimp
 
       # Browsers
       (pkgs.wrapFirefox
