@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  programs.zsh = rec {
+  programs.zsh = {
 
     plugins = [
       {
@@ -35,15 +35,14 @@
       # fi
     '';
 
-    initExtraFirst = # bash
-      ''
-        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-        # Initialization code that may require console input (password prompts, [y/n]
-        # confirmations, etc.) must go above this block; everything else may go below.
-            if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-              source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-            fi
-      '';
+    initContent = lib.mkBefore ''
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      # Initialization code that may require console input (password prompts, [y/n]
+      # confirmations, etc.) must go above this block; everything else may go below.
+          if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+            source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+          fi
+    '';
 
     shellAliases = rec {
 
@@ -67,7 +66,7 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "nixos-rebuild switch --option eval-cache false --use-remote-sudo";
+      up = "nixos-rebuild switch --option eval-cache false --sudo";
 
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";
@@ -89,10 +88,7 @@
 
       svim = "sudoedit";
 
-      zsh-fix-hist =
-        "strings ${history.path} > ${history.path} && fc -R ${history.path}";
-
-      clone = "git clone";
+      gc = "git clone";
 
     };
 

@@ -17,6 +17,7 @@
       postman
       unrar-wrapper
       openvpn
+      zoom-us
 
       # System information
       hwinfo
@@ -42,6 +43,7 @@
       pass
       tree
       fastfetch
+      pokemonsay
       gnumake
       unzip
       zip
@@ -83,6 +85,8 @@
       awscli2
       openssl
       # biome
+      # ollama
+      code-cursor-fhs
 
       # Academia Tools
       obsidian
@@ -100,9 +104,8 @@
       libnotify
       adwaita-icon-theme
       solaar
-      ventoy-full
       certbot-full
-      pymol
+      # pymol
 
       # Gaming
       mangohud
@@ -112,13 +115,13 @@
       bottles
       # cockatrice
       prismlauncher
-      # modrinth-app
+      modrinth-app
       # ferium
       pokemmo-installer
       # lime3ds
       # ryujinx
 
-      xournal
+      xournalpp
 
     ];
   };

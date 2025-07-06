@@ -12,21 +12,28 @@
     ./programs/nixvim.nix
     ./programs/wallpaper.nix
     ./coursor.nix
+    ./suspend.nix
 
   ];
   services = {
     mako = {
+
       enable = true;
-      actions = true;
-      anchor = "top-right";
-      borderRadius = 8;
-      borderSize = 1;
-      defaultTimeout = 10000;
-      icons = true;
-      layer = "overlay";
-      maxVisible = 3;
-      padding = "10";
-      width = 300;
+
+      settings = {
+        anchor = "top-right";
+        border-radius = 8;
+        border-size = 1;
+        actions = true;
+        default-timeout = 10000;
+        icons = true;
+        layer = "overlay";
+        max-visible = 3;
+        padding = "10";
+        width = 300;
+
+      };
+
     };
 
   };

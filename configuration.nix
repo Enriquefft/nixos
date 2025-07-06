@@ -6,7 +6,6 @@ flake-overlays:
 
   imports = [
     ./hardware-configuration.nix
-    ./suspend.nix
     ./applications.nix
     ./scripts.nix
     ./nix.nix
@@ -89,18 +88,17 @@ flake-overlays:
 
   hardware = {
 
-    logitech = {
-      wireless = {
-        enable = true;
-        enableGraphical = true;
-      };
-      lcd = {
-        enable = true;
-        startWhenNeeded = true;
-      };
-    };
+    # logitech = {
+    #   wireless = {
+    #     enable = true;
+    #     enableGraphical = true;
+    #   };
+    #   lcd = {
+    #     enable = true;
+    #     startWhenNeeded = true;
+    #   };
+    # };
 
-    pulseaudio.enable = false;
     bluetooth = {
 
       enable = true;
@@ -121,8 +119,8 @@ flake-overlays:
     #   modesetting.enable = true;
     #
     #   powerManagement = {
-    #     enable = false;
-    #     # finegrained = false;
+    #     enable = true;
+    #     finegrained = true;
     #   };
     #
     #   prime = {
@@ -141,7 +139,7 @@ flake-overlays:
     #
     #   };
     #
-    #   open = false;
+    #   open = true;
     #
     #   nvidiaSettings = true;
     #
@@ -186,9 +184,7 @@ flake-overlays:
     verbose = true;
 
   };
-
-  fonts.packages = with pkgs;
-    [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+  fonts.packages = [ pkgs.nerd-fonts.fira-code ];
 
   environment = {
     localBinInPath = true;
@@ -271,6 +267,8 @@ flake-overlays:
 
   services = {
 
+    pulseaudio.enable = false;
+
     keyd = {
       enable = true;
 
@@ -293,15 +291,15 @@ flake-overlays:
 
     envfs.enable = true;
 
+    # # Remove NVIDIA USB xHCI Host Controller devices, if present
+    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+    # # Remove NVIDIA USB Type-C UCSI devices, if present
+    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+    # # Remove NVIDIA Audio devices, if present
+    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+    # # Remove NVIDIA VGA/3D controller devices
+    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
     udev.extraRules = ''
-      # Remove NVIDIA USB xHCI Host Controller devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA USB Type-C UCSI devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA Audio devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA VGA/3D controller devices
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
 
       # ZSA/Oryx
 
@@ -320,12 +318,6 @@ flake-overlays:
     dbus = { enable = true; };
 
     flatpak.enable = true;
-
-    batteryNotifier = {
-      enable = true;
-      notifyCapacity = 15;
-      suspendCapacity = 7;
-    };
 
     blueman.enable = true;
 
@@ -408,41 +400,39 @@ flake-overlays:
     # prevent overheating on intel CPU
     thermald.enable = true;
 
-    # tlp = {
-    #   enable = true;
-    #   settings = {
-    #     # Platform
-    #     PLATFORM_PROFILE_ON_BAT = "powersave";
-    #     PLATFORM_PROFILE_ON_AC = "powersave";
-    #     CPU_ENERGY_PERF_POLICY_ON_AC="power";
-    #     CPU_ENERGY_PERF_POLICY_ON_BAT="power";
-    #
-    #     # Processor
-    #     # CPU_SCALING_MAX_FREQ_ON_AC = 1600000;
-    #     # CPU_SCALING_MAX_FREQ_ON_BAT = 600000;
-    #     CPU_BOOST_ON_BAT = 0;
-    #     CPU_BOOST_ON_AC = 0;
-    #     CPU_HWP_DYN_BOOST_ON_BAT = 0;
-    #     CPU_HWP_DYN_BOOST_ON_AC = 0;
-    #
-    #     START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
-    #     STOP_CHARGE_THRESH_BAT0 = 85; # 80 and above it stops charging
-    #   };
-    # };
-
-    auto-cpufreq = {
+    tlp = {
       enable = true;
       settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "powersave";
-          turbo = "never";
-        };
+        # Platform
+        CPU_SCALING_GOVERNOR_ON_AC = "powersave";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "power";
+
+        CPU_MIN_PERF_ON_AC = 0;
+        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MIN_PERF_ON_BAT = 0;
+        CPU_MAX_PERF_ON_BAT = 20;
+
+        START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
+        STOP_CHARGE_THRESH_BAT0 = 85; # 80 and above it stops charging
       };
     };
+
+    #   auto-cpufreq = {
+    #     enable = true;
+    #     settings = {
+    #       battery = {
+    #         governor = "powersave";
+    #         turbo = "never";
+    #       };
+    #       charger = {
+    #         governor = "performance";
+    #         turbo = "auto";
+    #       };
+    #     };
+    #   };
   };
 
   virtualisation = {

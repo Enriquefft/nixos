@@ -88,8 +88,8 @@
           # JavaScript/TypeScript Development
           ts_ls.enable = true; # TypeScript/JavaScript language server
           tailwindcss.enable = true; # Tailwind CSS IntelliSense
-          eslint.enable = true; # ESLint integration for linting JS/TS code
-          biome.enable = true;
+          # eslint.enable = true; # ESLint integration for linting JS/TS code
+          biome = { enable = true; };
 
           # Svelte/Volar/Prism
           # svelte.enable = true;       # Svelte language support
