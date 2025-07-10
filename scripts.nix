@@ -22,16 +22,26 @@
       gpush = pkgs.writeShellApplication {
         name = "gpush";
         text = ''
+
           #!/usr/bin/env bash
           set -euo pipefail
 
+          # commit message
           if [ $# -gt 0 ]; then
-            msg="\"$*\"" # wraps value in actual quotes
+            msg="$*"
           else
             msg="chore: regular commit"
           fi
 
-          git commit -a -m "$msg" && git push
+          # if no changes, exit zero and continue script
+          if git diff-index --quiet HEAD --; then
+            echo "Nothing to commit."
+          else
+            git commit -a -m "$msg"
+          fi
+          git push
+
+
         '';
       };
 
