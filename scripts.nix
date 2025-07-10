@@ -19,9 +19,22 @@
         '';
       };
 
-    in [
-      manteinance
-      last_logs
-    ];
+      gpush = pkgs.writeShellApplication {
+        name = "gpush";
+        text = ''
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          if [ $# -gt 0 ]; then
+            msg="$*"
+          else
+            msg="chore: regular commit"
+          fi
+
+          git commit -a -m "$msg" && git push
+        '';
+      };
+
+    in [ manteinance last_logs gpush ];
   };
 }

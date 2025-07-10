@@ -89,7 +89,6 @@
       svim = "sudoedit";
 
       gc = "git clone";
-      gpush = "git add . && git commit -m 'feat: update' && git push";
 
     };
 
