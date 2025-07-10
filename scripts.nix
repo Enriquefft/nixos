@@ -26,7 +26,7 @@
           set -euo pipefail
 
           if [ $# -gt 0 ]; then
-            msg="$*"
+            msg="\"$*\"" # wraps value in actual quotes
           else
             msg="chore: regular commit"
           fi
