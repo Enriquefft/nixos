@@ -203,13 +203,6 @@ flake-overlays:
 
     };
 
-    # overlays = let
-    #   nix-xilinx = import (builtins.fetchTarball {
-    #     url =
-    #       "https://gitlab.com/doronbehar/nix-xilinx/-/archive/master/nix-xilinx-master.tar.gz";
-    #     sha256 = "sha256:0mx0ahvvydiaxw5n2xfhdd36kj8kdnx4in0bfvqzpnmjkafd911q";
-    #   });
-    # in [ nix-xilinx.overlay ];
     overlays = flake-overlays;
 
   };

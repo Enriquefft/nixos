@@ -120,6 +120,7 @@
       pokemmo-installer
       # lime3ds
       # ryujinx
+      netflix
 
       xournalpp
 

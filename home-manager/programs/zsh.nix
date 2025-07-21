@@ -30,9 +30,6 @@
       if uwsm check may-start; then
           exec uwsm start -S hyprland-uwsm.desktop
       fi
-      # if uwsm check may-start && uwsm select; then
-      #     exec systemd-cat -t uwsm_start uwsm start default
-      # fi
     '';
 
     initContent = lib.mkBefore ''
@@ -89,6 +86,7 @@
       svim = "sudoedit";
 
       gc = "git clone";
+      gpull = "git pull --rebase";
 
     };
 
@@ -112,7 +110,7 @@
       setopt correct                                                  # Auto correct mistakes
       setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
       setopt nocaseglob                                               # Case insensitive globbing
-      setopt rcexpandparam                                            # Array expension with parameters
+      setopt rcexpandparam                                            # Array expansion with parameters
       #setopt nocheckjobs                                             # Don't warn about running processes when exiting
       setopt numericglobsort                                          # Sort filenames numerically when it makes sense
       setopt nobeep                                                   # Disable beep

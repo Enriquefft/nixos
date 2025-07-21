@@ -21,19 +21,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-xilinx = {
-      url = "gitlab:doronbehar/nix-xilinx";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nix-xilinx = {
+    #   url = "gitlab:doronbehar/nix-xilinx";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
   };
 
   outputs =
 
-    { self, nixpkgs, nix-xilinx, ... }@inputs:
+    { self, nixpkgs, # nix-xilinx,
+    ... }@inputs:
     let
 
-      flake-overlays = [ nix-xilinx.overlay ];
+      flake-overlays = [
+        # nix-xilinx.overlay
+      ];
 
     in {
 

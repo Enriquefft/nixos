@@ -5,7 +5,6 @@
     systemd = {
 
       enable = false;
-      variables = [ "--all" ];
 
     };
 
