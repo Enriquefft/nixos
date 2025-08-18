@@ -211,7 +211,7 @@ flake-overlays:
 
     steam = {
 
-      enable = true;
+      enable = false;
       gamescopeSession.enable = true;
       remotePlay.openFirewall =
         true; # Open ports in the firewall for Steam Remote Play
@@ -248,6 +248,7 @@ flake-overlays:
       enableCompletion = false;
 
     };
+
     firefox = {
       enable = true;
       preferences = {

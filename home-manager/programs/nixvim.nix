@@ -2,7 +2,7 @@
 
 {
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeModules.nixvim
     ./nixvim/autocommands.nix
     ./nixvim/completion.nix
     ./nixvim/keymappings.nix

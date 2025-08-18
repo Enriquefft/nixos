@@ -121,6 +121,7 @@
       # lime3ds
       # ryujinx
       netflix
+      stremio
 
       xournalpp
 

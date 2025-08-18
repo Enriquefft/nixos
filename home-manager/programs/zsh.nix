@@ -19,7 +19,7 @@
 
     autocd = true;
 
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
 
     enable = true;
     enableCompletion = true;
