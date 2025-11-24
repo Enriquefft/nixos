@@ -5,12 +5,13 @@
   environment = rec {
 
     # Generates a text file listing all installed system packages, sorted and unique.
-    etc."current-system-packages".text = let
-      packages = builtins.map (p: "${p.name}") systemPackages;
-      sortedUnique =
-        builtins.sort builtins.lessThan (pkgs.lib.lists.unique packages);
-      formatted = builtins.concatStringsSep "\n" sortedUnique;
-    in formatted;
+    etc."current-system-packages".text =
+      let
+        packages = builtins.map (p: "${p.name}") systemPackages;
+        sortedUnique = builtins.sort builtins.lessThan (pkgs.lib.lists.unique packages);
+        formatted = builtins.concatStringsSep "\n" sortedUnique;
+      in
+      formatted;
 
     systemPackages = with pkgs; [
 
@@ -18,7 +19,8 @@
       unrar-wrapper
       openvpn
       zoom-us
-
+      protonvpn-gui
+      komikku
       # System information
       hwinfo
       pciutils
@@ -66,8 +68,7 @@
       gimp
 
       # Browsers
-      (pkgs.wrapFirefox
-        (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
+      (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
       google-chrome
 
       # Communication Tools
@@ -109,7 +110,7 @@
 
       # Gaming
       mangohud
-      protonup
+      protonup-ng
       lutris
       heroic
       bottles

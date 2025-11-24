@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -19,7 +20,9 @@
         "uwsm app -- ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       ];
 
-      xwayland = { force_zero_scaling = true; };
+      xwayland = {
+        force_zero_scaling = true;
+      };
 
       # Input configuration
       input = {
@@ -28,7 +31,9 @@
         kb_options = "compose:rctrl";
         follow_mouse = "1";
         mouse_refocus = "false";
-        touchpad = { natural_scroll = "no"; };
+        touchpad = {
+          natural_scroll = "no";
+        };
         sensitivity = "-0.2";
       };
 
@@ -75,11 +80,10 @@
         preserve_split = "yes";
       };
 
-      # Gesture settings
-      gestures = { workspace_swipe = "off"; };
-
       # Miscellaneous settings
-      misc = { force_default_wallpaper = "-1"; };
+      misc = {
+        force_default_wallpaper = "-1";
+      };
 
       # Main modifier key
       "$mainMod" = "SUPER";

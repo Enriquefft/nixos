@@ -26,7 +26,7 @@ flake-overlays:
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
-    # kernelParams = [ "quiet" "splash" ];
+    kernelParams = [ "i915.enable_psr=0" ];
     # plymouth = {
     #   enable = true;
     #   font =
@@ -200,6 +200,7 @@ flake-overlays:
   nixpkgs = {
     config = {
       allowUnfree = true;
+      permittedInsecurePackages = [ "qtwebengine-5.15.19" ];
 
     };
 
@@ -211,7 +212,7 @@ flake-overlays:
 
     steam = {
 
-      enable = false;
+      enable = true;
       gamescopeSession.enable = true;
       remotePlay.openFirewall =
         true; # Open ports in the firewall for Steam Remote Play
