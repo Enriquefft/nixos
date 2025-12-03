@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.zsh = {
@@ -49,8 +54,7 @@
       "..." = "cd ../..";
       "...." = "cd ../../..";
 
-      ls =
-        "${pkgs.eza}/bin/exa --color=auto --group-directories-first --classify";
+      ls = "${pkgs.eza}/bin/exa --color=auto --group-directories-first --classify";
       lst = "${ls} --tree";
       la = "${ls} --all";
       ll = "${ls} --all --long --header --group";
@@ -63,7 +67,7 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "nixos-rebuild switch --option eval-cache false --sudo";
+      up = "nixos-rebuild switch --option eval-cache false";
 
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";
@@ -72,14 +76,11 @@
       hypr-conf = "vim /etc/nixos/home-manager/hyprland.nix";
 
       # TODO: move to dev shells
-      compile =
-        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -Wno-padded -fsanitize=address -g";
-      compilemain =
-        "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -fsanitize=address -g *.cpp -o main";
+      compile = "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -Wno-padded -fsanitize=address -g";
+      compilemain = "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -fsanitize=address -g *.cpp -o main";
 
       con = "nmcli connection up";
-      airplane =
-        "nmcli radio wifi off; nmcli radio bluetooth off; nmcli radio wwan off";
+      airplane = "nmcli radio wifi off; nmcli radio bluetooth off; nmcli radio wwan off";
 
       docker-rm = "docker rmi $(docker images -a)";
 

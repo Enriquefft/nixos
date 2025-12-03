@@ -83,7 +83,7 @@
       pgcli
       gh
       # unityhub
-      awscli2
+      # awscli2
       openssl
       # biome
       # ollama
@@ -116,7 +116,7 @@
       bottles
       # cockatrice
       prismlauncher
-      modrinth-app
+      # modrinth-app
       # ferium
       pokemmo-installer
       # lime3ds

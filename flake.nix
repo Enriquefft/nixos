@@ -3,7 +3,8 @@
 
   inputs = {
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -12,12 +13,13 @@
 
     nixvim = {
       url = "github:nix-community/nixvim"; # Unstable
-      inputs.nixpkgs.follows = "nixpkgs";
+      # url = "github:nix-community/nixvim/nixos-25.05";
+      # inputs.nixpkgs.follows = "nixpkgs";
 
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -30,15 +32,19 @@
 
   outputs =
 
-    { self, nixpkgs, # nix-xilinx,
-    ... }@inputs:
+    {
+      self,
+      nixpkgs, # nix-xilinx,
+      ...
+    }@inputs:
     let
 
       flake-overlays = [
         # nix-xilinx.overlay
       ];
 
-    in {
+    in
+    {
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
