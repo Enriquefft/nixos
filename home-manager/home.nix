@@ -174,8 +174,11 @@
       enable = true;
 
       settings = {
-        name = "Enriquefft";
-        email = "enriquefft2001@gmail.com";
+        user = {
+
+          name = "Enriquefft";
+          email = "enriquefft2001@gmail.com";
+        };
         init.defaultBranch = "main";
         safe.directory = "/etc/nixos";
 
@@ -195,5 +198,3 @@
 
   };
 }
-
-# };
