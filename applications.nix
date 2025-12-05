@@ -88,6 +88,7 @@
       # biome
       # ollama
       code-cursor-fhs
+      claude
 
       # Academia Tools
       obsidian
