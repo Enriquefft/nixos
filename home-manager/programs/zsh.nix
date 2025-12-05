@@ -67,7 +67,7 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "nixos-rebuild switch --option eval-cache false";
+      up = "nixos-rebuild switch --option eval-cache false --sudo";
 
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";
