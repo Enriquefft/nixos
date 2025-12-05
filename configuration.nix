@@ -1,6 +1,11 @@
 # Options: https://search.nixos.org/options
 flake-overlays:
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
 
@@ -15,7 +20,9 @@ flake-overlays:
   boot = {
 
     loader = {
-      systemd-boot = { enable = true; };
+      systemd-boot = {
+        enable = true;
+      };
       efi = {
 
         efiSysMountPoint = "/boot";
@@ -47,10 +54,19 @@ flake-overlays:
     firewall.enable = true;
 
     # Open ports in the firewall.
-    firewall.allowedTCPPorts = [ 80 443 ];
-    firewall.allowedUDPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [
+      80
+      443
+    ];
+    firewall.allowedUDPPorts = [
+      80
+      443
+    ];
 
-    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    nameservers = [
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
 
   };
 
@@ -71,7 +87,10 @@ flake-overlays:
   # Select internationalisation properties.
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "en_US.UTF-8/UTF-8" "es_PE.UTF-8/UTF-8" ];
+    supportedLocales = [
+      "en_US.UTF-8/UTF-8"
+      "es_PE.UTF-8/UTF-8"
+    ];
   };
 
   console = {
@@ -155,8 +174,12 @@ flake-overlays:
     options nouveau modeset=0
   '';
 
-  boot.blacklistedKernelModules =
-    [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+  boot.blacklistedKernelModules = [
+    "nouveau"
+    "nvidia"
+    "nvidia_drm"
+    "nvidia_modeset"
+  ];
 
   powerManagement = {
     enable = true;
@@ -166,13 +189,22 @@ flake-overlays:
   users = {
 
     defaultUserShell = pkgs.zsh;
-    groups = { plugdev = { }; };
+    groups = {
+      plugdev = { };
+    };
 
     users.hybridz = {
       isNormalUser = true;
       description = "Enrique Flores";
-      extraGroups =
-        [ "wheel" "input" "networkmanager" "audio" "video" "docker" "plugdev" ];
+      extraGroups = [
+        "wheel"
+        "input"
+        "networkmanager"
+        "audio"
+        "video"
+        "docker"
+        "plugdev"
+      ];
     };
 
   };
@@ -192,8 +224,7 @@ flake-overlays:
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-        "\${HOME}/.steam/root/compatibilitytools.d";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
     };
   };
 
@@ -214,12 +245,9 @@ flake-overlays:
 
       enable = true;
       gamescopeSession.enable = true;
-      remotePlay.openFirewall =
-        true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall =
-        true; # Open ports in the firewall for Source Dedicated Server
-      localNetworkGameTransfers.openFirewall =
-        true; # Open ports in the firewall for Steam Local Network Game Transfers
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
     };
 
     gamemode.enable = false;
@@ -232,7 +260,9 @@ flake-overlays:
       enableZshIntegration = true;
     };
 
-    light = { enable = true; };
+    light = {
+      enable = true;
+    };
 
     hyprland = {
       withUWSM = true;
@@ -310,7 +340,9 @@ flake-overlays:
 
     upower.enable = true;
 
-    dbus = { enable = true; };
+    dbus = {
+      enable = true;
+    };
 
     flatpak.enable = true;
 
@@ -324,19 +356,21 @@ flake-overlays:
       enable = true;
       ensureDatabases = [ "hybridz" ];
 
-      ensureUsers = [{
-        name = "hybridz";
-        ensureDBOwnership = true;
-        ensureClauses = {
-          login = true;
-          createrole = true;
-          createdb = true;
-          bypassrls = true;
-          "inherit" = true;
-          replication = true;
+      ensureUsers = [
+        {
+          name = "hybridz";
+          ensureDBOwnership = true;
+          ensureClauses = {
+            login = true;
+            createrole = true;
+            createdb = true;
+            bypassrls = true;
+            "inherit" = true;
+            replication = true;
 
-        };
-      }];
+          };
+        }
+      ];
 
       authentication = pkgs.lib.mkOverride 10 ''
         #type database  DBuser  auth-method
@@ -431,7 +465,9 @@ flake-overlays:
   };
 
   virtualisation = {
-    docker = { enable = true; };
+    docker = {
+      enable = true;
+    };
 
   };
 
