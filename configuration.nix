@@ -119,9 +119,14 @@ flake-overlays:
     # };
 
     bluetooth = {
-
       enable = true;
       powerOnBoot = false;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+          Experimental = true;
+        };
+      };
     };
 
     cpu.intel.updateMicrocode = true;

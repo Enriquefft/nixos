@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Always remind me that this directory should be run with sudo permisions to perform edits.
 
 ## Build Commands
 

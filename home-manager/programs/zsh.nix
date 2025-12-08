@@ -32,8 +32,9 @@
     syntaxHighlighting.enable = true;
 
     loginExtra = ''
-      if uwsm check may-start; then
-          exec uwsm start -S hyprland-uwsm.desktop
+      if [[ $(tty) == /dev/tty1 ]] && uwsm check may-start; then
+          exec uwsm start hyprland-uwsm.desktop
+        # exec uwsm-start-logged start hyprland-uwsm.desktop # Logged version
       fi
     '';
 

@@ -68,6 +68,27 @@
         '';
       };
 
-    in [ manteinance last_logs gpush ];
+      uwsm-start-logged = pkgs.writeShellApplication {
+        name = "uwsm-start-logged";
+        runtimeInputs = [ pkgs.uwsm ];
+        text = ''
+          #!/usr/bin/env bash
+
+          LOGFILE="/tmp/uwsm-start-$(date +%Y%m%d-%H%M%S).log"
+
+          echo "=== UWSM Start Log ===" | tee "$LOGFILE"
+          echo "Date: $(date)" | tee -a "$LOGFILE"
+          echo "TTY: $(tty)" | tee -a "$LOGFILE"
+          echo "User: $USER" | tee -a "$LOGFILE"
+          echo "Arguments: $*" | tee -a "$LOGFILE"
+          echo "==================" | tee -a "$LOGFILE"
+          echo "" | tee -a "$LOGFILE"
+
+          # Run uwsm and capture all output
+          exec uwsm "$@" 2>&1 | tee -a "$LOGFILE"
+        '';
+      };
+
+    in [ manteinance last_logs gpush uwsm-start-logged ];
   };
 }
