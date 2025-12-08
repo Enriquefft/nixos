@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
 
     plugins = {
@@ -40,18 +41,19 @@
           # C/C++ Language Servers
           clangd = {
             enable = true; # Provides features for C/C++ development using LLVM
-            cmd = [ "clangd" "--offset-encoding=utf-16" ];
+            cmd = [
+              "clangd"
+              "--offset-encoding=utf-16"
+            ];
             package = pkgs.llvmPackages_19.clang-tools;
 
           };
 
           # Docker Development
-          dockerls.enable =
-            true; # Supports Dockerfile syntax highlighting and validation
+          dockerls.enable = true; # Supports Dockerfile syntax highlighting and validation
 
           # Dart/Flutter Development
-          dartls.enable =
-            true; # Language server for Dart, supporting Flutter development
+          dartls.enable = true; # Language server for Dart, supporting Flutter development
 
           # Template Engines
           templ.enable = true; # Generic template engine language server
@@ -89,7 +91,11 @@
           ts_ls.enable = true; # TypeScript/JavaScript language server
           tailwindcss.enable = true; # Tailwind CSS IntelliSense
           # eslint.enable = true; # ESLint integration for linting JS/TS code
-          biome = { enable = true; };
+          biome = {
+            enable = true;
+            package = pkgs.biome;
+            cmd = [ "${pkgs.biome}/bin/biome" "lsp-proxy" ];
+          };
 
           # Svelte/Volar/Prism
           # svelte.enable = true;       # Svelte language support
