@@ -122,6 +122,14 @@
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
       zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"       # Colored completion (different colors for dirs/files/etc)
       zstyle ':completion:*' rehash true                              # automatically find new executables in path
+
+      # Safe rm wrapper - prompts and warns about trash-cli
+      rm() {
+        echo "⚠️  WARNING: Consider using 'trash-put' instead of 'rm' for safer deletion!"
+        echo "   trash-put: move to trash | trash-list: list trash | trash-restore: restore files"
+        echo ""
+        command rm -i "$@"
+      }
     '';
 
   };

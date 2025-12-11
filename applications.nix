@@ -53,6 +53,7 @@
       csvlens
       mlocate
       lsof
+      trash-cli
 
       # ZSA Keyboard
       keymapp
