@@ -85,7 +85,6 @@
       # unityhub
       # awscli2
       openssl
-      # biome
       # ollama
       code-cursor-fhs
       claude-code

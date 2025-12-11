@@ -93,8 +93,9 @@
           # eslint.enable = true; # ESLint integration for linting JS/TS code
           biome = {
             enable = true;
-            package = pkgs.biome;
-            cmd = [ "${pkgs.biome}/bin/biome" "lsp-proxy" ];
+            # Override cmd to skip node_modules check (which has broken dynamic binaries on NixOS)
+            # This forces LSP to use biome from PATH (nix-managed via direnv)
+            cmd = ["biome" "lsp-proxy"];
           };
 
           # Svelte/Volar/Prism

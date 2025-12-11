@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(journalctl:*)",
+      "Bash(wpctl status:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(echo:*)",
+      "Bash(nix flake:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -358,7 +358,7 @@ flake-overlays:
       package = pkgs.mariadb;
     };
     postgresql = {
-      enable = true;
+      enable = false;
       ensureDatabases = [ "hybridz" ];
 
       ensureUsers = [
