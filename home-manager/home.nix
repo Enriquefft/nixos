@@ -18,7 +18,6 @@
     ./programs/nixvim.nix
     ./programs/wallpaper.nix
     ./coursor.nix
-    ./suspend.nix
 
   ];
   services = {

@@ -8,7 +8,17 @@
       "Bash(nix flake:*)",
       "Bash(cat:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(nix why-depends:*)",
+      "Bash(NIXPKGS_ALLOW_INSECURE=1 nix why-depends:*)",
+      "Bash(curl:*)",
+      "Bash(nix show-config:*)",
+      "Bash(ping:*)",
+      "Bash(sudo nixos-rebuild:*)",
+      "WebFetch(domain:linrunner.de)",
+      "WebFetch(domain:hamradio.my)",
+      "WebFetch(domain:community.frame.work)",
+      "Bash(trash-put:*)"
     ],
     "deny": [],
     "ask": []

@@ -37,6 +37,7 @@ in {
     systemd.user.timers."lowbatt" = {
       description = "check battery level";
       timerConfig = {
+        OnBootSec = "1m";
         OnUnitInactiveSec = "2m";
         Unit = "lowbatt.service";
       };

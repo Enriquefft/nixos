@@ -74,10 +74,10 @@
 
       # Communication Tools
       discord
-      element-desktop
+      # element-desktop
 
       # Office Suite
-      libreoffice-qt
+      libreoffice-still
 
       # Development Tools
       # zed-editor
@@ -89,6 +89,7 @@
       # ollama
       code-cursor-fhs
       claude-code
+      act
 
       # Academia Tools
       obsidian
@@ -122,8 +123,6 @@
       pokemmo-installer
       # lime3ds
       # ryujinx
-      netflix
-      stremio
 
       xournalpp
 
