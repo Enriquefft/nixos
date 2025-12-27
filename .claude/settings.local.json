@@ -18,7 +18,8 @@
       "WebFetch(domain:linrunner.de)",
       "WebFetch(domain:hamradio.my)",
       "WebFetch(domain:community.frame.work)",
-      "Bash(trash-put:*)"
+      "Bash(trash-put:*)",
+      "Bash(ruff:*)"
     ],
     "deny": [],
     "ask": []

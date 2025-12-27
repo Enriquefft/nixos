@@ -55,8 +55,8 @@
         # '';
         # };
 
-        gpush = pkgs.writeShellApplication {
-          name = "gpush";
+        gcommit = pkgs.writeShellApplication {
+          name = "gcommit";
           text = ''
             #!/usr/bin/env bash
             set -euo pipefail
@@ -82,23 +82,65 @@
             esac
             done
 
-            # commit message
-            if [ $# -gt 0 ]; then
-            msg="$*"
-            else
-            msg="chore: regular commit"
+            # prompt for commit message with default
+            default_msg="chore: regular commit"
+            echo "Commit message (default: $default_msg):"
+            read -r msg
+
+            # use default if empty
+            if [ -z "$msg" ]; then
+            msg="$default_msg"
             fi
 
             # assemble flag
             flag=
             [ "$no_verify" = true ] && flag="--no-verify"
 
-            # perform commit & push
+            # perform commit
             if git diff-index --quiet HEAD --; then
             echo "Nothing to commit."
             else
             git commit -a $flag -m "$msg"
             fi
+          '';
+        };
+
+        gpush = pkgs.writeShellApplication {
+          name = "gpush";
+          runtimeInputs = [ gcommit ];
+          text = ''
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            # parse options with getopt
+            OPTS=$(getopt -o "" -l no-verify -- "$@") || exit 1
+            eval set -- "$OPTS"
+
+            no_verify=false
+            while true; do
+            case "$1" in
+            --no-verify)
+            no_verify=true
+            shift
+            ;;
+            --)
+            shift
+            break
+            ;;
+            *)
+            shift
+            ;;
+            esac
+            done
+
+            # assemble flag
+            flag=
+            [ "$no_verify" = true ] && flag="--no-verify"
+
+            # call gcommit
+            gcommit $flag
+
+            # pull and push
             git pull --rebase
             git push $flag
           '';
@@ -129,6 +171,7 @@
       [
         manteinance
         last_logs
+        gcommit
         gpush
         uwsm-start-logged
       ];
