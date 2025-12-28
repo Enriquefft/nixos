@@ -28,6 +28,8 @@
       dmidecode
       inxi
 
+      uv
+
       # System Utilities
       gparted
       killall

@@ -82,14 +82,19 @@
             esac
             done
 
-            # prompt for commit message with default
+            # check if commit message was provided as argument
             default_msg="chore: regular commit"
+            if [ $# -gt 0 ]; then
+            # use all remaining args as commit message
+            msg="$*"
+            else
+            # prompt for commit message with default
             echo "Commit message (default: $default_msg):"
             read -r msg
-
             # use default if empty
             if [ -z "$msg" ]; then
             msg="$default_msg"
+            fi
             fi
 
             # assemble flag
@@ -137,8 +142,8 @@
             flag=
             [ "$no_verify" = true ] && flag="--no-verify"
 
-            # call gcommit
-            gcommit $flag
+            # call gcommit with remaining args (commit message)
+            gcommit $flag "$@"
 
             # pull and push
             git pull --rebase

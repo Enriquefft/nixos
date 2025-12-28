@@ -19,7 +19,11 @@
       "WebFetch(domain:hamradio.my)",
       "WebFetch(domain:community.frame.work)",
       "Bash(trash-put:*)",
-      "Bash(ruff:*)"
+      "Bash(ruff:*)",
+      "Bash(nix search:*)",
+      "Bash(nix eval --json 'builtins.readFile (builtins.fetchurl {url = \"\"\"\"file:///etc/nixos/flake.nix\"\"\"\"; sha256 = \"\"\"\"1avqa3jx9pyk7qxdzd7jr84pkxjypjzd9hfchkrxlr46yblygjf\"\"\"\"; })')",
+      "Bash(nix eval:*)",
+      "WebFetch(domain:v2.tauri.app)"
     ],
     "deny": [],
     "ask": []
