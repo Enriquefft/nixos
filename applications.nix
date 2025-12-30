@@ -14,6 +14,7 @@
       formatted;
 
     systemPackages = with pkgs; [
+      whisper-cpp
 
       postman
       unrar-wrapper
@@ -69,6 +70,7 @@
       vlc
       obs-studio
       gimp
+      ffmpeg
 
       # Browsers
       (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
@@ -95,6 +97,9 @@
 
       # Academia Tools
       obsidian
+
+      # Custom Applications
+      (import ./packages/whispering.nix { inherit pkgs; })
 
       # Design Tools
       figma-linux
