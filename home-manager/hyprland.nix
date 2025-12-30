@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  colors = (import ./colors.nix).cyberTardigrade;
+in
 {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -17,6 +20,8 @@
       exec-once = [
         "uwsm app -- firefox"
         "uwsm app -- waybar"
+        "uwsm app -- hyprpaper"
+        "uwsm app -- wl-paste --watch cliphist store"
         "uwsm app -- ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       ];
 
@@ -42,35 +47,37 @@
 
       };
 
+      # General settings
+      general = {
+        gaps_in = 4;
+        gaps_out = 8;
+        border_size = 2;
+        "col.active_border" = "rgb(${colors.accent_orange})";
+        "col.inactive_border" = "rgb(${colors.border})";
+      };
+
       # Decoration settings
       decoration = {
-        rounding = "10";
+        rounding = 8;
         blur = {
           enabled = false;
-          # size = "3";
-          # passes = "1";
+          size = 6;
+          passes = 2;
         };
         shadow = {
           enabled = false;
-          # drop_shadow = "yes";
-          # shadow_range = "4";
-          # shadow_render_power = "3";
-          # "col.shadow" = "rgba(1a1a1aee)";
-
+          color = "rgba(${colors.accent_orange}33)";
         };
       };
 
       # Animation settings
       animations = {
-        enabled = "yes";
-        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+        enabled = true;
+        bezier = "easeOut, 0.25, 1, 0.5, 1";
         animation = [
-          "windows, 1, 7, myBezier"
-          "windowsOut, 1, 7, default, popin 80%"
-          "border, 1, 10, default"
-          "borderangle, 1, 8, default"
-          "fade, 1, 7, default"
-          "workspaces, 1, 6, default"
+          "windows, 1, 3, easeOut"
+          "workspaces, 1, 4, easeOut, slide"
+          "fade, 1, 3, default"
         ];
       };
 
@@ -91,26 +98,30 @@
 
       # Keybindings
       bind = [
-        # General keybindings
+        # Core applications
+        "$mainMod, C, killactive"
         "$mainMod, Q, exec, uwsm app -- kitty"
-        "$mainMod, C, killactive,"
-        "$mainMod, M, exec, uwsm stop,"
-        "$mainMod, E, exec, uwsm app -- dolphin"
-        "$mainMod, V, togglefloating,"
         "$mainMod, D, exec, uwsm app -- wofi --show drun"
-        "$mainMod, X, pin,"
+        "$mainMod, E, exec, uwsm app -- kitty -e yazi"
+        "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+        "$mainMod, L, exec, hyprlock"
+        "$mainMod, N, exec, pkill hyprsunset || hyprsunset -t 4500"
+        "$mainMod, X, exec, wlogout"
+        "$mainMod, B, exec, pkill waybar || uwsm app -- waybar"
+        "$mainMod, Escape, exec, hyprlock"
+
+        # Window management
         "$mainMod, F, fullscreen"
-        # Move focus with arrow keys on DVORAK
-        "$mainMod, H, movefocus, l"
-        "$mainMod, S, movefocus, r"
-        "$mainMod, N, movefocus, u"
-        "$mainMod, T, movefocus, d"
-        # Move focus with arrow keys
-        "$mainMod, H, movefocus, l"
-        "$mainMod, L, movefocus, r"
-        "$mainMod, K, movefocus, u"
-        "$mainMod, J, movefocus, d"
-        # Switch workspaces
+        "$mainMod, Space, togglefloating"
+        "$mainMod, M, exec, uwsm stop"
+
+        # Focus movement (vim keys)
+        "$mainMod, h, movefocus, l"
+        "$mainMod, j, movefocus, d"
+        "$mainMod, k, movefocus, u"
+        "$mainMod, l, movefocus, r"
+
+        # Workspace switching (1-9)
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
         "$mainMod, 3, workspace, 3"
@@ -120,8 +131,8 @@
         "$mainMod, 7, workspace, 7"
         "$mainMod, 8, workspace, 8"
         "$mainMod, 9, workspace, 9"
-        "$mainMod, 0, workspace, 10"
-        # Move active window to a workspace
+
+        # Move to workspace (SHIFT + 1-9)
         "$mainMod SHIFT, 1, movetoworkspace, 1"
         "$mainMod SHIFT, 2, movetoworkspace, 2"
         "$mainMod SHIFT, 3, movetoworkspace, 3"
@@ -131,16 +142,16 @@
         "$mainMod SHIFT, 7, movetoworkspace, 7"
         "$mainMod SHIFT, 8, movetoworkspace, 8"
         "$mainMod SHIFT, 9, movetoworkspace, 9"
-        "$mainMod SHIFT, 0, movetoworkspace, 10"
+
+        # Screenshots (optimized for most common usage)
+        ", Print, exec, hyprshot -m region --clipboard-only" # Most used: region → clipboard
+        "$mainMod, Print, exec, hyprshot -m region" # Save region to file
+        "SHIFT, Print, exec, hyprshot -m output --current --clipboard-only" # Monitor → clipboard
+        "$mainMod SHIFT, Print, exec, hyprshot -m output --current" # Save monitor to file
+
         # Workspace switching with scroll
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
-        # Screenshot keybindings
-        ", PRINT, exec, hyprshot -m output --current --clipboard-only" # screenshot monitor
-        "$mainMod, PRINT, exec, hyprshot -m region --clipboard-only" # screenshot region
-        "$shiftMod, PRINT, exec, hyprshot -m output --current" # screenshot monitor & save
-        "$mainMod&$shiftMod, PRINT, exec, hyprshot -m region" # screenshot region & save
-
       ];
       binde = [
         # Volume control

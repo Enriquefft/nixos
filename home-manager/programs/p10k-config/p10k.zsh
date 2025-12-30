@@ -199,10 +199,10 @@
   ################################[ prompt_char: prompt symbol ]################################
   # Transparent background.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=
-  # Green prompt symbol if the last command succeeded.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=76
-  # Red prompt symbol if the last command failed.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
+  # Orange prompt symbol if the last command succeeded (Cyber Tardigrade theme).
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#e86a30'
+  # Red prompt symbol if the last command failed (Cyber Tardigrade theme).
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND='#d55a5a'
   # Default prompt symbol.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='❯'
   # Prompt symbol in command vi mode.
@@ -222,8 +222,8 @@
   ##################################[ dir: current directory ]##################################
   # Current directory background color.
   typeset -g POWERLEVEL9K_DIR_BACKGROUND=4
-  # Default current directory foreground color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
+  # Default current directory foreground color (Cyber Tardigrade theme - bright cyan for contrast).
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND='#7eb3d4'
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
@@ -391,12 +391,12 @@
       return
     fi
 
-    # Styling for different parts of Git status.
+    # Styling for different parts of Git status (Cyber Tardigrade theme - high contrast).
     local       meta='%7F' # white foreground
-    local      clean='%0F' # black foreground
-    local   modified='%0F' # black foreground
-    local  untracked='%0F' # black foreground
-    local conflicted='%1F' # red foreground
+    local      clean='%F{#7fd4a8}' # bright green - clean repo
+    local   modified='%F{#ffbe78}' # bright gold - modified files
+    local  untracked='%F{#ff9966}' # bright orange - untracked files
+    local conflicted='%F{#ff8a8a}' # bright red - conflicts
 
     local res
 

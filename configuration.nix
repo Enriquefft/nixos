@@ -15,6 +15,7 @@ flake-overlays:
     ./scripts.nix
     ./nix.nix
     ./suspend.nix
+    ./hyprland-battery-effects.nix
     inputs.home-manager.nixosModules.default
   ];
 
@@ -222,7 +223,7 @@ flake-overlays:
     verbose = true;
 
   };
-  fonts.packages = [ pkgs.nerd-fonts.fira-code ];
+  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
 
   environment = {
     localBinInPath = true;
@@ -391,6 +392,13 @@ flake-overlays:
       device = "BAT0";
       notifyCapacity = 10;
       suspendCapacity = 5;
+    };
+
+    hyprlandBatteryEffects = {
+      enable = true;
+      device = "BAT0";
+      threshold = 90;
+      checkInterval = "2m";
     };
 
     dbus = {

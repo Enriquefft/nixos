@@ -107,6 +107,35 @@
       # Hyprland Utilities
       hyprshot
       hyprpicker
+      hyprlock
+      hypridle
+      hyprpaper
+      hyprsunset
+
+      # Desktop Tools
+      wlogout
+      cliphist
+      grim
+      slurp
+
+      # CLI Tools
+      yazi
+      btop
+      fd
+      lazygit
+
+      # System Utilities
+      brightnessctl
+      playerctl
+
+      # Theming Tools
+      nwg-look
+      libsForQt5.qt5ct
+      kdePackages.qt6ct
+
+      # Media
+      # rff  # Package not available in nixpkgs
+      cava
 
       # Miscellaneous
       glib
