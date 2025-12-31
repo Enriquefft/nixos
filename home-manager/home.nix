@@ -19,6 +19,7 @@
     ./programs/wallpaper.nix
     ./programs/hyprlock.nix
     ./programs/hypridle.nix
+    ./programs/swayosd.nix
     ./coursor.nix
 
   ];

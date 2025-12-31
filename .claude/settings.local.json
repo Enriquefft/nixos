@@ -25,7 +25,11 @@
       "Bash(nix eval:*)",
       "WebFetch(domain:v2.tauri.app)",
       "Bash(git add:*)",
-      "Bash(nix-env:*)"
+      "Bash(nix-env:*)",
+      "Bash(sudo du:*)",
+      "Bash(nix path-info:*)",
+      "Bash(nix-build:*)",
+      "Bash(systemctl:*)"
     ],
     "deny": [],
     "ask": []

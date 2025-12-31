@@ -15,7 +15,7 @@ in {
         # Module layout per rice.md
         modules-left = [ "custom/logo" "hyprland/workspaces" "hyprland/window" ];
         modules-center = [ "cpu" "memory" "network" ];
-        modules-right = [ "mpris" "clock" "tray" ];
+        modules-right = [ "mpris" "pulseaudio" "clock" "tray" ];
 
         # Custom logo module
         "custom/logo" = {
@@ -54,6 +54,21 @@ in {
         "mpris" = {
           format = "♪ {title} - {artist}";
           max-length = 40;
+        };
+
+        # PulseAudio/PipeWire volume
+        "pulseaudio" = {
+          format = "{icon} {volume}%";
+          format-muted = " {volume}%";
+          format-icons = {
+            headphone = "";
+            headset = "";
+            default = ["" "" ""];
+          };
+          scroll-step = 5;
+          on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          on-click-right = "pavucontrol";
+          tooltip-format = "{desc}\nVolume: {volume}%";
         };
 
         # Clock
@@ -101,6 +116,15 @@ in {
 
       #mpris {
         color: #${colors.accent_cyan};
+      }
+
+      #pulseaudio {
+        color: #${colors.accent_magenta};
+        padding: 0 12px;
+      }
+
+      #pulseaudio.muted {
+        color: #${colors.fg_dim};
       }
 
       #clock {

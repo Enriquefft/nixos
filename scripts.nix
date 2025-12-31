@@ -172,6 +172,33 @@
           '';
         };
 
+        audio-switcher = pkgs.writeShellApplication {
+          name = "audio-switcher";
+          runtimeInputs = [ pkgs.pipewire pkgs.libnotify ];
+          text = ''
+            #!/usr/bin/env bash
+
+            # Get available sinks
+            sinks=$(wpctl status | awk '/Sinks:/,/Sources:/' | grep -E "^ *[0-9]+" | sed 's/^[* ]*//g')
+
+            # Format for wofi (using bash parameter expansion)
+            options="''${sinks//. /|}"
+
+            # Show in wofi
+            selected=$(echo "$options" | wofi --dmenu --prompt "Audio Device" --width 400)
+
+            [ -z "$selected" ] && exit 0
+
+            # Extract sink ID
+            sink_id=$(echo "$selected" | cut -d'|' -f1)
+            wpctl set-default "$sink_id"
+
+            # Notify
+            device_name=$(echo "$selected" | cut -d'|' -f2-)
+            notify-send -u low "Audio Device" "Switched to: $device_name" -i audio-card
+          '';
+        };
+
       in
       [
         manteinance
@@ -179,6 +206,7 @@
         gcommit
         gpush
         uwsm-start-logged
+        audio-switcher
       ];
   };
 }

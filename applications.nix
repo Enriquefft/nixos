@@ -134,7 +134,7 @@
       kdePackages.qt6ct
 
       # Media
-      # rff  # Package not available in nixpkgs
+      (import ./packages/riff.nix { inherit (pkgs) lib stdenv fetchFromGitHub rustPlatform meson ninja pkg-config wrapGAppsHook4 blueprint-compiler desktop-file-utils gtk4 libadwaita gst_all_1 alsa-lib openssl libpulseaudio; })
       cava
 
       # Miscellaneous

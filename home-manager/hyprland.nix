@@ -114,6 +114,7 @@ in
         "$mainMod, F, fullscreen"
         "$mainMod, Space, togglefloating"
         "$mainMod, M, exec, uwsm stop"
+        "$mainMod, A, exec, audio-switcher"  # Audio device switcher
 
         # Focus movement (vim keys)
         "$mainMod, h, movefocus, l"
@@ -154,13 +155,13 @@ in
         "$mainMod, mouse_up, workspace, e-1"
       ];
       binde = [
-        # Volume control
-        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        # Brightness control
-        ", XF86MonBrightnessDown, exec, light -U 5"
-        ", XF86MonBrightnessUp, exec, light -A 5"
+        # Volume control (SwayOSD)
+        ", XF86AudioRaiseVolume, exec, swayosd-client --output-volume raise"
+        ", XF86AudioLowerVolume, exec, swayosd-client --output-volume lower"
+        ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
+        # Brightness control (SwayOSD)
+        ", XF86MonBrightnessDown, exec, swayosd-client --brightness lower"
+        ", XF86MonBrightnessUp, exec, swayosd-client --brightness raise"
       ];
 
       # Mouse bindings
