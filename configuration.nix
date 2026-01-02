@@ -25,6 +25,13 @@ in {
     ./modules/system/users.nix
     ./modules/system/nix.nix
 
+    # Hardware modules
+    ./modules/hardware/graphics.nix
+    ./modules/hardware/nvidia-disable.nix
+    ./modules/hardware/bluetooth.nix
+    ./modules/hardware/audio.nix
+    ./modules/hardware/peripherals.nix
+
     inputs.home-manager.nixosModules.default
   ];
 
@@ -34,87 +41,6 @@ in {
     # platformTheme = "gtk2";
     # style = "gtk2";
   };
-
-  hardware = {
-
-    # logitech = {
-    #   wireless = {
-    #     enable = true;
-    #     enableGraphical = true;
-    #   };
-    #   lcd = {
-    #     enable = true;
-    #     startWhenNeeded = true;
-    #   };
-    # };
-
-    bluetooth = {
-      enable = true;
-      powerOnBoot = false;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          Experimental = true;
-        };
-      };
-    };
-
-    cpu.intel.updateMicrocode = true;
-
-    enableAllFirmware = true;
-    enableRedistributableFirmware = true;
-
-    graphics = {
-      enable = true;
-      extraPackages = with pkgs; [ vpl-gpu-rt ];
-
-    };
-    # nvidia = {
-    #   modesetting.enable = true;
-    #
-    #   powerManagement = {
-    #     enable = true;
-    #     finegrained = true;
-    #   };
-    #
-    #   prime = {
-    #
-    #     # NVIDIA PRIME Sync
-    #     sync.enable = false;
-    #
-    #     # get bus id from `nix shell nixpkgs#pciutils -c lspci | grep ' VGA '`
-    #     intelBusId = "PCI:0:2:0";
-    #     nvidiaBusId = "PCI:1:0:0";
-    #
-    #     offload = {
-    #       enable = true;
-    #       enableOffloadCmd = true;
-    #     };
-    #
-    #   };
-    #
-    #   open = true;
-    #
-    #   nvidiaSettings = true;
-    #
-    #   package = config.boot.kernelPackages.nvidiaPackages.stable;
-    #
-    # };
-
-  };
-
-  # DISABLE NVIDIA
-  boot.extraModprobeConfig = ''
-    blacklist nouveau
-    options nouveau modeset=0
-  '';
-
-  boot.blacklistedKernelModules = [
-    "nouveau"
-    "nvidia"
-    "nvidia_drm"
-    "nvidia_modeset"
-  ];
 
   powerManagement = {
     enable = true;
@@ -244,8 +170,6 @@ in {
 
   services = {
 
-    pulseaudio.enable = false;
-
     keyd = {
       enable = true;
 
@@ -267,28 +191,6 @@ in {
     };
 
     envfs.enable = true;
-
-    # # Remove NVIDIA USB xHCI Host Controller devices, if present
-    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-    # # Remove NVIDIA USB Type-C UCSI devices, if present
-    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-    # # Remove NVIDIA Audio devices, if present
-    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-    # # Remove NVIDIA VGA/3D controller devices
-    # ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-    udev.extraRules = ''
-
-      # ZSA/Oryx
-
-      # Rules for Oryx web flashing and live training
-      KERNEL=="hidraw*", ATTRS{idVendor}=="16c0", MODE="0664", GROUP="plugdev"
-      KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
-
-      # Keymapp Flashing rules for the Voyager
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
-
-
-    '';
 
     upower.enable = true;
 
@@ -375,20 +277,6 @@ in {
         variant = "intl";
         options = "caps:swapescape";
       };
-
-    };
-
-    pipewire = {
-
-      enable = true;
-
-      pulse.enable = true;
-
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
-      jack.enable = true;
 
     };
 

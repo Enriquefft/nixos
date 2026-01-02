@@ -1,0 +1,17 @@
+# Peripheral Devices Configuration
+# udev rules for special hardware (ZSA keyboards, etc.)
+{ ... }:
+
+{
+  services.udev.extraRules = ''
+    # ZSA Keyboards (Voyager, Moonlander, Ergodox EZ)
+    # Required for Oryx web flashing and Keymapp
+
+    # Rules for Oryx web flashing and live training
+    KERNEL=="hidraw*", ATTRS{idVendor}=="16c0", MODE="0664", GROUP="plugdev"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
+
+    # Keymapp Flashing rules for the Voyager
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", MODE:="0666", SYMLINK+="ignition_dfu"
+  '';
+}
