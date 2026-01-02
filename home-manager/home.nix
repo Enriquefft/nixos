@@ -20,13 +20,18 @@
     ./programs/hyprlock.nix
     ./programs/hypridle.nix
     ./programs/swayosd.nix
-    ./coursor.nix
+    ./cursor.nix
 
   ];
   services = {
+    gnome-keyring = {
+      enable = true;
+      components = [ "secrets" "ssh" ];
+    };
+
     mako =
       let
-        colors = (import ./colors.nix).cyberTardigrade;
+        colors = (import ../shared/colors.nix).cyberTardigrade;
       in {
         enable = true;
 

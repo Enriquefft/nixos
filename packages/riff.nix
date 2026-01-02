@@ -14,6 +14,7 @@
 , alsa-lib
 , openssl
 , libpulseaudio
+, pipewire
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     alsa-lib
     libpulseaudio
+    pipewire
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
@@ -62,6 +64,15 @@ rustPlatform.buildRustPackage rec {
     runHook preInstall
     ninja -C build install
     runHook postInstall
+  '';
+
+  postInstall = ''
+    # Add keywords to desktop entry for better discoverability
+    desktopFile="$out/share/applications/com.diegovsky.riff.desktop"
+    if [ -f "$desktopFile" ]; then
+      sed -i '/^Keywords=/d' "$desktopFile"
+      echo "Keywords=spotify;music;audio;streaming;player;premium;" >> "$desktopFile"
+    fi
   '';
 
   meta = with lib; {

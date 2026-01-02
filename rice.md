@@ -36,7 +36,7 @@ border        #3a3055    Inactive borders
 | Lock | hyprlock | ~/.config/hypr/hyprlock.conf |
 | Screenshots | hyprshot | - |
 | Night mode | hyprsunset | - |
-| Music | rff | GTK themed |
+| Music | riff | GTK themed |
 
 ## Packages (NixOS)
 
@@ -64,7 +64,7 @@ nwg-look gradience qt5ct qt6ct
 (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
 
 # Media
-rff cava
+riff cava
 ```
 
 ## Hyprland Config
@@ -264,4 +264,4 @@ Urgency colors:
 5. **Polish**: Animations, blur, keybinds, hyprlock
 6. **Editor**: NixVim + colorscheme
 7. **Notifications**: Swaync + control center
-8. **Final**: GTK/QT theming, Rff, fastfetch
+8. **Final**: GTK/QT theming, Riff, fastfetch

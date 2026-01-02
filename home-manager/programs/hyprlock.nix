@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  colors = (import ../colors.nix).cyberTardigrade;
+  colors = (import ../../shared/colors.nix).cyberTardigrade;
 in {
   programs.hyprlock = {
     enable = true;

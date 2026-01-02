@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  colors = (import ../colors.nix).cyberTardigrade;
+  colors = (import ../../shared/colors.nix).cyberTardigrade;
 in {
   programs.wofi = {
     enable = true;

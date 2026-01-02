@@ -24,6 +24,8 @@ flake-overlays:
     loader = {
       systemd-boot = {
         enable = true;
+        editor = false;  # Disable boot entry editing for security
+        consoleMode = "max";  # Use maximum resolution for boot menu
       };
       efi = {
 
@@ -35,14 +37,22 @@ flake-overlays:
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
-    kernelParams = [ "i915.enable_psr=0" ];
-    # plymouth = {
-    #   enable = true;
-    #   font =
-    #     "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
-    #   themePackages = [ pkgs.catppuccin-plymouth ];
-    #   theme = "catppuccin-macchiato";
-    # };
+    kernelParams = [
+      "i915.enable_psr=0"
+      "quiet"           # Suppress most kernel messages
+      "splash"          # Enable Plymouth splash screen
+      "vt.global_cursor_default=0"  # Hide blinking cursor
+      "rd.systemd.show_status=false"  # Hide systemd status during initrd
+      "rd.udev.log_level=3"  # Reduce udev logging in initrd
+      "udev.log_priority=3"  # Reduce udev logging after boot
+    ];
+
+    plymouth = {
+      enable = true;
+      font = "${pkgs.nerd-fonts.jetbrains-mono}/share/fonts/truetype/NerdFonts/JetBrainsMono/JetBrainsMonoNerdFont-Regular.ttf";
+      themePackages = [ pkgs.adi1090x-plymouth-themes ];
+      theme = "rings";  # Minimal theme matching research terminal aesthetic
+    };
   };
 
   systemd.tmpfiles.rules = [
@@ -96,8 +106,31 @@ flake-overlays:
   };
 
   console = {
-    font = "Lat2-Terminus16";
-    useXkbConfig = true; # use xkb.options in tty.
+    # Cyber Tardigrade TTY theme
+    font = "ter-v32n";
+    packages = with pkgs; [ terminus_font ];
+    earlySetup = true;
+    useXkbConfig = true;
+
+    # ANSI colors matching Cyber Tardigrade palette
+    colors = [
+      "0d0d1a"  # 0: black (bg_base)
+      "d55a5a"  # 1: red (error)
+      "5aaa7a"  # 2: green (success)
+      "f0a050"  # 3: yellow (accent_gold)
+      "5a8fba"  # 4: blue (accent_cyan)
+      "b55a9a"  # 5: magenta (accent_magenta)
+      "5a8fba"  # 6: cyan (accent_cyan)
+      "a8a8c0"  # 7: white (fg_normal)
+      "6b6b8a"  # 8: bright black (fg_dim)
+      "ff8a8a"  # 9: bright red (terminal_error)
+      "7fd4a8"  # 10: bright green (terminal_success)
+      "ffbe78"  # 11: bright yellow (terminal_modified)
+      "7eb3d4"  # 12: bright blue (terminal_cyan)
+      "b55a9a"  # 13: bright magenta (accent_magenta)
+      "7eb3d4"  # 14: bright cyan (terminal_cyan)
+      "d4d4e8"  # 15: bright white (fg_bright)
+    ];
   };
 
   qt = {
@@ -537,6 +570,8 @@ flake-overlays:
     polkit.enable = true;
 
     rtkit.enable = true;
+
+    pam.services.login.enableGnomeKeyring = true;
 
     sudo.enable = true; # Enabled to be used with sudoedit (svim alias)
 

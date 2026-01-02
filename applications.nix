@@ -16,6 +16,7 @@
     systemPackages = with pkgs; [
       whisper-cpp
 
+      nodejs
       postman
       unrar-wrapper
       openvpn
@@ -30,6 +31,7 @@
       inxi
 
       uv
+      jq
 
       # System Utilities
       gparted
@@ -65,6 +67,8 @@
       xfce.thunar
       pavucontrol
       pamixer
+      gnome-keyring
+      seahorse
 
       # Media Applications
       vlc
@@ -134,7 +138,27 @@
       kdePackages.qt6ct
 
       # Media
-      (import ./packages/riff.nix { inherit (pkgs) lib stdenv fetchFromGitHub rustPlatform meson ninja pkg-config wrapGAppsHook4 blueprint-compiler desktop-file-utils gtk4 libadwaita gst_all_1 alsa-lib openssl libpulseaudio; })
+      (import ./packages/riff.nix {
+        inherit (pkgs)
+          lib
+          stdenv
+          fetchFromGitHub
+          rustPlatform
+          meson
+          ninja
+          pkg-config
+          wrapGAppsHook4
+          blueprint-compiler
+          desktop-file-utils
+          gtk4
+          libadwaita
+          gst_all_1
+          alsa-lib
+          openssl
+          libpulseaudio
+          pipewire
+          ;
+      })
       cava
 
       # Miscellaneous

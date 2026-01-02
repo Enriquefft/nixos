@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  colors = (import ./colors.nix).cyberTardigrade;
+  colors = (import ../shared/colors.nix).cyberTardigrade;
 in
 {
   wayland.windowManager.hyprland = {
