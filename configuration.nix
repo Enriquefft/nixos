@@ -15,8 +15,6 @@ in {
     ./hardware-configuration.nix
     ./applications.nix
     ./scripts.nix
-    ./suspend.nix
-    ./hyprland-battery-effects.nix
 
     # System modules
     ./modules/system/boot.nix
@@ -32,6 +30,10 @@ in {
     ./modules/hardware/audio.nix
     ./modules/hardware/peripherals.nix
 
+    # Power management
+    ./modules/power/battery.nix
+    ./modules/power/thermal.nix
+
     inputs.home-manager.nixosModules.default
   ];
 
@@ -40,11 +42,6 @@ in {
     # TODO: rice xd
     # platformTheme = "gtk2";
     # style = "gtk2";
-  };
-
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = "powersave";
   };
 
   home-manager = {
@@ -194,20 +191,6 @@ in {
 
     upower.enable = true;
 
-    batteryNotifier = {
-      enable = true;
-      device = "BAT0";
-      notifyCapacity = 10;
-      suspendCapacity = 5;
-    };
-
-    hyprlandBatteryEffects = {
-      enable = true;
-      device = "BAT0";
-      threshold = 90;
-      checkInterval = "2m";
-    };
-
     dbus = {
       enable = true;
     };
@@ -280,42 +263,6 @@ in {
 
     };
 
-    # prevent overheating on intel CPU
-    thermald.enable = true;
-
-    tlp = {
-      enable = true;
-      settings = {
-        # Platform
-        CPU_SCALING_GOVERNOR_ON_AC = "powersave";
-        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-        CPU_ENERGY_PERF_POLICY_ON_AC = "power";
-
-        CPU_MIN_PERF_ON_AC = 0;
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 20;
-
-        START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
-        STOP_CHARGE_THRESH_BAT0 = 85; # 80 and above it stops charging
-      };
-    };
-
-    #   auto-cpufreq = {
-    #     enable = true;
-    #     settings = {
-    #       battery = {
-    #         governor = "powersave";
-    #         turbo = "never";
-    #       };
-    #       charger = {
-    #         governor = "performance";
-    #         turbo = "auto";
-    #       };
-    #     };
-    #   };
   };
 
   virtualisation = {
