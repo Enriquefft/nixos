@@ -45,6 +45,7 @@
         "x-scheme-handler/https" = "firefox.desktop";
         "x-scheme-handler/about" = "firefox.desktop";
         "x-scheme-handler/unknown" = "firefox.desktop";
+        "x-scheme-handler/figma" = "figma-linux.desktop";
 
       };
       enable = true;
@@ -76,6 +77,29 @@
     #     categories = [ "Utility" "Development" "IDE" ];
     #   };
     # };
+  };
+
+  # GTK theme configuration (fixes white-on-white in figma-linux)
+  gtk = {
+    enable = true;
+
+    theme = {
+      name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3;
+    };
+
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
+    };
+
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
   };
 
   # Home Manager needs a bit of information about you and the paths it should
