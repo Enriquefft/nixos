@@ -23,6 +23,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nix-xilinx = {
     #   url = "gitlab:doronbehar/nix-xilinx";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -47,7 +52,10 @@
     {
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = {
+          inherit inputs;
+          antigravity = inputs.antigravity-nix.packages.x86_64-linux.default;
+        };
         modules = [
           inputs.home-manager.nixosModules.default
           inputs.nix-index-database.nixosModules.nix-index
