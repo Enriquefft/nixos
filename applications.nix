@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, antigravity, ... }:
 
 {
 
@@ -14,100 +14,77 @@
       formatted;
 
     systemPackages = with pkgs; [
-      whisper-cpp
+      # ─────────────────────────────────────────────────────────
+      # Core System Utilities
+      # ─────────────────────────────────────────────────────────
+      git
+      wget
+      vim
+      killall
+      brightnessctl
+      playerctl
+      gparted
 
-      nodejs
-      postman
+      # File Management
+      file
+      tree
+      eza
+      unzip
+      zip
+      p7zip
       unrar-wrapper
-      openvpn
-      zoom-us
-      protonvpn-gui
-      komikku
-      # System information
+      trash-cli
+      mlocate
+
+      # System Information
       hwinfo
       pciutils
       lshw
       dmidecode
       inxi
+      lsof
+      fastfetch
 
-      uv
-      jq
-
-      # System Utilities
-      gparted
-      killall
-      wget
-      vim
-      git
-      file
-      binutils
-      eza
-      wl-clipboard
+      # ─────────────────────────────────────────────────────────
+      # CLI Tools
+      # ─────────────────────────────────────────────────────────
       bat
       ripgrep
       fzf
-      dconf
-      pass
-      tree
-      fastfetch
-      pokemonsay
-      gnumake
-      unzip
-      zip
-      p7zip
+      fd
+      jq
       csvlens
-      mlocate
-      lsof
-      trash-cli
+      yazi
+      btop
+      lazygit
 
-      # ZSA Keyboard
-      keymapp
-
-      # Desktop Environment Tools
-      xfce.thunar
-      pavucontrol
-      pamixer
-      gnome-keyring
-      seahorse
-
-      # Media Applications
-      vlc
-      obs-studio
-      gimp
-      ffmpeg
-
-      # Browsers
-      (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
-      google-chrome
-
-      # Communication Tools
-      discord
-      # element-desktop
-
-      # Office Suite
-      libreoffice-still
-
+      # ─────────────────────────────────────────────────────────
       # Development Tools
-      # zed-editor
+      # ─────────────────────────────────────────────────────────
+      binutils
+      gnumake
+      openssl
+      nodejs
+      uv
+
+      # Development Applications
+      code-cursor-fhs
+      # claude-code
+      antigravity
+      (pkgs.writeShellScriptBin "opencode" ''
+        exec /home/hybridz/.opencode/bin/opencode "$@"
+      '')
+      (pkgs.writeShellScriptBin "gemini" ''
+        exec npx @google/gemini-cli "$@"
+      '')
+      postman
       pgcli
       gh
-      # unityhub
-      # awscli2
-      openssl
-      # ollama
-      code-cursor-fhs
-      claude-code
       act
 
-      # Academia Tools
-      obsidian
-
-      # Custom Applications
-      (import ./packages/whispering.nix { inherit pkgs; })
-
-      # Design Tools
-      figma-linux
-
+      # ─────────────────────────────────────────────────────────
+      # Desktop Environment
+      # ─────────────────────────────────────────────────────────
       # Hyprland Utilities
       hyprshot
       hyprpicker
@@ -115,29 +92,57 @@
       hypridle
       hyprpaper
       hyprsunset
+      wlogout
 
       # Desktop Tools
-      wlogout
+      xfce.thunar
       cliphist
       grim
       slurp
+      wl-clipboard
 
-      # CLI Tools
-      yazi
-      btop
-      fd
-      lazygit
+      # Audio Control
+      pavucontrol
+      pamixer
 
-      # System Utilities
-      brightnessctl
-      playerctl
-
-      # Theming Tools
+      # Theming & Appearance
       nwg-look
       libsForQt5.qt5ct
       kdePackages.qt6ct
+      adw-gtk3
+      gnome-themes-extra
+      adwaita-icon-theme
 
-      # Media
+      # System Integration
+      dconf
+      glib
+      xdg-utils
+      libnotify
+      gnome-keyring
+      seahorse
+      pass
+
+      # ─────────────────────────────────────────────────────────
+      # Browsers
+      # ─────────────────────────────────────────────────────────
+      (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
+      google-chrome
+
+      # ─────────────────────────────────────────────────────────
+      # Communication
+      # ─────────────────────────────────────────────────────────
+      discord
+      zoom-us
+
+      # ─────────────────────────────────────────────────────────
+      # Media & Content Creation
+      # ─────────────────────────────────────────────────────────
+      vlc
+      obs-studio
+      gimp
+      ffmpeg
+      whisper-cpp
+      cava
       (import ./packages/riff.nix {
         inherit (pkgs)
           lib
@@ -159,32 +164,53 @@
           pipewire
           ;
       })
-      cava
 
-      # Miscellaneous
-      glib
-      xdg-utils
-      libnotify
-      adwaita-icon-theme
-      solaar
-      certbot-full
-      # pymol
+      # ─────────────────────────────────────────────────────────
+      # Productivity
+      # ─────────────────────────────────────────────────────────
+      libreoffice-still
+      obsidian
+      xournalpp
+      komikku
 
+      # ─────────────────────────────────────────────────────────
+      # Design & Creative Tools
+      # ─────────────────────────────────────────────────────────
+      figma-linux
+
+      # ─────────────────────────────────────────────────────────
       # Gaming
+      # ─────────────────────────────────────────────────────────
       mangohud
       protonup-ng
       lutris
       heroic
       bottles
-      # cockatrice
       prismlauncher
-      # modrinth-app
-      # ferium
       pokemmo-installer
-      # lime3ds
-      # ryujinx
 
-      xournalpp
+      # ─────────────────────────────────────────────────────────
+      # Hardware & Peripherals
+      # ─────────────────────────────────────────────────────────
+      keymapp # ZSA Keyboard
+      solaar # Logitech devices
+
+      # ─────────────────────────────────────────────────────────
+      # Security & Networking
+      # ─────────────────────────────────────────────────────────
+      openvpn
+      protonvpn-gui
+      certbot-full
+
+      # ─────────────────────────────────────────────────────────
+      # Custom Packages
+      # ─────────────────────────────────────────────────────────
+      (import ./packages/whispering.nix { inherit pkgs; })
+
+      # ─────────────────────────────────────────────────────────
+      # Fun Stuff
+      # ─────────────────────────────────────────────────────────
+      pokemonsay
 
     ];
   };
