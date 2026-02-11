@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   colors = (import ../../shared/colors.nix).cyberTardigrade;
-in {
+in
+{
   programs.kitty = {
     enable = true;
 
@@ -57,5 +63,9 @@ in {
     };
 
     shellIntegration.enableZshIntegration = true;
+
+    keybindings = {
+      "shift+enter" = "send_text all \\n";
+    };
   };
 }
