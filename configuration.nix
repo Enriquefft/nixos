@@ -54,9 +54,8 @@ in {
 
   qt = {
     enable = true;
-    # TODO: rice xd
-    # platformTheme = "gtk2";
-    # style = "gtk2";
+    platformTheme = "gtk2";
+    style = "gtk2";
   };
 
   home-manager = {
