@@ -36,4 +36,7 @@ in {
       '';
     };
   };
+
+  # Don't auto-start MariaDB - use 'sudo systemctl start mysql' when needed
+  systemd.services.mysql.wantedBy = pkgs.lib.mkForce [];
 }

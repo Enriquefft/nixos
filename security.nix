@@ -12,7 +12,12 @@ in {
     pam.services.login.enableGnomeKeyring = true;
 
     # Enabled to be used with sudoedit (svim alias)
-    sudo.enable = true;
+    sudo = {
+      enable = true;
+      extraConfig = ''
+        Defaults pwfeedback
+      '';
+    };
 
     doas = {
       enable = true;

@@ -69,13 +69,39 @@ in {
         CPU_ENERGY_PERF_POLICY_ON_AC = "power";
 
         CPU_MIN_PERF_ON_AC = 0;
-        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MAX_PERF_ON_AC = 80;
         CPU_MIN_PERF_ON_BAT = 0;
         CPU_MAX_PERF_ON_BAT = 20;
+
+        # Disable turbo boost - reduces heat significantly
+        CPU_BOOST_ON_AC = 0;
+        CPU_BOOST_ON_BAT = 0;
 
         # Battery charge thresholds - balances availability with longevity
         START_CHARGE_THRESH_BAT0 = constants.battery.charge.start;  # Start charging below 40%
         STOP_CHARGE_THRESH_BAT0 = constants.battery.charge.stop;    # Stop charging at 85%
+
+        # WiFi power saving
+        WIFI_PWR_ON_AC = "off";
+        WIFI_PWR_ON_BAT = "on";
+
+        # USB autosuspend
+        USB_AUTOSUSPEND = 1;
+
+        # Runtime Power Management for PCI(e) devices
+        RUNTIME_PM_ON_AC = "on";
+        RUNTIME_PM_ON_BAT = "auto";
+
+        # NVMe/SATA power management
+        AHCI_RUNTIME_PM_ON_AC = "on";
+        AHCI_RUNTIME_PM_ON_BAT = "auto";
+        SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
+        SATA_LINKPWR_ON_AC = "max_performance";
+
+        # Sound power saving
+        SOUND_POWER_SAVE_ON_AC = 0;
+        SOUND_POWER_SAVE_ON_BAT = 1;
+        SOUND_POWER_SAVE_CONTROLLER = "Y";
       };
     };
 
@@ -124,6 +150,35 @@ in {
           '';
         };
       })
+
+      # Battery temperature monitor (warns if battery overheats)
+      {
+        timers."battery-temp-monitor" = {
+          description = "Monitor battery temperature";
+          timerConfig = {
+            OnBootSec = "2m";
+            OnUnitInactiveSec = "5m";
+            Unit = "battery-temp-monitor.service";
+          };
+          wantedBy = [ "timers.target" ];
+        };
+        services."battery-temp-monitor" = {
+          description = "Battery temperature warning";
+          serviceConfig.PassEnvironment = "DISPLAY";
+          script = ''
+            temp_raw=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/${constants.battery.device}/temp 2>/dev/null || echo "0")
+            # temp is in tenths of degrees C (e.g. 361 = 36.1°C)
+            temp_threshold=450  # 45.0°C
+
+            if [[ $temp_raw -ge $temp_threshold ]]; then
+              temp_display=$((temp_raw / 10))
+              ${pkgs.libnotify}/bin/notify-send --urgency=critical --icon=dialog-warning \
+                "Battery Overheating" \
+                "Battery temperature is ''${temp_display}°C. Consider reducing load or shutting down."
+            fi
+          '';
+        };
+      }
 
       # Hyprland visual effects (disable blur/shadow on battery)
       (mkIf cfgEffects.enable {

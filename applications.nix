@@ -44,6 +44,7 @@
       inxi
       lsof
       fastfetch
+      powertop
 
       # ─────────────────────────────────────────────────────────
       # CLI Tools
