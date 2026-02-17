@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
 
@@ -180,8 +180,9 @@
                                 echo "✅ All $commit_num commit(s) applied."
                             else
                                 echo "🚫 Aborted."
+                                exit 1
                             fi
-                            exit 0
+                            # Return to allow gpush to continue with pull/push
                         fi
 
                         # check if commit message was provided as argument
@@ -495,6 +496,153 @@
           '';
         };
 
+        gpu-toggle = pkgs.writeShellApplication {
+          name = "gpu-toggle";
+          runtimeInputs = [
+            pkgs.pciutils
+            pkgs.kmod
+            pkgs.systemd
+            pkgs.libnotify
+          ];
+          text = let
+            constants = import ./shared/constants.nix;
+            gpu = constants.gpu.pci.address;
+            audio = constants.gpu.pci.audioAddress;
+          in ''
+            GPU_DEV="/sys/bus/pci/devices/${gpu}"
+            AUDIO_DEV="/sys/bus/pci/devices/${audio}"
+
+            notify_user() {
+              if [ -n "''${SUDO_USER:-}" ]; then
+                uid=$(id -u "$SUDO_USER")
+                sudo -u "$SUDO_USER" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+                  notify-send -u normal "GPU Toggle" "$1" 2>/dev/null || true
+              fi
+            }
+
+            gpu_on() {
+              echo "Powering on NVIDIA GPU..."
+
+              # Rescan PCI bus if device was removed
+              if [ ! -d "$GPU_DEV" ]; then
+                echo "GPU not on PCI bus, rescanning..."
+                echo 1 > /sys/bus/pci/rescan
+                sleep 2
+              fi
+
+              if [ ! -d "$GPU_DEV" ]; then
+                echo "ERROR: GPU not found after rescan"
+                exit 1
+              fi
+
+              # Set power control to on
+              echo on > "$GPU_DEV/power/control"
+              [ -d "$AUDIO_DEV" ] && echo on > "$AUDIO_DEV/power/control"
+              sleep 1
+
+              # Load NVIDIA kernel modules from current-system
+              # (use -d to specify module directory in case running after nixos-rebuild test)
+              modprobe -d /run/current-system/kernel-modules nvidia
+              modprobe -d /run/current-system/kernel-modules nvidia_uvm
+              modprobe -d /run/current-system/kernel-modules nvidia_drm
+              modprobe -d /run/current-system/kernel-modules nvidia_modeset
+
+              # Create NVIDIA device files (/dev/nvidia*, /dev/nvidiactl, etc.)
+              # Required for CUDA to communicate with the GPU
+              ${config.hardware.nvidia.package}/bin/nvidia-smi > /dev/null 2>&1 || true
+              sleep 1
+
+              # Start Ollama
+              systemctl start ollama
+
+              echo "GPU is ON, Ollama started"
+              notify_user "NVIDIA GPU powered ON, Ollama started"
+            }
+
+            gpu_off() {
+              echo "Powering off NVIDIA GPU..."
+
+              # Stop Ollama
+              systemctl stop ollama 2>/dev/null || true
+              sleep 1
+
+              # Unload NVIDIA kernel modules (reverse order)
+              rmmod nvidia_modeset 2>/dev/null || true
+              rmmod nvidia_drm 2>/dev/null || true
+              rmmod nvidia_uvm 2>/dev/null || true
+              rmmod nvidia 2>/dev/null || true
+
+              # Set power control to auto (allows D3cold)
+              if [ -d "$GPU_DEV" ]; then
+                echo auto > "$GPU_DEV/power/control"
+              fi
+              if [ -d "$AUDIO_DEV" ]; then
+                echo auto > "$AUDIO_DEV/power/control"
+              fi
+
+              sleep 2
+
+              # Check if GPU entered low-power state
+              if [ -d "$GPU_DEV" ]; then
+                state=$(cat "$GPU_DEV/power_state" 2>/dev/null || echo "unknown")
+                if [ "$state" = "D0" ]; then
+                  echo "GPU still in D0, removing from PCI bus as fallback..."
+                  echo 1 > "$GPU_DEV/remove"
+                  [ -d "$AUDIO_DEV" ] && echo 1 > "$AUDIO_DEV/remove"
+                  echo "GPU removed from PCI bus (rescan will restore it)"
+                else
+                  echo "GPU entered power state: $state"
+                fi
+              fi
+
+              echo "GPU is OFF"
+              notify_user "NVIDIA GPU powered OFF"
+            }
+
+            gpu_status() {
+              if [ ! -d "$GPU_DEV" ]; then
+                echo "GPU:    OFF (removed from PCI bus)"
+                echo "Ollama: $(systemctl is-active ollama 2>/dev/null || true)"
+                return
+              fi
+
+              power_state=$(cat "$GPU_DEV/power_state" 2>/dev/null || echo "unknown")
+              driver=$(basename "$(readlink "$GPU_DEV/driver" 2>/dev/null)" 2>/dev/null || echo "none")
+              ollama_state=$(systemctl is-active ollama 2>/dev/null || true)
+
+              case "$power_state" in
+                D0)       gpu_label="ON (D0 - fully powered, drawing ~10-15W)" ;;
+                D3cold)   gpu_label="OFF (D3cold - powered down, ~0W)" ;;
+                D3hot)    gpu_label="STANDBY (D3hot - low power, ~1-2W)" ;;
+                *)        gpu_label="$power_state" ;;
+              esac
+
+              if [ "$driver" = "none" ]; then
+                driver_label="no driver loaded"
+              else
+                driver_label="$driver"
+              fi
+
+              echo "GPU:    $gpu_label"
+              echo "Driver: $driver_label"
+              echo "Ollama: $ollama_state"
+            }
+
+            case "''${1:-status}" in
+              on)   gpu_on ;;
+              off)  gpu_off ;;
+              status) gpu_status ;;
+              *)
+                echo "Usage: gpu-toggle {on|off|status}"
+                echo "  on     - Power on GPU, load drivers, start Ollama"
+                echo "  off    - Stop Ollama, unload drivers, power off GPU"
+                echo "  status - Show GPU power state and Ollama status"
+                exit 1
+                ;;
+            esac
+          '';
+        };
+
         project-init = pkgs.writeShellApplication {
           name = "project-init";
           runtimeInputs = [
@@ -544,6 +692,7 @@
         uwsm-start-logged
         audio-switcher
         md2pdf
+        gpu-toggle
         project-init
       ];
   };

@@ -9,6 +9,7 @@
         enable = true;
         editor = false;  # Disable boot entry editing for security
         consoleMode = "max";  # Use maximum resolution for boot menu
+        configurationLimit = 3;  # Keep max 3 boot entries to prevent /boot filling up
       };
       efi = {
         efiSysMountPoint = "/boot";
@@ -19,7 +20,9 @@
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
     kernelParams = [
-      "i915.enable_psr=0"  # Disable Panel Self Refresh - fixes screen flickering on Framework 13 Intel
+      "i915.enable_psr=2"  # PSR2 - saves power while avoiding PSR1 flickering on Framework 13 Intel
+      "pcie_aspm=force"    # Force PCIe Active State Power Management for better battery life
+      "acpi_backlight=native"  # Use Intel GPU native backlight control (required after blacklisting nvidia_wmi_ec_backlight)
       "quiet"           # Suppress most kernel messages
       "splash"          # Enable Plymouth splash screen
       "vt.global_cursor_default=0"  # Hide blinking cursor

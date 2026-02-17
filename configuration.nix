@@ -41,6 +41,7 @@ in {
     ./modules/services/desktop.nix
     ./modules/services/display.nix
     ./modules/services/input.nix
+    ./modules/services/ollama.nix
 
     # Programs
     ./modules/programs/hyprland.nix

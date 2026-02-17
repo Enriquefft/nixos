@@ -24,7 +24,7 @@
     # TLP charge thresholds (battery longevity)
     charge = {
       start = 40;  # Begin charging when below 40%
-      stop = 85;   # Stop charging at 85%
+      stop = 60;   # Stop charging at 60% (reduced to minimize stress on degraded battery)
     };
 
     # Low battery warnings
@@ -33,6 +33,14 @@
 
     # Visual effects threshold
     effects = 90;  # Disable blur/shadow below 90%
+  };
+
+  # GPU (NVIDIA RTX 4070 Max-Q)
+  gpu = {
+    pci = {
+      address = "0000:01:00.0";
+      audioAddress = "0000:01:00.1";
+    };
   };
 
   # Display
