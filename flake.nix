@@ -43,6 +43,7 @@
     };
 
     openclaw = {
+      # My openclaw config
       url = "path:./openclaw";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-openclaw.follows = "nix-openclaw";
