@@ -53,6 +53,7 @@
       ripgrep
       fzf
       fd
+      zoxide
       jq
       csvlens
       yazi
