@@ -32,8 +32,11 @@
   # Machine-specific secrets injection for openclaw services
   systemd.user.services.openclaw-gateway.Service.EnvironmentFile =
     [ "/run/secrets/rendered/openclaw.env" ];
-  systemd.user.services.kapso-whatsapp-poller.Service.EnvironmentFile =
-    [ "/run/secrets/rendered/openclaw.env" ];
+  services.kapso-whatsapp.secrets = {
+    apiKeyFile = "/run/secrets/openclaw/kapso-api-key";
+    phoneNumberIdFile = "/run/secrets/openclaw/kapso-phone-number-id";
+    gatewayTokenFile = "/run/secrets/openclaw/gateway-token";
+  };
 
   services.gnome-keyring = {
     enable = true;
