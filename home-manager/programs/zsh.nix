@@ -39,6 +39,15 @@
     '';
 
     initContent = lib.mkBefore ''
+      # OpenClaw wrapper - loads secrets only when needed
+      openclaw() {
+        if [ -f /run/secrets/rendered/openclaw.env ]; then
+          env $(cat /run/secrets/rendered/openclaw.env | xargs) $(which openclaw) "$@"
+        else
+          $(which openclaw) "$@"
+        fi
+      }
+
       # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
       # Initialization code that may require console input (password prompts, [y/n]
       # confirmations, etc.) must go above this block; everything else may go below.
@@ -105,6 +114,8 @@
     };
 
     profileExtra = ''
+      export PATH="/home/hybridz/.cache/.bun/bin:$PATH"
+
       setopt incappendhistory
       setopt histfindnodups
       setopt histreduceblanks

@@ -1,21 +1,19 @@
 {
 
-    programs.nixvim.plugins.obsidian = {
+  programs.nixvim.plugins.obsidian = {
 
+    enable = false;
 
-        enable = false;
+    settings = {
+      workspaces = [
+      ];
+      new_notes_location = "current_dir";
+      completion = {
+        nvim_cmp = true;
+        min_chars = 2;
+      };
+    };
 
-        #    settings = {
-    #      workspaces = [
-    #        ];
-        #        new_notes_location = "current_dir";
-        #        completion = {
-            #          nvim_cmp = true;
-            #          min_chars = 2;
-            #        };
-            #    };
-
-        };
-
+  };
 
 }

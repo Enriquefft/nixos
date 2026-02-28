@@ -69,9 +69,9 @@
       ", XF86AudioLowerVolume, exec, swayosd-client --output-volume lower"
       ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
 
-      # Brightness control (SwayOSD)
-      ", XF86MonBrightnessDown, exec, swayosd-client --brightness lower"
-      ", XF86MonBrightnessUp, exec, swayosd-client --brightness raise"
+      # Brightness control (SwayOSD - explicit device required after nvidia_wmi_ec_backlight blacklist)
+      ", XF86MonBrightnessDown, exec, swayosd-client --brightness lower --device intel_backlight"
+      ", XF86MonBrightnessUp, exec, swayosd-client --brightness raise --device intel_backlight"
     ];
 
     # Mouse bindings

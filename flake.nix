@@ -28,6 +28,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nix-xilinx = {
     #   url = "gitlab:doronbehar/nix-xilinx";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -46,6 +55,7 @@
 
       flake-overlays = [
         # nix-xilinx.overlay
+        inputs.nix-openclaw.overlays.default
       ];
 
     in
@@ -59,6 +69,7 @@
         modules = [
           inputs.home-manager.nixosModules.default
           inputs.nix-index-database.nixosModules.nix-index
+          inputs.sops-nix.nixosModules.sops
           (import ./configuration.nix flake-overlays)
         ];
       };

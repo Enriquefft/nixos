@@ -26,6 +26,7 @@
     ./programs/kitty.nix
     ./programs/nixvim.nix
     ./programs/swayosd.nix
+    ./programs/openclaw.nix
   ];
 
   services.gnome-keyring = {
@@ -208,6 +209,5 @@
       nix-direnv.enable = true;
 
     };
-
   };
 }

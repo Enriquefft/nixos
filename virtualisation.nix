@@ -7,4 +7,7 @@
 
   # Don't auto-start Docker - use 'sudo systemctl start docker' when needed
   systemd.services.docker.wantedBy = lib.mkForce [];
+
+  # Flatpak support for sandboxed applications
+  services.flatpak.enable = true;
 }

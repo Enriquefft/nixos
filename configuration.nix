@@ -42,6 +42,7 @@ in {
     ./modules/services/display.nix
     ./modules/services/input.nix
     ./modules/services/ollama.nix
+    ./modules/services/openclaw-secrets.nix
 
     # Programs
     ./modules/programs/hyprland.nix
@@ -49,9 +50,16 @@ in {
     ./modules/programs/steam.nix
     ./modules/programs/zsh.nix
     ./modules/programs/development.nix
+    ./modules/programs/factorio-gog.nix
 
     inputs.home-manager.nixosModules.default
   ];
+
+  # sops-nix global settings
+  sops = {
+    age.keyFile = "/home/hybridz/.config/sops/age/keys.txt";
+    defaultSopsFile = ./secrets/openclaw.yaml;
+  };
 
   qt = {
     enable = true;
@@ -62,6 +70,7 @@ in {
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
+    backupFileExtension = "hm-backup";
     users.${constants.user.name} = import ./home-manager/home.nix;
     verbose = true;
 
@@ -76,6 +85,9 @@ in {
       NIXOS_OZONE_WL = "1";
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
     };
+
+    # sops CLI for managing encrypted secrets
+    systemPackages = [ pkgs.sops pkgs.age ];
   };
 
   nixpkgs = {
