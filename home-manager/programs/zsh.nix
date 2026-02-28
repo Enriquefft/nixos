@@ -109,6 +109,7 @@
       docker-rm = "docker rmi $(docker images -a)";
 
       svim = "sudoedit";
+      sclaude = "IS_SANDBOX=1 doas claude --dangerously-skip-permissions";
 
       gc = "git clone";
       gpull = "git pull --rebase";
