@@ -46,7 +46,11 @@ in {
 
         # Network
         "network" = {
-          format = "󰈀 {bandwidthDownBits} ↓ {bandwidthUpBits} ↑";
+          format-wifi = "󰤨 {essid} ({signalStrength}%) {bandwidthDownBits} ↓ {bandwidthUpBits} ↑";
+          format-ethernet = "󰈀 {ifname} {bandwidthDownBits} ↓ {bandwidthUpBits} ↑";
+          format-disconnected = "󰤭 Disconnected";
+          tooltip-format-wifi = "{essid} via {ifname}\nSignal: {signalStrength}%\nFrequency: {frequency} GHz";
+          tooltip-format-ethernet = "Connected via {ifname}";
           interval = 1;
         };
 
