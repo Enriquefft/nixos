@@ -1,13 +1,32 @@
 { nix-openclaw, kapso-whatsapp-plugin }:
 { pkgs, ... }:
 let
-  kapsoPackages = kapso-whatsapp-plugin.packages.${pkgs.system};
+  kapsoPackages = kapso-whatsapp-plugin.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [
     nix-openclaw.homeManagerModules.openclaw
-    (import ./plugins/whatsapp.nix { inherit kapsoPackages kapso-whatsapp-plugin; })
+    kapso-whatsapp-plugin.homeManagerModules.default
   ];
+
+  # Kapso WhatsApp bridge (module manages CLI, systemd service, config.toml)
+  services.kapso-whatsapp = {
+    enable = true;
+    package = kapsoPackages.poller;
+    cliPackage = kapsoPackages.cli;
+
+    security = {
+      mode = "allowlist";
+      roles = { owner = [ "+51926689401" ]; };
+      sessionIsolation = false;
+    };
+  };
+
+  # Skill symlink (not managed by the kapso HM module)
+  home.file.".openclaw/workspace/skills/whatsapp" = {
+    source = "${kapso-whatsapp-plugin}/skills/whatsapp";
+    recursive = true;
+  };
 
   programs.openclaw = {
     enable = true;
