@@ -26,8 +26,14 @@
     ./programs/kitty.nix
     ./programs/nixvim.nix
     ./programs/swayosd.nix
-    ./programs/openclaw.nix
+    inputs.openclaw.homeManagerModules.default
   ];
+
+  # Machine-specific secrets injection for openclaw services
+  systemd.user.services.openclaw-gateway.Service.EnvironmentFile =
+    [ "/run/secrets/rendered/openclaw.env" ];
+  systemd.user.services.kapso-whatsapp-poller.Service.EnvironmentFile =
+    [ "/run/secrets/rendered/openclaw.env" ];
 
   services.gnome-keyring = {
     enable = true;

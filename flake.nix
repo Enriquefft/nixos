@@ -37,6 +37,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    kapso-whatsapp-plugin = {
+      url = "github:Enriquefft/openclaw-kapso-whatsapp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    openclaw = {
+      url = "path:./openclaw";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix-openclaw.follows = "nix-openclaw";
+      inputs.kapso-whatsapp-plugin.follows = "kapso-whatsapp-plugin";
+    };
+
     # nix-xilinx = {
     #   url = "gitlab:doronbehar/nix-xilinx";
     #   inputs.nixpkgs.follows = "nixpkgs";

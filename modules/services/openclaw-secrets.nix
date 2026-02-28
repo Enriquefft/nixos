@@ -14,6 +14,10 @@
       sopsFile = ../../secrets/openclaw.yaml;
       owner = "hybridz";
     };
+    "openclaw/kapso-phone-number-id" = {
+      sopsFile = ../../secrets/openclaw.yaml;
+      owner = "hybridz";
+    };
   };
 
   # Render a single env file from all secrets for the systemd service
@@ -22,6 +26,7 @@
       ZAI_API_KEY=${config.sops.placeholder."openclaw/zai-api-key"}
       KAPSO_API_KEY=${config.sops.placeholder."openclaw/kapso-api-key"}
       OPENCLAW_TOKEN=${config.sops.placeholder."openclaw/gateway-token"}
+      KAPSO_PHONE_NUMBER_ID=${config.sops.placeholder."openclaw/kapso-phone-number-id"}
     '';
     owner = "hybridz";
   };

@@ -41,10 +41,24 @@
     initContent = lib.mkBefore ''
       # OpenClaw wrapper - loads secrets only when needed
       openclaw() {
+        local bin
+        bin=$(whence -p openclaw)
         if [ -f /run/secrets/rendered/openclaw.env ]; then
-          env $(cat /run/secrets/rendered/openclaw.env | xargs) $(which openclaw) "$@"
+          env $(cat /run/secrets/rendered/openclaw.env | xargs) "$bin" "$@"
         else
-          $(which openclaw) "$@"
+          "$bin" "$@"
+        fi
+      }
+
+      alias claw=openclaw
+
+      kapso-whatsapp-cli() {
+        local bin
+        bin=$(whence -p kapso-whatsapp-cli)
+        if [ -f /run/secrets/rendered/openclaw.env ]; then
+          env $(cat /run/secrets/rendered/openclaw.env | xargs) "$bin" "$@"
+        else
+          "$bin" "$@"
         fi
       }
 

@@ -302,6 +302,28 @@
         "type": "github"
       }
     },
+    "openclaw": {
+      "inputs": {
+        "kapso-whatsapp-plugin": [
+          "kapso-whatsapp-plugin"
+        ],
+        "nix-openclaw": [
+          "nix-openclaw"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./openclaw",
+        "type": "path"
+      },
+      "original": {
+        "path": "./openclaw",
+        "type": "path"
+      },
+      "parent": []
+    },
     "root": {
       "inputs": {
         "antigravity-nix": "antigravity-nix",
@@ -311,6 +333,7 @@
         "nix-openclaw": "nix-openclaw",
         "nixpkgs": "nixpkgs_3",
         "nixvim": "nixvim",
+        "openclaw": "openclaw",
         "sops-nix": "sops-nix"
       }
     },
