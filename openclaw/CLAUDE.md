@@ -31,7 +31,9 @@ Environment variables available at runtime:
 nix flake check
 
 # Full system build (from /etc/nixos)
-sudo nixos-rebuild test --flake /etc/nixos#nixos
+nixos-rebuild test --flake /etc/nixos#nixos
+# or simply
+up
 
 # Check services after rebuild
 systemctl --user status openclaw-gateway kapso-whatsapp-poller
