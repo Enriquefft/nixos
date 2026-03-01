@@ -9,7 +9,8 @@ flake-overlays:
 
 let
   constants = import ./shared/constants.nix;
-in {
+in
+{
 
   imports = [
     ./hardware-configuration.nix
@@ -49,6 +50,7 @@ in {
     ./modules/programs/firefox.nix
     ./modules/programs/steam.nix
     ./modules/programs/zsh.nix
+    ./modules/programs/obs.nix
     ./modules/programs/development.nix
     ./modules/programs/factorio-gog.nix
 
@@ -87,7 +89,10 @@ in {
     };
 
     # sops CLI for managing encrypted secrets
-    systemPackages = [ pkgs.sops pkgs.age ];
+    systemPackages = [
+      pkgs.sops
+      pkgs.age
+    ];
   };
 
   nixpkgs = {

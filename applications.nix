@@ -140,7 +140,6 @@
       # Media & Content Creation
       # ─────────────────────────────────────────────────────────
       vlc
-      obs-studio
       gimp
       ffmpeg
       whisper-cpp
