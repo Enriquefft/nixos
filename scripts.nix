@@ -643,6 +643,31 @@
           '';
         };
 
+        create-issue = pkgs.writeShellApplication {
+          name = "issue";
+          text = ''
+            if [ $# -eq 0 ]; then
+              echo "Usage: issue <description>"
+              echo "Example: issue we need to change the red button"
+              exit 1
+            fi
+
+            description="$*"
+
+            claude --dangerously-skip-permissions --model haiku -p \
+              "You will create a GitHub issue for the current repo using 'gh issue create'.
+
+The request is: $description
+
+First, decide whether you need to research the codebase before creating the issue. Research IS needed when the request is vague, references existing code/features, or would benefit from technical context (e.g. 'refactor auth', 'fix the sidebar bug', 'add dark mode'). Research is NOT needed when the request is self-contained and clear enough on its own (e.g. 'add a LICENSE file', 'update README with install instructions').
+
+If research is needed: read relevant files, understand the architecture, then create the issue with technical context in the body.
+If research is not needed: create the issue directly.
+
+Use 'gh issue create' with appropriate --title and --body flags."
+          '';
+        };
+
         project-init = pkgs.writeShellApplication {
           name = "project-init";
           runtimeInputs = [
@@ -693,6 +718,7 @@
         audio-switcher
         md2pdf
         gpu-toggle
+        create-issue
         project-init
       ];
   };
