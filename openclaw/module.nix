@@ -20,6 +20,12 @@ in
       roles = { owner = [ "+51926689401" ]; };
       sessionIsolation = false;
     };
+
+    transcribe = {
+      provider = "local";
+      modelPath = "/home/hybridz/ggml-base.bin";
+      language = "es";
+    };
   };
 
   # Skill symlink (not managed by the kapso HM module)
@@ -30,7 +36,6 @@ in
 
   programs.openclaw = {
     enable = true;
-    documents = ./documents;
     config = {
       gateway.mode = "local";
       gateway.auth.token = "\${OPENCLAW_TOKEN}";
@@ -38,17 +43,35 @@ in
         baseUrl = "https://api.z.ai/api/paas/v4";
         apiKey = "\${ZAI_API_KEY}";
         api = "openai-completions";
-        models = [ { id = "glm-5"; name = "GLM 5"; } ];
+        models = [
+          { id = "glm-5"; name = "GLM 5"; }
+          { id = "glm-4.7"; name = "GLM 4.7"; }
+          { id = "glm-4.7-flash"; name = "GLM 4.7 Flash"; }
+        ];
       };
       models.providers.zai-coding = {
         baseUrl = "https://api.z.ai/api/coding/paas/v4";
         apiKey = "\${ZAI_API_KEY}";
         api = "openai-completions";
-        models = [ { id = "glm-5"; name = "GLM 5 Coding"; } ];
+        models = [
+          { id = "glm-5"; name = "GLM 5 Coding"; }
+          { id = "glm-4.7"; name = "GLM 4.7 Coding"; }
+        ];
       };
       agents.defaults.model = {
         primary = "zai-coding/glm-5";
-        fallbacks = [ "zai/glm-5" ];
+        fallbacks = [ "zai/glm-5" "zai-coding/glm-4.7" ];
+      };
+      agents.defaults.heartbeat = {
+        model = "zai/glm-4.7-flash";
+      };
+      agents.defaults.subagents = {
+        model = "zai-coding/glm-4.7";
+      };
+      agents.defaults.models = {
+        "zai-coding/glm-5"   = { alias = "glm5"; };
+        "zai-coding/glm-4.7" = { alias = "4.7"; };
+        "zai/glm-4.7-flash"  = { alias = "flash"; };
       };
     };
     systemd = { enable = true; unitName = "openclaw-gateway"; };
