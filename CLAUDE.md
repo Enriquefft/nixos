@@ -1,26 +1,22 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-Always remind me that this directory should be run with sudo permisions to perform edits.
 
 ## Build Commands
 
 ```bash
 # Test configuration (builds and activates without adding to boot menu)
-sudo nixos-rebuild test --flake .#nixos
+nix flake check  # Quick syntax validation
+nix build .#nixosConfigurations.nixos.config.system.build.toplevel  # Full build test
 
 # Quick commit and push (custom script)
 gpush "commit message"  # or just `gpush` for default "chore: regular commit"
+
+# rebuild and switch, once everything is working
+up
 ```
 
 **Important:** Never run `nixos-rebuild switch` or `nix flake update` - only use `test`.
-
-## Testing Without Sudo
-
-```bash
-nix flake check  # Quick syntax validation
-nix build .#nixosConfigurations.nixos.config.system.build.toplevel  # Full build test
-```
 
 ## Architecture
 
