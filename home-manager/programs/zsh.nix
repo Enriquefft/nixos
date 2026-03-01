@@ -114,6 +114,9 @@
       gc = "git clone";
       gpull = "git pull --rebase";
 
+      # ClawHub — skill registry
+      clawhub = "clawhub --workdir ~/.openclaw/workspace";
+
     };
 
     history = {
@@ -129,7 +132,7 @@
     };
 
     profileExtra = ''
-      export PATH="/home/hybridz/.cache/.bun/bin:$PATH"
+      export PATH="/home/hybridz/.cache/.bun/bin:/home/hybridz/.npm-global/bin:$PATH"
 
       setopt incappendhistory
       setopt histfindnodups
