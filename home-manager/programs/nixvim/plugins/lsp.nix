@@ -10,6 +10,13 @@
 
       };
 
+      ltex-extra = {
+        enable = true;
+        settings = {
+          path = ".ltex";
+        };
+      };
+
       lsp = {
         enable = true;
 
@@ -128,12 +135,7 @@
           ltex = {
             enable = true; # Strict grammar and spell checking
             settings = {
-              # enable = true;
-
               language = "en-US";
-              # language = "es";
-              # configurationTarget = { dictionary = "user"; };
-
             };
           };
 
