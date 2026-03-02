@@ -36,6 +36,7 @@
     apiKeyFile = "/run/secrets/openclaw/kapso-api-key";
     phoneNumberIdFile = "/run/secrets/openclaw/kapso-phone-number-id";
     gatewayTokenFile = "/run/secrets/openclaw/gateway-token";
+    webhookVerifyTokenFile = "/run/secrets/openclaw/kapso-webhook-verify-token";
   };
 
   services.gnome-keyring = {
