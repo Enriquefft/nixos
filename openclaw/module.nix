@@ -12,12 +12,16 @@ in
   # Kapso WhatsApp bridge (module manages CLI, systemd service, config.toml)
   services.kapso-whatsapp = {
     enable = true;
-    package = kapsoPackages.poller;
+    package = kapsoPackages.bridge;
     cliPackage = kapsoPackages.cli;
+
+    delivery.mode = "tailscale";
 
     security = {
       mode = "allowlist";
-      roles = { owner = [ "+51926689401" ]; };
+      roles = {
+        owner = [ "+51926689401" ];
+      };
       sessionIsolation = false;
     };
 
@@ -44,9 +48,18 @@ in
         apiKey = "\${ZAI_API_KEY}";
         api = "openai-completions";
         models = [
-          { id = "glm-5"; name = "GLM 5"; }
-          { id = "glm-4.7"; name = "GLM 4.7"; }
-          { id = "glm-4.7-flash"; name = "GLM 4.7 Flash"; }
+          {
+            id = "glm-5";
+            name = "GLM 5";
+          }
+          {
+            id = "glm-4.7";
+            name = "GLM 4.7";
+          }
+          {
+            id = "glm-4.7-flash";
+            name = "GLM 4.7 Flash";
+          }
         ];
       };
       models.providers.zai-coding = {
@@ -54,13 +67,22 @@ in
         apiKey = "\${ZAI_API_KEY}";
         api = "openai-completions";
         models = [
-          { id = "glm-5"; name = "GLM 5 Coding"; }
-          { id = "glm-4.7"; name = "GLM 4.7 Coding"; }
+          {
+            id = "glm-5";
+            name = "GLM 5 Coding";
+          }
+          {
+            id = "glm-4.7";
+            name = "GLM 4.7 Coding";
+          }
         ];
       };
       agents.defaults.model = {
         primary = "zai-coding/glm-5";
-        fallbacks = [ "zai/glm-5" "zai-coding/glm-4.7" ];
+        fallbacks = [
+          "zai/glm-5"
+          "zai-coding/glm-4.7"
+        ];
       };
       agents.defaults.heartbeat = {
         model = "zai/glm-4.7-flash";
@@ -69,12 +91,21 @@ in
         model = "zai-coding/glm-4.7";
       };
       agents.defaults.models = {
-        "zai-coding/glm-5"   = { alias = "glm5"; };
-        "zai-coding/glm-4.7" = { alias = "4.7"; };
-        "zai/glm-4.7-flash"  = { alias = "flash"; };
+        "zai-coding/glm-5" = {
+          alias = "glm5";
+        };
+        "zai-coding/glm-4.7" = {
+          alias = "4.7";
+        };
+        "zai/glm-4.7-flash" = {
+          alias = "flash";
+        };
       };
     };
-    systemd = { enable = true; unitName = "openclaw-gateway"; };
+    systemd = {
+      enable = true;
+      unitName = "openclaw-gateway";
+    };
     bundledPlugins = { };
     customPlugins = [ ];
   };
