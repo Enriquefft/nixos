@@ -65,11 +65,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772395733,
-        "narHash": "sha256-0MVkNXjfbNeDrsZT0K933S8i4ap2BlvnrEpyOpClnCc=",
+        "lastModified": 1772396159,
+        "narHash": "sha256-Z4ra97IwEkbTFlo0YHwQH5FC7jHqVXi4Gmn9UpAPAJo=",
         "owner": "Enriquefft",
         "repo": "openclaw-kapso-whatsapp",
-        "rev": "3dd11af01e3055b517f0165be7ac1369bd24e49d",
+        "rev": "55f9502a8c2dfdf32669f78d1153f907ae0d0797",
         "type": "github"
       },
       "original": {
