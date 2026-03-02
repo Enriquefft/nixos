@@ -18,6 +18,14 @@
       sopsFile = ../../secrets/openclaw.yaml;
       owner = "hybridz";
     };
+    "openclaw/kapso-webhook-secret" = {
+      sopsFile = ../../secrets/openclaw.yaml;
+      owner = "hybridz";
+    };
+    "openclaw/kapso-webhook-verify-token" = {
+      sopsFile = ../../secrets/openclaw.yaml;
+      owner = "hybridz";
+    };
   };
 
   # Render a single env file from all secrets for the systemd service
