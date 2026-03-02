@@ -10,7 +10,6 @@ without needing NixOS context.
 |------|---------|
 | `module.nix` | Gateway config, model providers (ZAI), agent defaults |
 | `documents/` | Agent identity: AGENTS.md, SOUL.md, TOOLS.md |
-| `plugins/whatsapp.nix` | Kapso WhatsApp poller wiring |
 | `flake.nix` | Sub-flake inputs (nixpkgs, nix-openclaw, kapso-whatsapp-plugin) |
 
 ## Secrets
@@ -36,7 +35,7 @@ nixos-rebuild test --flake /etc/nixos#nixos
 up
 
 # Check services after rebuild
-systemctl --user status openclaw-gateway kapso-whatsapp-poller
+systemctl --user status openclaw-gateway kapso-whatsapp-bridge
 ```
 
 ## Document-only changes
