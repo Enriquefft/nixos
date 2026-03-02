@@ -44,6 +44,7 @@ in
     ./modules/services/input.nix
     ./modules/services/ollama.nix
     ./modules/services/openclaw-secrets.nix
+    ./modules/services/tailscale.nix
 
     # Programs
     ./modules/programs/hyprland.nix
