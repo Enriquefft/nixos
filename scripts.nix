@@ -668,6 +668,69 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        up = pkgs.writeShellApplication {
+          name = "up";
+          text = ''
+            sudo nixos-rebuild switch --option eval-cache false --flake /etc/nixos#nixos
+          '';
+        };
+
+        con = pkgs.writeShellApplication {
+          name = "con";
+          text = ''
+            nmcli connection up "$@"
+          '';
+        };
+
+        airplane = pkgs.writeShellApplication {
+          name = "airplane";
+          text = ''
+            nmcli radio wifi off
+            nmcli radio bluetooth off
+            nmcli radio wwan off
+          '';
+        };
+
+        camon = pkgs.writeShellApplication {
+          name = "camon";
+          text = ''
+            sudo modprobe uvcvideo
+            echo "Camera ON"
+          '';
+        };
+
+        camoff = pkgs.writeShellApplication {
+          name = "camoff";
+          runtimeInputs = [ pkgs.lsof ];
+          text = ''
+            # Kill any processes using the camera
+            for dev in /dev/video*; do
+              if [ -e "$dev" ]; then
+                pids=$(sudo lsof -t "$dev" 2>/dev/null || true)
+                if [ -n "$pids" ]; then
+                  echo "Killing processes using $dev: $pids"
+                  echo "$pids" | xargs -r sudo kill -9
+                fi
+              fi
+            done
+            sleep 1
+            sudo modprobe -r uvcvideo
+            echo "Camera OFF"
+          '';
+        };
+
+        docker-rm = pkgs.writeShellApplication {
+          name = "docker-rm";
+          text = ''
+            images=$(docker images -a -q)
+            if [ -z "$images" ]; then
+              echo "No images to remove."
+            else
+              docker rmi "$images"
+            fi
+          '';
+        };
+
         project-init = pkgs.writeShellApplication {
           name = "project-init";
           runtimeInputs = [
@@ -720,6 +783,12 @@ Use 'gh issue create' with appropriate --title and --body flags."
         gpu-toggle
         create-issue
         project-init
+        up
+        con
+        airplane
+        docker-rm
+        camon
+        camoff
       ];
   };
 }
