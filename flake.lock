@@ -146,17 +146,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1772407092,
-        "narHash": "sha256-VbnlSuke3jhCsR0pf1XoZXEfosFrHvnhvZZ4cc0UGps=",
-        "owner": "Enriquefft",
-        "repo": "openclaw-kapso-whatsapp",
-        "rev": "17c1ac6ed5de73feb0bc5106912398b535c53f8b",
-        "type": "github"
+        "lastModified": 1772502641,
+        "narHash": "sha256-QLa1zk6WawUCMIrrOuCrV7r2OuCS8LyapuM6ykyJcj4=",
+        "path": "/home/hybridz/Projects/openclaw-kapso-whatsapp",
+        "type": "path"
       },
       "original": {
-        "owner": "Enriquefft",
-        "repo": "openclaw-kapso-whatsapp",
-        "type": "github"
+        "path": "/home/hybridz/Projects/openclaw-kapso-whatsapp",
+        "type": "path"
       }
     },
     "nix-index-database": {
