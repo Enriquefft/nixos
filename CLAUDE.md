@@ -34,6 +34,7 @@ This is a NixOS flake-based configuration for a single machine (`nixos`) running
 | `nix.nix` | Nix daemon settings (flakes enabled, gc weekly) |
 | `scripts.nix` | Custom shell scripts (`mant`, `last_logs`, `gpush`) |
 | `hardware-configuration.nix` | Auto-generated hardware config |
+| `openclaw/` | OpenClaw agent sub-flake (self-contained, has its own CLAUDE.md) |
 | `TROUBLESHOOTING.md` | Documenation for found errors, keep up to date |
 
 ### Home Manager Structure (`home-manager/`)

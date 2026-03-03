@@ -9,6 +9,7 @@ in {
     ./appearance.nix
     ./input.nix
     ./keybinds.nix
+    ./windowrules.nix
   ];
 
   wayland.windowManager.hyprland = {

@@ -719,6 +719,16 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        kiro-browser = pkgs.writeShellApplication {
+          name = "kiro-browser";
+          text = ''
+            exec /usr/bin/google-chrome-stable \
+              --class=kiro-browser \
+              --user-data-dir="$HOME/.openclaw/browser/openclaw/user-data" \
+              "$@"
+          '';
+        };
+
         docker-rm = pkgs.writeShellApplication {
           name = "docker-rm";
           text = ''
@@ -789,6 +799,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         docker-rm
         camon
         camoff
+        kiro-browser
       ];
   };
 }

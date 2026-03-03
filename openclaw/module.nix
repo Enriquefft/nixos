@@ -24,7 +24,7 @@ in
       };
       sessionIsolation = false;
       # Group support - prefix required to trigger bot in groups
-      groupPrefix = "!claw";
+      # groupPrefix = "!claw";
       # groupIds = [ ]; # Add group IDs here when known (format: 120363xxx@g.us)
     };
 
@@ -39,8 +39,6 @@ in
   # Skill symlinks (mkOutOfStoreSymlink = live edits, no rebuild needed)
   home.file.".openclaw/workspace/skills/whatsapp".source =
     config.lib.file.mkOutOfStoreSymlink "/home/hybridz/Projects/openclaw-kapso-whatsapp/skills/whatsapp";
-  home.file.".openclaw/workspace/skills/help".source =
-    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/help";
 
   programs.openclaw = {
     enable = true;
@@ -104,6 +102,10 @@ in
         "zai/glm-4.7-flash" = {
           alias = "flash";
         };
+      };
+      # Browser config - use kiro-browser for dedicated workspace 8
+      browser = {
+        executablePath = "/run/current-system/sw/bin/kiro-browser";
       };
     };
     systemd = {
