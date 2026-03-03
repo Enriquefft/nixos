@@ -1,5 +1,5 @@
 { nix-openclaw, kapso-whatsapp-plugin }:
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   kapsoPackages = kapso-whatsapp-plugin.packages.${pkgs.stdenv.hostPlatform.system};
 in
@@ -23,20 +23,24 @@ in
         owner = [ "+51926689401" ];
       };
       sessionIsolation = false;
+      # Group support - prefix required to trigger bot in groups
+      groupPrefix = "!claw";
+      # groupIds = [ ]; # Add group IDs here when known (format: 120363xxx@g.us)
     };
 
     transcribe = {
       provider = "local";
+      binaryPath = "/run/current-system/sw/bin/whisper-cli";
       modelPath = "/home/hybridz/ggml-base.bin";
       language = "es";
     };
   };
 
-  # Skill symlink (not managed by the kapso HM module)
-  home.file.".openclaw/workspace/skills/whatsapp" = {
-    source = "${kapso-whatsapp-plugin}/skills/whatsapp";
-    recursive = true;
-  };
+  # Skill symlinks (mkOutOfStoreSymlink = live edits, no rebuild needed)
+  home.file.".openclaw/workspace/skills/whatsapp".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/hybridz/Projects/openclaw-kapso-whatsapp/skills/whatsapp";
+  home.file.".openclaw/workspace/skills/help".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/help";
 
   programs.openclaw = {
     enable = true;
