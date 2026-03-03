@@ -37,8 +37,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # kapso-whatsapp-plugin — toggle between local and repo:
+    # kapso-whatsapp-plugin = {
+    #   url = "github:Enriquefft/openclaw-kapso-whatsapp";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     kapso-whatsapp-plugin = {
-      url = "github:Enriquefft/openclaw-kapso-whatsapp";
+      url = "path:/home/hybridz/Projects/openclaw-kapso-whatsapp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
