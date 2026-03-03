@@ -91,8 +91,6 @@
       mkdir = "mkdir -vp";
       mv = "mv -iv";
 
-      up = "nixos-rebuild switch --option eval-cache false --sudo";
-
       # Config aliases
       nix-conf = "vim /etc/nixos/configuration.nix";
       nix-apps = "vim /etc/nixos/applications.nix";
@@ -103,10 +101,6 @@
       compile = "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -Wno-padded -fsanitize=address -g";
       compilemain = "clang++ -std=c++2b -Weverything -Wno-c++14-compat -Wno-c++98-compat -Wno-string-compare -fsanitize=address -g *.cpp -o main";
 
-      con = "nmcli connection up";
-      airplane = "nmcli radio wifi off; nmcli radio bluetooth off; nmcli radio wwan off";
-
-      docker-rm = "docker rmi $(docker images -a)";
 
       svim = "sudoedit";
       sclaude = "IS_SANDBOX=1 doas claude --dangerously-skip-permissions";
