@@ -33,6 +33,39 @@ canonical context source for all of them.
 | `flake.nix` | Sub-flake inputs (nixpkgs, nix-openclaw, kapso-whatsapp-plugin) |
 | `reference/` | Reusable content: full profile, application response templates |
 
+## Extension Architecture
+
+OpenClaw is fast-moving open source. We customize it **without forking** — extend via
+plugins, skills, config, and identity documents. Never bypass OpenClaw internals.
+
+```
+upstream openclaw (community, fast-moving — don't fork)
+    │
+    ├── nix config (module.nix — model providers, agent defaults, sandbox)
+    ├── plugins (TypeScript — tools, services, hooks, HTTP handlers)
+    ├── skills (SKILL.md + CLI tools — agent knowledge & capabilities)
+    ├── cron (YAML jobs — scheduled agent sessions via cron-sync)
+    ├── documents (identity — Kiro's personality, directives, context)
+    └── reference (templates — reusable content for outbound comms)
+```
+
+### Plugin capabilities (primary extension mechanism)
+
+Plugins run in-process (trusted code) and can:
+- **Intercept tool calls** — `before_tool_call` hook can inspect, modify, or block
+- **React after tool calls** — `after_tool_call` for audit/logging/side-effects
+- **Intercept messages** — inbound (before LLM) and outbound (before delivery)
+- **Register tools, CLI commands, services, HTTP endpoints, skills**
+
+Plugins CANNOT: modify system prompt directly, add/remove tools mid-session,
+modify tool call results, or override core auth/reserved commands.
+
+### Extension principle
+
+**Build on OpenClaw — use plugins, skills, and config. Don't bypass internals.**
+If something can't be done via the extension surface, file upstream or use a plugin
+`before_tool_call` hook to enforce guardrails.
+
 ## documents/ — OpenClaw identity (NOT repo docs)
 
 The `documents/` directory contains **Kiro's personality, directives, and operational
