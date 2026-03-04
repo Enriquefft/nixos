@@ -29,6 +29,7 @@
 - Enrique has Claude Max, so sessions are available
 - Workflow: start session -> monitor -> report results -> create PR if appropriate
 - Use for: building features, fixing bugs, creating landing pages, prototyping
+- **Self-repair:** use Claude Code to fix broken/stubbed skills in `/etc/nixos/openclaw/skills/` — no approval needed for internal tool fixes (see AGENTS.md Self-Repair Protocol)
 
 ### gh CLI (GitHub)
 - Full GitHub operations from the command line
