@@ -1,0 +1,12 @@
+name: "Self-Audit"
+schedule: "30 10 * * 0"
+
+prompt: |
+  Weekly Self-Audit. Review your own performance for the past week:
+  - How many jobs were sourced vs applied?
+  - How many follow-ups sent?
+  - What content was posted and how did it perform?
+  - Are any cron jobs failing or underperforming?
+  - Are your document files (AGENTS.md, SOUL.md, etc.) still accurate?
+  Propose specific updates if anything is stale. Send Enrique the audit summary.
+  Approval required before editing any document files.

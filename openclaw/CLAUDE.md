@@ -4,6 +4,18 @@ This directory is the personal OpenClaw agent configuration sub-flake.
 Agents working on OpenClaw settings can `cd /etc/nixos/openclaw/` and work here
 without needing NixOS context.
 
+## Pre-read map
+
+Before working in a specific area, read the corresponding doc **directly** first.
+Do not rely on Explore agents as a substitute for these — they are mandatory pre-reads.
+
+| Area | Read before touching |
+|------|----------------------|
+| Cron jobs (`cron/`) | [`cron/README.md`](cron/README.md) |
+| Skills (`skills/`) | [`skills/README.md`](skills/README.md) |
+| Agent identity (`documents/`) | [`documents/AGENTS.md`](documents/AGENTS.md), [`documents/IDENTITY.md`](documents/IDENTITY.md) |
+| Module config (`module.nix`) | This CLAUDE.md (you're already here) |
+
 ## Who works here
 
 Multiple coding agents edit this repo: **Claude Code** (primary), **OpenClaw/Kiro**

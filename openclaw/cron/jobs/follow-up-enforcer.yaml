@@ -1,0 +1,9 @@
+name: "Follow-Up Enforcer"
+schedule: "0 14 * * *"
+
+prompt: |
+  Follow-Up Enforcer. Check the job tracker. For any application older than 5 days
+  with no update, draft a follow-up message. Prepare drafts for Enrique's review.
+  Do not send anything without explicit approval.
+  On approval, send and update tracker status to "followed-up".
+  Keep follow-ups short, specific, and human-sounding. No corporate language.

@@ -1,0 +1,10 @@
+name: "Job Board Scan AM"
+schedule: "0 8 * * *"
+
+prompt: |
+  Job Board Scan (Morning). Browse monitored job boards (see LORE.md for the list).
+  Filter for roles matching Enrique's profile. Score by fit.
+  Prepare a digest of the top 5: company, role, link, one line on why it fits.
+  Add each to the job tracker with status "new".
+  If any listing is an exceptionally strong match, flag it as urgent.
+  Send digest to Enrique via WhatsApp. Do not apply without explicit approval.

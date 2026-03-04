@@ -1,0 +1,9 @@
+name: "Target Company Refresh"
+schedule: "0 10 * * 0"
+
+prompt: |
+  Target Company Refresh. Research and update the target company list in LORE.md.
+  Three categories: remote-global, US sponsors, relocation-friendly.
+  Check for new open roles at known target companies.
+  Send Enrique a summary of changes via WhatsApp.
+  Approval required before editing LORE.md.

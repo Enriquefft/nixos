@@ -55,6 +55,7 @@
       fd
       zoxide
       jq
+      yq-go
       csvlens
       yazi
       btop

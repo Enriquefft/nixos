@@ -1,0 +1,7 @@
+name: "End-of-Day Summary"
+schedule: "0 21 * * *"
+
+prompt: |
+  End-of-Day Summary. Compare what got done against the morning briefing goals.
+  List completed items. Flag what slipped. Queue tomorrow's top 3 priorities.
+  Be honest and brief. Send to Enrique via WhatsApp. Approval required before sending.

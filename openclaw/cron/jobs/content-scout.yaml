@@ -1,0 +1,10 @@
+name: "Content Scout"
+schedule: "30 8 * * *"
+
+prompt: |
+  Content Scout. Browse X/Twitter, LinkedIn, HackerNews, Reddit in Enrique's niches
+  (AI, dev tools, startups). Identify 3-5 content opportunities: trending topics,
+  questions people are asking, debates to weigh in on.
+  For each: suggest a hook and target platform.
+  Send a digest to Enrique via WhatsApp. Do not draft full posts unless asked.
+  Do not post anything.

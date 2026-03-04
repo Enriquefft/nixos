@@ -85,25 +85,18 @@ Note: Use `sudo` not `doas`. Doas requires TTY which the gateway doesn't have.
 
 ## Cron Jobs
 
+Cron jobs are defined as YAML files in `/etc/nixos/openclaw/cron/jobs/`.
+To add, modify, or remove a job:
+
+1. Create/edit/delete a `.yaml` file in `/etc/nixos/openclaw/cron/jobs/`
+2. Run `cron-sync` to apply changes to the gateway
+3. Use `cron-sync --dry-run` to preview changes first
+
+To remove a job: delete its YAML file, then run `cron-sync --remove-missing`.
+
 ```bash
-# Recurring
-openclaw cron add --name "<n>" --cron "<expr>" --tz "America/Lima" --session isolated --message "<task>" --no-deliver
-
-# One-shot
-openclaw cron add --name "<n>" --at "<ISO timestamp>" --session main --system-event "<event>" --wake now --delete-after-run
-
-# Manage
+# Read-only commands (need env vars)
+export $(cat /run/secrets/rendered/openclaw.env | xargs)
 openclaw cron list
-openclaw cron run <job-id>
-openclaw cron rm <job-id>
+openclaw cron run <job-id>    # test a job manually
 ```
-
-Common schedules:
-
-| Schedule | Expression |
-|----------|------------|
-| Daily 9am | `0 9 * * *` |
-| Every hour | `0 * * * *` |
-| Weekly Monday 9am | `0 9 * * 1` |
-| Every 6 hours | `0 */6 * * *` |
-| Every 12 hours | `0 */12 * * *` |

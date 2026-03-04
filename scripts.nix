@@ -781,6 +781,14 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        cron-sync = pkgs.writeShellApplication {
+          name = "cron-sync";
+          runtimeInputs = [ pkgs.yq-go pkgs.jq pkgs.coreutils ];
+          text = ''
+            exec /etc/nixos/openclaw/cron/sync.sh "$@"
+          '';
+        };
+
       in
       [
         manteinance
@@ -800,6 +808,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         camon
         camoff
         kiro-browser
+        cron-sync
       ];
   };
 }

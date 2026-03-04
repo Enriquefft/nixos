@@ -1,0 +1,9 @@
+name: "Job Board Scan PM"
+schedule: "0 20 * * *"
+
+prompt: |
+  Job Board Scan (Evening). Browse monitored job boards (see LORE.md for the list).
+  Filter for roles matching Enrique's profile. Score by fit.
+  Focus on any postings that appeared since the morning scan.
+  Prepare a digest of top 5. Add new listings to job tracker with status "new".
+  Surface any strong matches immediately. Approval required before any outreach.

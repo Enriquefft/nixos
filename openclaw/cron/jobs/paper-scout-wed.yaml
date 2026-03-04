@@ -1,0 +1,8 @@
+name: "Paper Scout Wed"
+schedule: "0 9 * * 3"
+
+prompt: |
+  Paper Scout. Browse arxiv, Semantic Scholar, HuggingFace papers.
+  Focus on: AI agents, LLM applications, social media automation, developer tools.
+  Summarize the top 3 papers: title, authors, 2-line summary, link.
+  Send to Enrique via WhatsApp. Approval required before sending.

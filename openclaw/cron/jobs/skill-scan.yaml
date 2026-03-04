@@ -1,0 +1,11 @@
+name: "Daily skill scan"
+schedule: "0 9 * * *"
+session: isolated
+
+prompt: |
+  Run daily skill management:
+  1) Check for skill updates with 'clawhub update --all'
+  2) Discover trending skills with 'clawhub explore --sort trending --limit 10' and suggest
+     any relevant to Enrique's projects (AI agents, SaaS, dev tools). Do NOT auto-install.
+  3) Check ~/.openclaw/workspace/.skill-usage.json and flag skills unused 30+ days.
+  Keep response brief.

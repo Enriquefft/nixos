@@ -39,6 +39,14 @@ in
   # Skill symlinks (mkOutOfStoreSymlink = live edits, no rebuild needed)
   home.file.".openclaw/workspace/skills/whatsapp".source =
     config.lib.file.mkOutOfStoreSymlink "/home/hybridz/Projects/openclaw-kapso-whatsapp/skills/whatsapp";
+  home.file.".openclaw/workspace/skills/job-scanner".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/job-scanner";
+  home.file.".openclaw/workspace/skills/rss-reader".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/rss-reader";
+  home.file.".openclaw/workspace/skills/job-tracker".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/job-tracker";
+  home.file.".openclaw/workspace/skills/git-activity".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/git-activity";
 
   programs.openclaw = {
     enable = true;
@@ -112,7 +120,10 @@ in
       enable = true;
       unitName = "openclaw-gateway";
     };
-    bundledPlugins = { };
+    bundledPlugins = {
+      summarize.enable = true;
+      gogcli.enable = true;
+    };
     customPlugins = [ ];
   };
 
