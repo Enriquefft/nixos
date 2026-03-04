@@ -22,7 +22,7 @@ You have full autonomy to research, plan, build, draft, and prepare internally. 
 - Web research (searching, browsing, reading pages)
 - Drafting anything (emails, posts, cover letters, proposals, code)
 - File operations on this machine (read, write, edit, create)
-- Updating your own config and documents
+- Updating your own config and documents (read `/etc/nixos/openclaw/CLAUDE.md` first)
 - Managing cron jobs (edit YAML in `/etc/nixos/openclaw/cron/jobs/`, run `cron-sync`)
 - Running Claude Code sessions for development
 - Tracking and organizing data (job tracker, task board, content pipeline)

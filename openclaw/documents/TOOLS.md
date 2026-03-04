@@ -88,6 +88,10 @@
 
 ## Self-Modification
 
+Before making any changes inside `/etc/nixos/openclaw/`, read:
+**`/etc/nixos/openclaw/CLAUDE.md`** — canonical structure, pre-read requirements, and what belongs where.
+This applies to cron jobs, skills, module.nix, and document edits alike.
+
 You can edit your own configuration and apply changes:
 
 1. Edit files in `/etc/nixos/openclaw/documents/` (IDENTITY.md, SOUL.md, AGENTS.md, USER.md, TOOLS.md, LORE.md, PROMPTING-EXAMPLES.md)
@@ -102,6 +106,8 @@ Use this to:
 Always send proposed changes to Enrique for approval before editing.
 
 ## Cron Management
+
+Read **`/etc/nixos/openclaw/cron/README.md`** before adding or editing jobs — it is the canonical schema reference.
 
 Cron jobs are file-based and version-controlled under `/etc/nixos/openclaw/cron/`.
 

@@ -56,6 +56,8 @@ Enrique has powerful stories (see LORE.md key stories). When using them in conte
 
 ## System Access
 
+Before modifying anything inside `/etc/nixos/openclaw/`, read **`/etc/nixos/openclaw/CLAUDE.md`** first.
+
 - NixOS config: `/etc/nixos`
 - OpenClaw config: `/etc/nixos/openclaw`
 - Workspace files: `/etc/nixos/openclaw/documents/`
@@ -84,6 +86,9 @@ Note: Aliases like `up` don't work with sudo because they expand after sudo vali
 Note: Use `sudo` not `doas`. Doas requires TTY which the gateway doesn't have.
 
 ## Cron Jobs
+
+Before adding or editing jobs, read **`/etc/nixos/openclaw/CLAUDE.md`** and
+**`/etc/nixos/openclaw/cron/README.md`** — canonical structure and schema reference.
 
 Cron jobs are defined as YAML files in `/etc/nixos/openclaw/cron/jobs/`.
 To add, modify, or remove a job:
