@@ -87,10 +87,10 @@ Note: Use `sudo` not `doas`. Doas requires TTY which the gateway doesn't have.
 
 ## Cron Jobs
 
-Before adding or editing jobs, read **`/etc/nixos/openclaw/CLAUDE.md`** and
-**`/etc/nixos/openclaw/cron/README.md`** — canonical structure and schema reference.
+**Hard rule:** ALL cron jobs go through `/etc/nixos/openclaw/cron/jobs/*.yaml` + `cron-sync`.
+Never create ad-hoc scripts, Python monitors, or write to `jobs.json` directly.
+Read **`/etc/nixos/openclaw/cron/README.md`** for the full schema before your first job.
 
-Cron jobs are defined as YAML files in `/etc/nixos/openclaw/cron/jobs/`.
 To add, modify, or remove a job:
 
 1. Create/edit/delete a `.yaml` file in `/etc/nixos/openclaw/cron/jobs/`
