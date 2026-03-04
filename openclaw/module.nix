@@ -20,9 +20,14 @@ in
     security = {
       mode = "allowlist";
       roles = {
-        owner = [ "+51926689401" ];
+        owner = [
+          "+51926689401"
+          "+51984089340"
+          "+51917443156"
+          "+51984938682"
+        ];
       };
-      sessionIsolation = false;
+      sessionIsolation = true;
       # Group support - prefix required to trigger bot in groups
       # groupPrefix = "!claw";
       # groupIds = [ ]; # Add group IDs here when known (format: 120363xxx@g.us)
@@ -115,9 +120,11 @@ in
       browser = {
         executablePath = "/run/current-system/sw/bin/kiro-browser";
       };
-      # Google Calendar (gogcli) keyring password
-      gateway.env = {
-        GOG_KEYRING_PASSWORD = "\${GOG_KEYRING_PASSWORD}";
+      # Web search via Brave Search API
+      tools.web.search = {
+        enabled = true;
+        provider = "brave";
+        apiKey = "\${BRAVE_API_KEY}";
       };
     };
     systemd = {
