@@ -24,8 +24,8 @@ All skills follow a standard interface:
 
 | Skill | Purpose | State |
 |-------|---------|-------|
-| `job-scanner` | Fetch/filter job board listings | stub (TODO) |
-| `rss-reader` | Fetch/parse RSS/Atom feeds | stub (TODO) |
+| `job-scanner` | Fetch/filter job board listings | implemented (remoteok, weworkremotely, hackernews) |
+| `rss-reader` | Fetch/parse RSS/Atom feeds | implemented (arxiv, huggingface, hn, reddit) |
 | `job-tracker` | CRUD on job tracking store | implemented |
 | `git-activity` | Summarize git commits across ~/Projects/ | implemented |
 

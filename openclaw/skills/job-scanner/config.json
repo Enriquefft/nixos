@@ -1,0 +1,70 @@
+{
+  "boards": {
+    "wellfound": {
+      "name": "Wellfound (AngelList)",
+      "url": "https://wellfound.com/jobs",
+      "type": "startup",
+      "remote": true,
+      "categories": ["founding", "early-stage", "product", "ai"]
+    },
+    "remoteok": {
+      "name": "RemoteOK",
+      "url": "https://remoteok.com",
+      "type": "remote-global",
+      "remote": true,
+      "categories": ["remote", "global"]
+    },
+    "weworkremotely": {
+      "name": "WeWorkRemotely",
+      "url": "https://weworkremotely.com",
+      "type": "remote-global",
+      "remote": true,
+      "categories": ["remote", "global"]
+    },
+    "arcdev": {
+      "name": "Arc.dev",
+      "url": "https://arc.dev",
+      "type": "remote-global",
+      "remote": true,
+      "categories": ["remote", "vetted", "engineering"]
+    },
+    "turing": {
+      "name": "Turing",
+      "url": "https://turing.com",
+      "type": "remote-latam",
+      "remote": true,
+      "categories": ["remote", "latam", "global"]
+    },
+    "linkedin": {
+      "name": "LinkedIn Jobs",
+      "url": "https://linkedin.com/jobs",
+      "type": "broad",
+      "remote": true,
+      "categories": ["remote", "global", "sponsorship"]
+    },
+    "hackernews": {
+      "name": "HackerNews 'Who's Hiring'",
+      "url": "https://news.ycombinator.com/item?id=36033680",
+      "type": "startup",
+      "remote": true,
+      "categories": ["founding", "early-stage"]
+    },
+    "ycwork": {
+      "name": "Y Combinator Work at a Startup",
+      "url": "https://workat.studio",
+      "type": "startup",
+      "remote": true,
+      "categories": ["founding", "early-stage"]
+    }
+  },
+  "filters": {
+    "remote_only": false,
+    "max_results": 50,
+    "date_filter": "24h"
+  },
+  "scrape_config": {
+    "user_agent": "Mozilla/5.0 (compatible; JobScanner/1.0; +https://github.com/openclaw/job-scanner)",
+    "timeout_ms": 30000,
+    "retry_attempts": 3
+  }
+}

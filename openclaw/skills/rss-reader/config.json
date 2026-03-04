@@ -1,0 +1,55 @@
+{
+  "feeds": {
+    "arxiv-ai": {
+      "name": "arXiv - Artificial Intelligence",
+      "url": "https://arxiv.org/rss/cs.AI",
+      "group": "research"
+    },
+    "arxiv-ml": {
+      "name": "arXiv - Machine Learning",
+      "url": "https://arxiv.org/rss/cs.LG",
+      "group": "research"
+    },
+    "arxiv-cl": {
+      "name": "arXiv - Computation and Language",
+      "url": "https://arxiv.org/rss/cs.CL",
+      "group": "research"
+    },
+    "arxiv-ma": {
+      "name": "arXiv - Multiagent Systems",
+      "url": "https://arxiv.org/rss/cs.MA",
+      "group": "research"
+    },
+    "huggingface": {
+      "name": "HuggingFace Papers",
+      "url": "https://huggingface.co/papers.rss",
+      "group": "research"
+    },
+    "hn": {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com/rss",
+      "group": "news"
+    },
+    "reddit-ml": {
+      "name": "Reddit - r/MachineLearning",
+      "url": "https://www.reddit.com/r/MachineLearning/.rss",
+      "group": "news"
+    },
+    "reddit-localllama": {
+      "name": "Reddit - r/LocalLLaMA",
+      "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
+      "group": "news"
+    },
+    "reddit-startups": {
+      "name": "Reddit - r/startups",
+      "url": "https://www.reddit.com/r/startups/.rss",
+      "group": "news"
+    }
+  },
+  "defaults": {
+    "since": "24h",
+    "limit": 30,
+    "timeout_ms": 15000,
+    "user_agent": "OpenClaw-RSSReader/1.0"
+  }
+}
