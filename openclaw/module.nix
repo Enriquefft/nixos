@@ -115,6 +115,10 @@ in
       browser = {
         executablePath = "/run/current-system/sw/bin/kiro-browser";
       };
+      # Google Calendar (gogcli) keyring password
+      gateway.env = {
+        GOG_KEYRING_PASSWORD = "\${GOG_KEYRING_PASSWORD}";
+      };
     };
     systemd = {
       enable = true;
