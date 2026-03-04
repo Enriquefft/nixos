@@ -85,6 +85,9 @@
       gh
       act
 
+      # Playwright for browser automation (job-scanner skill)
+      playwright
+
       # ─────────────────────────────────────────────────────────
       # Desktop Environment
       # ─────────────────────────────────────────────────────────
