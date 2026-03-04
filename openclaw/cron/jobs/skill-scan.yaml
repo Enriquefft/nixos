@@ -1,11 +1,66 @@
-name: "Daily skill scan"
+name: "Daily Self-Improvement Scan"
 schedule: "0 9 * * *"
-session: isolated
 
 prompt: |
-  Run daily skill management:
-  1) Check for skill updates with 'clawhub update --all'
-  2) Discover trending skills with 'clawhub explore --sort trending --limit 10' and suggest
-     any relevant to Enrique's projects (AI agents, SaaS, dev tools). Do NOT auto-install.
-  3) Check ~/.openclaw/workspace/.skill-usage.json and flag skills unused 30+ days.
-  Keep response brief.
+  Daily Self-Improvement Scan. Audit and improve Kiro across 5 axes, then send a
+  single consolidated report via WhatsApp. Approval required before sending.
+
+  == 1. CAPABILITY UPGRADES ==
+  Run 'clawhub update --all' to update installed skills.
+  Run 'clawhub explore --sort trending --limit 10' and flag any relevant to Enrique's
+  stack (AI agents, automation, SaaS dev tools, MCP, content).
+  Check ~/.openclaw/workspace/.skill-usage.json — flag skills unused 30+ days as candidates
+  for removal.
+  Optionally search for new MCP servers published recently that would extend Kiro's
+  tool surface (web search: "new MCP server site:github.com").
+
+  == 2. PLATFORM CHANGES ==
+  Check for new nix-openclaw releases (search GitHub: "nix-openclaw releases").
+  Check for Claude API/model updates announced in the last week (search: "Anthropic Claude
+  API update"). Only include if something genuinely new and usable.
+
+  == 3. FIELD INTELLIGENCE ==
+  Browse HackerNews front page (news.ycombinator.com) and filter for posts relevant to:
+  AI agents, automation, developer tools, LLM engineering, MCP, NixOS. Flag top 2-3.
+  Search GitHub trending (github.com/trending) for repos in AI/agents/automation space —
+  flag any with clear relevance to Enrique's work or target roles.
+
+  == 4. RESEARCH RADAR ==
+  Search arxiv.org for new cs.AI or cs.LG submissions in the last 2 days matching
+  Enrique's active research interests (see LORE.md: multi-agent systems, algorithmic
+  fairness, LLM reasoning over structured data). Flag at most 2 relevant papers with
+  title + one-sentence summary. Skip if nothing relevant.
+
+  == 5. DOCUMENT HYGIENE ==
+  Read LORE.md and flag any facts that appear stale or outdated (product statuses,
+  job board status, tracker paths, target company lists). Do NOT edit without approval.
+  Check if any lessons from recent cron activity (content performance, job scan patterns,
+  outreach results) should be captured in LORE.md "Lessons Learned". Propose additions.
+  Flag any config or cron improvements that would make Kiro more effective.
+
+  == OUTPUT ==
+  Compile findings into a single WhatsApp message using this structure:
+
+  🤖 Self-Improvement Scan — [date]
+
+  🛠 Capability Upgrades
+  [bullet per new skill/MCP server worth installing, or "nothing new today"]
+
+  🚀 Platform Changes
+  [bullet per platform update, or "nothing new"]
+
+  📡 Field Intel
+  [2-3 bullets: tool/trend + why relevant to Enrique]
+
+  🔬 Research Radar
+  [1-2 papers with title + one line, or "nothing relevant today"]
+
+  🗂 Document Flags
+  [bullets for stale facts or proposed Lessons Learned additions, or "all current"]
+
+  ⚡ Proposed Actions
+  [anything requiring Enrique's decision: skill installs, doc edits, config changes]
+
+  Keep the total message concise — under 40 lines. No padding, no summaries of what
+  you did. Only include sections with actual findings; omit empty sections.
+  Approval required before sending.
