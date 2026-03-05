@@ -193,6 +193,7 @@
       bottles
       prismlauncher
       pokemmo-installer
+      (import ./packages/gogcli.nix { inherit pkgs; })
 
       # ─────────────────────────────────────────────────────────
       # Hardware & Peripherals

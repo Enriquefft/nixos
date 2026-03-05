@@ -1,4 +1,4 @@
 .claude/settings.local.json
 result
 node_modules/
-zeroclaw/.claude/worktrees/
+zeroclaw/
