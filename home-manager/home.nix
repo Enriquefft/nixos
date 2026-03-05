@@ -26,7 +26,7 @@
     ./programs/kitty.nix
     ./programs/nixvim.nix
     ./programs/swayosd.nix
-    ../zeroclaw/module.nix
+    /etc/nixos/zeroclaw/module.nix
   ];
 
   services.gnome-keyring = {
