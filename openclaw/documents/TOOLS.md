@@ -13,12 +13,12 @@
 
 ### Web Search
 - Search the web for current information
-- Available through Z.AI web search capability
+- Available through Brave Search API
 - Use for: job listings, company research, market research, news, trends
 
 ### Web Reader
 - Fetch and read full web pages
-- Available through Z.AI web reader capability
+- Available through Brave Search API
 - Use for: reading job descriptions, articles, documentation, competitor analysis
 
 ## Code & Development
@@ -68,7 +68,7 @@
 ## System Management
 
 ### NixOS Rebuild
-- `sudo nixos-rebuild switch --flake /etc/nixos#nixos` (or just `up`)
+- `sudo /run/current-system/sw/bin/nixos-rebuild switch --flake /etc/nixos#nixos`
 - Passwordless via sudo whitelist
 - Use for: applying config changes, installing packages, updating services
 
@@ -108,21 +108,21 @@ Always send proposed changes to Enrique for approval before editing.
 
 ## Cron Management
 
-Read **`/etc/nixos/openclaw/cron/README.md`** before adding or editing jobs — it is the canonical schema reference.
+**Preferred interface: `cron-manager` skill** — handles YAML creation, validation, and sync in one step.
+
+Read **`/etc/nixos/openclaw/cron/README.md`** for the full schema reference.
 
 Cron jobs are file-based and version-controlled under `/etc/nixos/openclaw/cron/`.
 
-### Directory
-- `cron/defaults.yaml` — shared defaults (timezone, session)
-- `cron/jobs/*.yaml` — one file per scheduled task (source of truth)
-- `cron/sync.sh` — syncs YAML definitions to OpenClaw via CLI
+### Quick Commands (via cron-manager)
+- **Add a job:** `./skills/cron-manager/run.ts create --name "Name" --schedule "0 8 * * *" --prompt "Instructions"`
+- **Edit a job:** `./skills/cron-manager/run.ts edit --name "Name" --schedule "*/30 * * * *"`
+- **Remove a job:** `./skills/cron-manager/run.ts remove --name "Name"`
+- **List jobs:** `./skills/cron-manager/run.ts list`
+- **Test a job:** `./skills/cron-manager/run.ts test --name "Name"`
+- **Preview sync:** `cron-sync --dry-run`
 
-### Workflow
-- **Add a job:** create a new `.yaml` in `cron/jobs/`, run `cron-sync`
-- **Edit a job:** edit the YAML, run `cron-sync`
-- **Remove a job:** delete the YAML, run `cron-sync --remove-missing`
-- **Preview changes:** `cron-sync --dry-run`
-- **Test a job:** `openclaw cron run <id>` (needs env vars loaded)
+**Do NOT** create standalone Python/bash scripts, crontab entries, systemd timers, or write to `jobs.json` directly. Each cron job runs as a full AI agent session with all tools.
 
 ### Job YAML Schema
 ```yaml
@@ -139,10 +139,13 @@ Reusable CLI tools available as OpenClaw skills at `/etc/nixos/openclaw/skills/`
 
 | Skill | Purpose | Usage |
 |-------|---------|-------|
+| `cron-manager` | Create, edit, remove, list, test cron jobs | `./run.ts create --name "Name" --schedule "0 8 * * *" --prompt "..."` |
+| `skill-scaffold` | Scaffold new skills with SKILL.md + run.ts | `./run.ts create --name "my-tool" --description "..."` |
 | `job-scanner` | Fetch/filter job board listings | `./run.ts --boards linkedin --remote-only` |
 | `rss-reader` | Fetch/parse RSS/Atom feeds | `./run.ts --feeds arxiv,hn --since 24h` |
 | `job-tracker` | CRUD on job tracking store | `./run.ts list --status new` |
 | `git-activity` | Summarize git commits across ~/Projects/ | `./run.ts --since yesterday` |
+| `task-queue` | Persistent task queue for issues, tasks, improvements | `./run.ts add --title "..." --type issue --source "cron-name"` |
 
 All skills follow the CLI contract: JSON stdout, stderr for diagnostics, `--help` for usage, exit 0 on success.
 State files: `~/.local/state/openclaw-cron/<skill-name>/`

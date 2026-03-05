@@ -20,16 +20,17 @@ prompt: |
   API update"). Only include if something genuinely new and usable.
 
   == 3. FIELD INTELLIGENCE ==
-  Browse HackerNews front page (news.ycombinator.com) and filter for posts relevant to:
-  AI agents, automation, developer tools, LLM engineering, MCP, NixOS. Flag top 2-3.
+  Run `rss-reader --feeds hn --since 24h --new-only --limit 15`. Parse the JSON output.
+  Filter for posts relevant to: AI agents, automation, developer tools, LLM engineering,
+  MCP, NixOS. Flag top 2-3 with title, link, and why it's relevant.
   Search GitHub trending (github.com/trending) for repos in AI/agents/automation space —
   flag any with clear relevance to Enrique's work or target roles.
 
   == 4. RESEARCH RADAR ==
-  Search arxiv.org for new cs.AI or cs.LG submissions in the last 2 days matching
-  Enrique's active research interests (see LORE.md: multi-agent systems, algorithmic
-  fairness, LLM reasoning over structured data). Flag at most 2 relevant papers with
-  title + one-sentence summary. Skip if nothing relevant.
+  Run `rss-reader --group research --since 2d --new-only --limit 10`. Parse the JSON output.
+  Filter for papers matching Enrique's active research interests (see LORE.md: multi-agent
+  systems, algorithmic fairness, LLM reasoning over structured data). Flag at most 2
+  relevant papers with title + one-sentence summary. Skip if nothing relevant.
 
   == 5. DOCUMENT HYGIENE ==
   Read LORE.md and flag any facts that appear stale or outdated (product statuses,

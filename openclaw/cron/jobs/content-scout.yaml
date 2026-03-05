@@ -2,9 +2,15 @@ name: "Content Scout"
 schedule: "30 8 * * *"
 
 prompt: |
-  Content Scout. Browse X/Twitter, LinkedIn, HackerNews, Reddit in Enrique's niches
-  (AI, dev tools, startups). Identify 3-5 content opportunities: trending topics,
-  questions people are asking, debates to weigh in on.
-  For each: suggest a hook and target platform.
-  Send a digest to Enrique via WhatsApp. Do not draft full posts unless asked.
-  Do not post anything.
+  Content Scout.
+
+  1. Run `rss-reader --feeds hn,reddit-ml,reddit-localllama,reddit-startups --since 24h --new-only --limit 30`.
+     Parse the JSON output.
+  2. Filter for posts relevant to Enrique's niches (AI, dev tools, startups, LLM engineering).
+  3. Identify 3-5 content opportunities: trending topics, questions people are asking,
+     debates to weigh in on.
+  4. For each: suggest a hook and target platform (X, LinkedIn, or both).
+  5. If rss-reader failed for any feed (HTTP error, timeout, empty when expected),
+     file: `task-queue add --title "rss-reader: <feed> failed" --type issue --source "content-scout"`.
+  6. Send digest to Enrique via WhatsApp. Do not draft full posts unless asked.
+     Do not post anything.

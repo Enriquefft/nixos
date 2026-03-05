@@ -28,31 +28,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-openclaw = {
-      url = "github:openclaw/nix-openclaw";
+    zeroclaw = {
+      url = "github:zeroclaw-labs/zeroclaw";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # kapso-whatsapp-plugin — toggle between local and repo:
-    # kapso-whatsapp-plugin = {
-    #   url = "github:Enriquefft/openclaw-kapso-whatsapp";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     kapso-whatsapp-plugin = {
       url = "path:/home/hybridz/Projects/openclaw-kapso-whatsapp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openclaw = {
-      # My openclaw config
-      url = "path:./openclaw";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-openclaw.follows = "nix-openclaw";
-      inputs.kapso-whatsapp-plugin.follows = "kapso-whatsapp-plugin";
     };
 
     # nix-xilinx = {
@@ -73,7 +60,6 @@
 
       flake-overlays = [
         # nix-xilinx.overlay
-        inputs.nix-openclaw.overlays.default
       ];
 
     in

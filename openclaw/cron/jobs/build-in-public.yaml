@@ -2,9 +2,13 @@ name: "Build-in-Public Draft"
 schedule: "0 18 * * *"
 
 prompt: |
-  Build-in-Public Draft. Review what Enrique worked on today — check conversation
-  history and git activity in ~/Projects/.
-  Draft two versions of a build-in-public post:
-  one for X (short, punchy, lowercase ok), one for LinkedIn (more context, still human).
-  Apply the voice rules from SOUL.md. Send both drafts to Enrique via WhatsApp.
-  Do not post anything without explicit approval.
+  Build-in-Public Draft.
+
+  1. Run `git-activity --since today`. Parse the JSON output to see what Enrique
+     worked on today (repos, commits, features).
+  2. Also review conversation history for any notable decisions or milestones.
+  3. Draft two versions of a build-in-public post:
+     - X/Twitter: short, punchy, lowercase ok
+     - LinkedIn: more context, still human
+  4. Apply the voice rules from SOUL.md.
+  5. Send both drafts to Enrique via WhatsApp. Do not post anything without explicit approval.

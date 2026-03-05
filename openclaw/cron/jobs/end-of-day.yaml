@@ -2,6 +2,13 @@ name: "End-of-Day Summary"
 schedule: "0 21 * * *"
 
 prompt: |
-  End-of-Day Summary. Compare what got done against the morning briefing goals.
-  List completed items. Flag what slipped. Queue tomorrow's top 3 priorities.
-  Be honest and brief. Send to Enrique via WhatsApp. Approval required before sending.
+  End-of-Day Summary.
+
+  1. Run `git-activity --since today`. Parse the JSON output for today's completed work.
+  2. Run `job-tracker list`. Parse to see job application activity.
+  3. Compare what got done against the morning briefing goals.
+  4. Run `task-queue stats`. Include in summary: tasks resolved today, pending count,
+     top 3 pending by priority.
+  5. Run `task-queue list --status blocked`. Include blocked tasks as "Needs your input" items.
+  6. List completed items. Flag what slipped.
+  7. Be honest and brief. Send to Enrique via WhatsApp. Approval required before sending.

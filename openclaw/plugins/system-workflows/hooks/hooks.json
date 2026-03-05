@@ -1,0 +1,29 @@
+{
+  "description": "System workflow enforcement — context injection + tool redirect (Claude Code hooks-inspired)",
+  "note": "This follows the Claude Code hooks API shape. Adapt to OpenClaw's actual hook API once verified.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "description": "Detect scheduling/skill creation intent and inject context about the correct workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/intent-detector.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit",
+        "description": "Block operations that bypass cron or skill workflows — redirect to correct tools",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/tool-guard.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -26,30 +26,8 @@
     ./programs/kitty.nix
     ./programs/nixvim.nix
     ./programs/swayosd.nix
-    inputs.openclaw.homeManagerModules.default
+    ../zeroclaw/module.nix
   ];
-
-  # Machine-specific secrets injection for openclaw services
-  systemd.user.services.openclaw-gateway.Service.EnvironmentFile =
-    [ "/run/secrets/rendered/openclaw.env" ];
-  # Restart gateway only when openclaw.json actually changes
-  systemd.user.services.openclaw-gateway.Unit.X-Restart-Triggers =
-    [ "${config.home.file.".openclaw/openclaw.json".source}" ];
-  # Bridge must follow gateway lifecycle (reconnect on gateway restart)
-  # Wants = gateway pulls bridge up on start; PartOf = bridge stops when gateway stops
-  systemd.user.services.openclaw-gateway.Unit.Wants = [ "kapso-whatsapp-bridge.service" ];
-  systemd.user.services.kapso-whatsapp-bridge.Unit.PartOf = [ "openclaw-gateway.service" ];
-  systemd.user.services.kapso-whatsapp-bridge.Unit.After = [ "openclaw-gateway.service" ];
-  # Give gateway time to bind :18789 before bridge connects; tolerate slow starts
-  systemd.user.services.kapso-whatsapp-bridge.Service.RestartSec = 3;
-  systemd.user.services.kapso-whatsapp-bridge.Unit.StartLimitIntervalSec = 60;
-  systemd.user.services.kapso-whatsapp-bridge.Unit.StartLimitBurst = 10;
-  services.kapso-whatsapp.secrets = {
-    apiKeyFile = "/run/secrets/openclaw/kapso-api-key";
-    phoneNumberIdFile = "/run/secrets/openclaw/kapso-phone-number-id";
-    gatewayTokenFile = "/run/secrets/openclaw/gateway-token";
-    webhookVerifyTokenFile = "/run/secrets/openclaw/kapso-webhook-verify-token";
-  };
 
   services.gnome-keyring = {
     enable = true;

@@ -2,7 +2,10 @@ name: "Paper Scout Sat"
 schedule: "0 9 * * 6"
 
 prompt: |
-  Paper Scout. Browse arxiv, Semantic Scholar, HuggingFace papers.
-  Focus on: AI agents, LLM applications, social media automation, developer tools.
-  Summarize the top 3 papers: title, authors, 2-line summary, link.
-  Send to Enrique via WhatsApp. Approval required before sending.
+  Paper Scout (Saturday).
+
+  1. Run `rss-reader --group research --since 7d --new-only --limit 20`. Parse the JSON output.
+  2. Filter for papers relevant to: AI agents, LLM applications, social media automation,
+     developer tools. Discard irrelevant entries.
+  3. Summarize the top 3 papers: title, authors, 2-line summary, link.
+  4. Send to Enrique via WhatsApp. Approval required before sending.

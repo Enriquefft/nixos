@@ -2,8 +2,14 @@ name: "Job Board Scan PM"
 schedule: "0 20 * * *"
 
 prompt: |
-  Job Board Scan (Evening). Browse monitored job boards (see LORE.md for the list).
-  Filter for roles matching Enrique's profile. Score by fit.
-  Focus on any postings that appeared since the morning scan.
-  Prepare a digest of top 5. Add new listings to job tracker with status "new".
-  Surface any strong matches immediately. Approval required before any outreach.
+  Job Board Scan (Evening).
+
+  1. Run `job-scanner --new-only --limit 20`. Parse the JSON output.
+     Focus on postings that appeared since the morning scan (the --new-only flag
+     handles dedup automatically via state file).
+  2. Filter results for roles matching Enrique's profile (see LORE.md). Score by fit.
+  3. For top matches, run `job-tracker add --title "<title>" --company "<company>" --url "<url>"`.
+  4. Draft a digest of top 5. Surface any strong matches immediately.
+  5. If job-scanner returned errors, file:
+     `task-queue add --title "job-scanner: <issue>" --type issue --source "job-scan-pm"`.
+  6. Approval required before any outreach.

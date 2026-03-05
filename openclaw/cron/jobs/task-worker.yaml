@@ -1,0 +1,24 @@
+name: "Task Worker"
+schedule: "30 10,15,19 * * *"
+
+prompt: |
+  Task Worker. Process the task queue.
+
+  1. Run `task-queue next`. Parse the JSON output.
+  2. If task is null (queue empty), end session silently.
+  3. Run `task-queue update <id> --status in_progress`.
+  4. Attempt to resolve the task using your available tools:
+     - For "issue" type: diagnose the problem, attempt fix via Claude Code or shell
+       commands, test the fix. Follow the Self-Repair Protocol in AGENTS.md.
+     - For "task" type: execute the task as Enrique requested. If it requires
+       external action (sending messages, applying to jobs), prepare everything
+       and flag for approval.
+     - For "followup" type: check if the original issue is still relevant, take
+       action if possible, or escalate to Enrique.
+     - For "improvement" type: implement if straightforward, or draft a proposal.
+  5. If resolved: run `task-queue resolve <id> --resolution "What was done"`.
+     If blocked or needs Enrique's input: run `task-queue update <id> --status blocked --description "Blocked because..."`.
+     If failed after genuine attempt: leave as in_progress (will retry next cycle).
+  6. Process at most 2 tasks per session. After resolving one, run `task-queue next` again.
+  7. If any task required Enrique's approval or attention, send a single WhatsApp
+     summary of what was attempted and what needs input. Otherwise end silently.

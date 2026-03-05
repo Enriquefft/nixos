@@ -87,7 +87,15 @@
       "Bash(ldd:*)",
       "Bash(/home/hybridz/Games/Factorio/data/noarch/game/bin/x64/factorio:*)",
       "Bash(update-desktop-database:*)",
-      "Bash(yes:*)"
+      "Bash(yes:*)",
+      "Bash(git mv:*)",
+      "Bash(sops:*)",
+      "Bash(git checkout:*)",
+      "Bash(direnv reload:*)",
+      "Bash(gh api:*)",
+      "Bash(do cp:*)",
+      "Bash(gh pr:*)",
+      "Bash(zeroclaw:*)"
     ],
     "deny": [],
     "ask": []

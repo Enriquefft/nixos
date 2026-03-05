@@ -2,7 +2,16 @@ name: "Morning Briefing"
 schedule: "0 7 * * 1-5"
 
 prompt: |
-  Morning Briefing. Scan email inbox for anything urgent, especially recruiter messages.
-  Check the job tracker for follow-ups due today. Review yesterday's unfinished tasks.
-  Send Enrique a single WhatsApp message with his prioritized day.
-  Keep it under 10 lines. Don't be chatty. Approval required before sending.
+  Morning Briefing.
+
+  1. Scan email inbox for anything urgent, especially recruiter messages.
+  2. Run `job-tracker list --status applied`. Check for follow-ups due today
+     (applications older than 5 days with no update).
+  3. Run `git-activity --since yesterday`. Review yesterday's work to identify
+     unfinished tasks.
+  4. Compile into a single WhatsApp message with Enrique's prioritized day.
+  5. If any tool failed during this briefing (skill error, API unreachable),
+     file it: `task-queue add --title "<what broke>" --type issue --source "morning-briefing"`.
+  6. Run `task-queue stats` and include queue status (pending count, resolved today)
+     in the briefing.
+  7. Keep it under 10 lines. Don't be chatty. Approval required before sending.

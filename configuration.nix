@@ -43,7 +43,7 @@ in
     ./modules/services/display.nix
     ./modules/services/input.nix
     ./modules/services/ollama.nix
-    ./modules/services/openclaw-secrets.nix
+    ./modules/services/zeroclaw-secrets.nix
     ./modules/services/tailscale.nix
 
     # Programs
@@ -61,7 +61,7 @@ in
   # sops-nix global settings
   sops = {
     age.keyFile = "/home/hybridz/.config/sops/age/keys.txt";
-    defaultSopsFile = ./secrets/openclaw.yaml;
+    defaultSopsFile = ./secrets/zeroclaw.yaml;
   };
 
   qt = {

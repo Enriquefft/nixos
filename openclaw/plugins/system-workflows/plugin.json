@@ -1,0 +1,10 @@
+{
+  "name": "system-workflows",
+  "version": "0.1.0",
+  "description": "Purpose-built tools for system-specific workflows (cron management, skill scaffolding). Prevents agents from bypassing version-controlled workflows with ad-hoc scripts.",
+  "skills": [
+    "skills/cron-manager",
+    "skills/skill-scaffold"
+  ],
+  "hooks": "hooks/hooks.json"
+}

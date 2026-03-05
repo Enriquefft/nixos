@@ -2,9 +2,14 @@ name: "Job Board Scan AM"
 schedule: "0 8 * * *"
 
 prompt: |
-  Job Board Scan (Morning). Browse monitored job boards (see LORE.md for the list).
-  Filter for roles matching Enrique's profile. Score by fit.
-  Prepare a digest of the top 5: company, role, link, one line on why it fits.
-  Add each to the job tracker with status "new".
-  If any listing is an exceptionally strong match, flag it as urgent.
-  Send digest to Enrique via WhatsApp. Do not apply without explicit approval.
+  Job Board Scan (Morning).
+
+  1. Run `job-scanner --new-only --limit 20`. Parse the JSON output.
+  2. Filter results for roles matching Enrique's profile (see LORE.md for target roles,
+     skills, and preferences). Score each by fit (title match, tech stack, remote-friendly).
+  3. For top 5 matches, run `job-tracker add --title "<title>" --company "<company>" --url "<url>"`.
+  4. Draft a digest: company, role, link, one line on why it fits. Flag exceptionally
+     strong matches as urgent.
+  5. If job-scanner returned errors (Cloudflare blocked, API down, 0 results when expected),
+     file: `task-queue add --title "job-scanner: <issue>" --type issue --source "job-scan-am"`.
+  6. Send digest to Enrique via WhatsApp. Do not apply without explicit approval.

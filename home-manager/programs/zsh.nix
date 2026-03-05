@@ -39,24 +39,24 @@
     '';
 
     initContent = lib.mkBefore ''
-      # OpenClaw wrapper - loads secrets only when needed
-      openclaw() {
+      # ZeroClaw wrapper - loads secrets only when needed
+      zeroclaw() {
         local bin
-        bin=$(whence -p openclaw)
-        if [ -f /run/secrets/rendered/openclaw.env ]; then
-          env $(cat /run/secrets/rendered/openclaw.env | xargs) "$bin" "$@"
+        bin=$(whence -p zeroclaw)
+        if [ -f /run/secrets/rendered/zeroclaw.env ]; then
+          env $(cat /run/secrets/rendered/zeroclaw.env | xargs) "$bin" "$@"
         else
           "$bin" "$@"
         fi
       }
 
-      alias claw=openclaw
+      alias claw=zeroclaw
 
       kapso-whatsapp-cli() {
         local bin
         bin=$(whence -p kapso-whatsapp-cli)
-        if [ -f /run/secrets/rendered/openclaw.env ]; then
-          env $(cat /run/secrets/rendered/openclaw.env | xargs) "$bin" "$@"
+        if [ -f /run/secrets/rendered/zeroclaw.env ]; then
+          env $(cat /run/secrets/rendered/zeroclaw.env | xargs) "$bin" "$@"
         else
           "$bin" "$@"
         fi
@@ -109,7 +109,7 @@
       gpull = "git pull --rebase";
 
       # ClawHub — skill registry
-      clawhub = "clawhub --workdir ~/.openclaw/workspace";
+      clawhub = "clawhub --workdir ~/.zeroclaw/workspace";
 
     };
 

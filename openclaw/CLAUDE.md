@@ -1,76 +1,22 @@
 # OpenClaw Agent Configuration
 
-This directory is the personal OpenClaw agent configuration sub-flake.
-Agents working on OpenClaw settings can `cd /etc/nixos/openclaw/` and work here
-without needing NixOS context.
+Personal OpenClaw agent configuration sub-flake.
 
-## Pre-read map
+## Structure
 
-Before working in a specific area, read the corresponding doc **directly** first.
-Do not rely on Explore agents as a substitute for these — they are mandatory pre-reads.
+| Path | Purpose | Pre-read |
+|------|---------|----------|
+| `module.nix` | Gateway config, model providers (ZAI, ZAI-Coding), agent defaults, bundled plugins, skill symlinks | This file |
+| `documents/` | **OpenClaw agent identity** (Kiro's brain) — NOT repo docs. Editing these changes how Kiro thinks and acts. | [`AGENTS.md`](documents/AGENTS.md), [`IDENTITY.md`](documents/IDENTITY.md) |
+| `skills/` | Bun/TS CLI tools as OpenClaw skills. Live edits, no rebuild. | [`skills/README.md`](skills/README.md) |
+| `cron/` | YAML job definitions synced via `cron-sync`. No rebuild needed. | [`cron/README.md`](cron/README.md) |
+| `plugins/` | Custom plugin code. `system-workflows` provides cron-manager + skill-scaffold skills and hook infrastructure. Two bundled plugins also enabled in `module.nix`: `summarize`, `gogcli`. | [`plugins/system-workflows/README.md`](plugins/system-workflows/README.md) |
+| `reference/` | Reusable content: full profile (`full-profile.md`), application response templates (`reusable-responses.md`) | — |
+| `flake.nix` | Sub-flake inputs (nixpkgs, nix-openclaw, kapso-whatsapp-plugin) | — |
 
-| Area | Read before touching |
-|------|----------------------|
-| Cron jobs (`cron/`) | [`cron/README.md`](cron/README.md) |
-| Skills (`skills/`) | [`skills/README.md`](skills/README.md) |
-| Agent identity (`documents/`) | [`documents/AGENTS.md`](documents/AGENTS.md), [`documents/IDENTITY.md`](documents/IDENTITY.md) |
-| Module config (`module.nix`) | This CLAUDE.md (you're already here) |
+### documents/ files
 
-## Who works here
-
-Multiple coding agents edit this repo: **Claude Code** (primary), **OpenClaw/Kiro**
-(self-modification), and occasionally others (opencode, copilot). This CLAUDE.md is the
-canonical context source for all of them.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `module.nix` | Gateway config, model providers (ZAI), agent defaults, skill symlinks |
-| `documents/` | **OpenClaw agent identity** (Kiro's brain) — NOT repo docs (see below) |
-| `skills/` | Utility CLI tools as OpenClaw skills (Bun/TS) |
-| `cron/` | Version-controlled cron job definitions |
-| `flake.nix` | Sub-flake inputs (nixpkgs, nix-openclaw, kapso-whatsapp-plugin) |
-| `reference/` | Reusable content: full profile, application response templates |
-
-## Extension Architecture
-
-OpenClaw is fast-moving open source. We customize it **without forking** — extend via
-plugins, skills, config, and identity documents. Never bypass OpenClaw internals.
-
-```
-upstream openclaw (community, fast-moving — don't fork)
-    │
-    ├── nix config (module.nix — model providers, agent defaults, sandbox)
-    ├── plugins (TypeScript — tools, services, hooks, HTTP handlers)
-    ├── skills (SKILL.md + CLI tools — agent knowledge & capabilities)
-    ├── cron (YAML jobs — scheduled agent sessions via cron-sync)
-    ├── documents (identity — Kiro's personality, directives, context)
-    └── reference (templates — reusable content for outbound comms)
-```
-
-### Plugin capabilities (primary extension mechanism)
-
-Plugins run in-process (trusted code) and can:
-- **Intercept tool calls** — `before_tool_call` hook can inspect, modify, or block
-- **React after tool calls** — `after_tool_call` for audit/logging/side-effects
-- **Intercept messages** — inbound (before LLM) and outbound (before delivery)
-- **Register tools, CLI commands, services, HTTP endpoints, skills**
-
-Plugins CANNOT: modify system prompt directly, add/remove tools mid-session,
-modify tool call results, or override core auth/reserved commands.
-
-### Extension principle
-
-**Build on OpenClaw — use plugins, skills, and config. Don't bypass internals.**
-If something can't be done via the extension surface, file upstream or use a plugin
-`before_tool_call` hook to enforce guardrails.
-
-## documents/ — OpenClaw identity (NOT repo docs)
-
-The `documents/` directory contains **Kiro's personality, directives, and operational
-context** — the files that define how the OpenClaw agent behaves. They are symlinked
-into OpenClaw's runtime workspace.
+This are files to be used by Openclaw during runtime.
 
 | File | Purpose |
 |------|---------|
@@ -82,70 +28,71 @@ into OpenClaw's runtime workspace.
 | `LORE.md` | Strategy, job search, distribution, research context |
 | `PROMPTING-EXAMPLES.md` | Behavior pattern examples |
 
-**Do not confuse these with repo documentation.** Editing these files changes how Kiro
-thinks and acts, not how coding agents understand this repo.
+## Extension Architecture
 
-## Cron System
+We customize OpenClaw **without forking** — extend via plugins, skills, config, and identity documents.
 
-YAML-defined jobs synced via `cron-sync`. No rebuild needed — edit YAML, run `cron-sync`.
-See **[cron/README.md](cron/README.md)** for schema, workflow, and sync details.
+### Plugin capabilities
 
-Quick reference: `cron-sync --dry-run` to preview, `cron-sync` to apply.
+Plugins run in-process and can:
+- Intercept/modify tool calls (`before_tool_call`, `after_tool_call`)
+- Intercept messages (inbound before LLM, outbound before delivery)
+- Register tools, CLI commands, services, HTTP endpoints, skills
+
+Plugins CANNOT: modify system prompt, add/remove tools mid-session, modify tool call results, override core auth.
+
+**Principle:** Build on OpenClaw — use plugins, skills, and config. Don't bypass internals.
 
 ## Skills
 
-Bun/TS CLI tools symlinked via `mkOutOfStoreSymlink` — live edits, no rebuild.
-See **[skills/README.md](skills/README.md)** for structure, CLI contract, and inventory.
+See [`skills/README.md`](skills/README.md) for CLI contract and inventory.
+
+- Skills with `package.json` need `bun install` in their directory
+- Per-skill `config.json` files are runtime config (not committed)
+- The `whatsapp` skill is symlinked from `~/Projects/openclaw-kapso-whatsapp/skills/whatsapp` (external repo)
+- `task-queue` is the canonical system for tracking issues, user tasks, improvements, and followups. See AGENTS.md "Task Queue Protocol" for filing rules.
+
+### Plugin-provided skills
+
+The `system-workflows` plugin provides two additional skills (symlinked from `plugins/system-workflows/skills/`):
+
+| Skill | Purpose | Usage |
+|-------|---------|-------|
+| `cron-manager` | Create, edit, remove, list, test cron jobs via YAML + cron-sync | `./run.ts create --name "Name" --schedule "0 8 * * *" --prompt "..."` |
+| `skill-scaffold` | Scaffold new skills with correct SKILL.md + run.ts structure | `./run.ts create --name "my-tool" --description "..."` |
+
+## Cron
+
+YAML jobs synced via `cron-sync`. Quick reference: `cron-sync --dry-run` to preview, `cron-sync` to apply.
+
+See [`cron/README.md`](cron/README.md) for schema and workflow.
 
 ## Secrets
 
-Secrets are NOT here. They are injected at runtime from `/run/secrets/rendered/openclaw.env`
-by the NixOS machine config (`home-manager/home.nix` + `modules/services/openclaw-secrets.nix`).
+Injected at runtime from `/run/secrets/rendered/openclaw.env` (managed by `modules/services/openclaw-secrets.nix`).
 
-Environment variables available at runtime:
-- `OPENCLAW_TOKEN` — gateway auth token
-- `ZAI_API_KEY` — Z.AI API key
-- `KAPSO_API_KEY` — Kapso API key
-- `KAPSO_PHONE_NUMBER_ID` — WhatsApp phone number ID
+| Variable | Purpose |
+|----------|---------|
+| `OPENCLAW_TOKEN` | Gateway auth token |
+| `ZAI_API_KEY` | Z.AI API key |
+| `KAPSO_API_KEY` | Kapso API key |
+| `KAPSO_PHONE_NUMBER_ID` | WhatsApp phone number ID |
+| `GOG_KEYRING_PASSWORD` | GOG keyring |
+| `BRAVE_API_KEY` | Brave web search |
 
 ## Testing
 
 ```bash
-# Validate sub-flake syntax
-nix flake check
-
-# Full system build (from /etc/nixos)
-nixos-rebuild test --flake /etc/nixos#nixos
-# or simply
-up
-
-# Check services after rebuild
-systemctl --user status openclaw-gateway kapso-whatsapp-bridge
-
-# Cron verification
-cron-sync --dry-run
-export $(cat /run/secrets/rendered/openclaw.env | xargs) && openclaw cron list
+nix flake check                                                                  # syntax validation
+sudo nixos-rebuild switch --option eval-cache false --flake /etc/nixos#nixos     # full rebuild
+systemctl --user status openclaw-gateway kapso-whatsapp-bridge                   # check services
+cron-sync --dry-run                                                              # preview cron changes
 ```
 
-## Document-only changes
+Document-only changes (`documents/`) only trigger a symlink update on rebuild, not a Go rebuild.
 
-Editing files in `documents/` (AGENTS.md, SOUL.md, TOOLS.md, etc.) only requires
-`up` to activate — no Go rebuild is triggered, just a symlink update.
+## Maintenance
 
-## What goes where
+When you modify this sub-flake's structure (add/remove skills, change module.nix schema, update cron workflow), update this CLAUDE.md. This file is the single source of truth for coding agents.
 
-| Location | Contains | Updated by |
-|----------|----------|------------|
-| `CLAUDE.md` (this file) | Stable repo structure, build commands, conventions | Coding agents when structure changes |
-| `documents/` | OpenClaw agent identity (Kiro's brain) | Kiro (self-modification) or manual edits |
-| `memory/MEMORY.md` | Session-learned gotchas only | Claude Code auto-memory |
-| `TODO.md` | Improvement backlog | Manual |
-
-## Doc maintenance convention
-
-When you modify the structure of this sub-flake — add/remove skills, change module.nix
-schema, update cron workflow, add new directories — **update this CLAUDE.md** to reflect
-the change. This file is the single source of truth for coding agents.
-
-Do NOT duplicate stable information into memory files. If something is true across
-sessions, it belongs here in CLAUDE.md, not in memory.
+Do NOT duplicate stable information into memory files — if it's true across sessions, it belongs here.

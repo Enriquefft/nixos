@@ -52,6 +52,14 @@ in
     config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/job-tracker";
   home.file.".openclaw/workspace/skills/git-activity".source =
     config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/git-activity";
+  home.file.".openclaw/workspace/skills/cron-manager".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/plugins/system-workflows/skills/cron-manager";
+  home.file.".openclaw/workspace/skills/skill-scaffold".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/plugins/system-workflows/skills/skill-scaffold";
+  home.file.".openclaw/workspace/skills/track-price-drops".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/track-price-drops";
+  home.file.".openclaw/workspace/skills/task-queue".source =
+    config.lib.file.mkOutOfStoreSymlink "/etc/nixos/openclaw/skills/task-queue";
 
   programs.openclaw = {
     enable = true;

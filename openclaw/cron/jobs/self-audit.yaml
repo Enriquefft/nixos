@@ -8,5 +8,10 @@ prompt: |
   - What content was posted and how did it perform?
   - Are any cron jobs failing or underperforming?
   - Are your document files (AGENTS.md, SOUL.md, etc.) still accurate?
+  - Run `task-queue stats`. Review queue health:
+    - Stale tasks (pending 3+ days, no attempts) — escalate or wontfix
+    - Stuck tasks (3+ failed attempts) — analyze why, escalate to Enrique
+    - Queue growth trend: growing faster than resolving?
+    - Propose `task-queue wontfix <id> --resolution "..."` for irrelevant tasks
   Propose specific updates if anything is stale. Send Enrique the audit summary.
   Approval required before editing any document files.

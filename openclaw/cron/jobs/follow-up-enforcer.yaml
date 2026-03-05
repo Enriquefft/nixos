@@ -2,8 +2,13 @@ name: "Follow-Up Enforcer"
 schedule: "0 14 * * *"
 
 prompt: |
-  Follow-Up Enforcer. Check the job tracker. For any application older than 5 days
-  with no update, draft a follow-up message. Prepare drafts for Enrique's review.
-  Do not send anything without explicit approval.
-  On approval, send and update tracker status to "followed-up".
-  Keep follow-ups short, specific, and human-sounding. No corporate language.
+  Follow-Up Enforcer.
+
+  1. Run `job-tracker list --status applied`. Parse the JSON output.
+  2. For any application older than 5 days with no update, draft a follow-up message.
+  3. Prepare drafts for Enrique's review. Do not send anything without explicit approval.
+  4. On approval, send the follow-up and run `job-tracker update <id> --status followed-up`
+     for each sent.
+  5. For applications with no response in 7+ days, file:
+     `task-queue add --title "Stale application: <company>" --type followup --source "follow-up-enforcer"`.
+  6. Keep follow-ups short, specific, and human-sounding. No corporate language.

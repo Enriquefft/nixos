@@ -724,7 +724,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
           text = ''
             exec /usr/bin/google-chrome-stable \
               --class=kiro-browser \
-              --user-data-dir="$HOME/.openclaw/browser/openclaw/user-data" \
+              --user-data-dir="$HOME/.zeroclaw/browser/zeroclaw/user-data" \
               "$@"
           '';
         };
