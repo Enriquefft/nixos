@@ -671,7 +671,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         up = pkgs.writeShellApplication {
           name = "up";
           text = ''
-            sudo nixos-rebuild switch --option eval-cache false --flake /etc/nixos#nixos
+            sudo nixos-rebuild switch --impure --option eval-cache false --flake /etc/nixos#nixos
           '';
         };
 
@@ -781,13 +781,6 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
-        cron-sync = pkgs.writeShellApplication {
-          name = "cron-sync";
-          runtimeInputs = [ pkgs.yq-go pkgs.jq pkgs.coreutils ];
-          text = ''
-            exec /etc/nixos/openclaw/cron/sync.sh "$@"
-          '';
-        };
 
       in
       [
@@ -808,7 +801,6 @@ Use 'gh issue create' with appropriate --title and --body flags."
         camon
         camoff
         kiro-browser
-        cron-sync
       ];
   };
 }
