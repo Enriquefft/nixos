@@ -2,3 +2,11 @@
 result
 node_modules/
 zeroclaw/
+
+# Personal/private documents — contain PII (phone, email, career strategy, financial info)
+# These files are required locally but must not be published.
+# Copy from templates or create manually; see PRIVACY.md for details.
+openclaw/documents/USER.md
+openclaw/documents/LORE.md
+openclaw/reference/full-profile.md
+openclaw/reference/reusable-responses.md

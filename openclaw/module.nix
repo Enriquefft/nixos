@@ -20,12 +20,8 @@ in
     security = {
       mode = "allowlist";
       roles = {
-        owner = [
-          "+51926689401"
-          "+51984089340"
-          "+51917443156"
-          "+51984938682"
-        ];
+        # REDACTED — add your own WhatsApp phone numbers here
+        owner = [ ];
       };
       sessionIsolation = true;
       # Group support - prefix required to trigger bot in groups

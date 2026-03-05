@@ -1,0 +1,58 @@
+# Lore
+
+Persistent context that evolves over time. The agent updates this file (with approval) as new information becomes relevant.
+
+## Job Search Strategy
+
+### Positioning
+
+Describe how you position yourself in the job market.
+
+### Target Paths (in priority order)
+
+1. **Remote-global** — description
+2. **Visa sponsorship** — description
+3. **Relocation** — description
+
+### Target Roles
+
+In order of fit:
+- Role 1
+- Role 2
+
+### Job Boards to Monitor
+
+- Board 1
+- Board 2
+
+### Application Approach
+
+Your preferred application strategy.
+
+## Products
+
+### Project 1
+- **What:** Description
+- **Status:** Current status
+
+## Distribution Strategy
+
+Your content/visibility strategy.
+
+## Research
+
+### Active
+1. Research project 1
+
+## Target Companies
+
+### Remote-Global
+- TBD
+
+## Application Tracker
+
+Maintained at `~/openclaw-data/job-tracker.json`
+
+## Lessons Learned
+
+(Updated as patterns emerge)
