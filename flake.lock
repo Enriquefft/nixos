@@ -147,8 +147,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1772689539,
-        "narHash": "sha256-YQ0w6Liy/7MBV6dKsupbRKfz/HxtcWrSamk5gCUsP1o=",
+        "lastModified": 1772779235,
+        "narHash": "sha256-bLo9jmNC3KbsaA6ATSUepe5BDvFlTdIrXzoR/g10tzo=",
         "path": "/home/hybridz/Projects/openclaw-kapso-whatsapp",
         "type": "path"
       },
@@ -174,6 +174,26 @@
       "original": {
         "owner": "nix-community",
         "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
+    "nix-steipete-tools": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772109967,
+        "narHash": "sha256-0oWZtmVJcI7Mc6nAXf7XM4FHLJv+H1X/8Gh31uJCyJ0=",
+        "owner": "openclaw",
+        "repo": "nix-steipete-tools",
+        "rev": "2b97c49e03657af1574aee5a34f57b38fba90035",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openclaw",
+        "repo": "nix-steipete-tools",
         "type": "github"
       }
     },
@@ -250,6 +270,7 @@
         "home-manager": "home-manager",
         "kapso-whatsapp-plugin": "kapso-whatsapp-plugin",
         "nix-index-database": "nix-index-database",
+        "nix-steipete-tools": "nix-steipete-tools",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix",
