@@ -52,16 +52,6 @@
 
       alias claw=zeroclaw
 
-      kapso-whatsapp-cli() {
-        local bin
-        bin=$(whence -p kapso-whatsapp-cli)
-        if [ -f /run/secrets/rendered/zeroclaw.env ]; then
-          env $(cat /run/secrets/rendered/zeroclaw.env | xargs) "$bin" "$@"
-        else
-          "$bin" "$@"
-        fi
-      }
-
       # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
       # Initialization code that may require console input (password prompts, [y/n]
       # confirmations, etc.) must go above this block; everything else may go below.
@@ -103,7 +93,7 @@
 
 
       svim = "sudoedit";
-      sclaude = "IS_SANDBOX=1 doas claude --dangerously-skip-permissions";
+      sclaude = "IS_SANDBOX=1 claude --dangerously-skip-permissions";
 
       gc = "git clone";
       gpull = "git pull --rebase";
