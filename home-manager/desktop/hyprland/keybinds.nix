@@ -14,7 +14,7 @@
       "$mainMod, L, exec, hyprlock"
       "$mainMod, N, exec, pkill hyprsunset || hyprsunset -t 4500"
       "$mainMod, X, exec, wlogout"
-      "$mainMod, B, exec, pkill waybar || uwsm app -- waybar"
+      "$mainMod, B, exec, audio-toggle"
       "$mainMod, Escape, exec, hyprlock"
 
       # Window management

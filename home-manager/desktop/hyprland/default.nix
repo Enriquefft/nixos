@@ -40,8 +40,8 @@ in {
 
       # Dwindle layout
       dwindle = {
-        pseudotile = "yes";
-        preserve_split = "yes";
+        pseudotile = true;
+        preserve_split = true;
       };
 
       # Main modifier key
