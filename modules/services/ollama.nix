@@ -1,11 +1,11 @@
 # Ollama AI Service
 # CUDA-accelerated LLM inference, started on-demand via gpu-toggle
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   services.ollama = {
     enable = true;
-    acceleration = "cuda";
+    package = pkgs.ollama-cuda;
   };
 
   # Don't auto-start Ollama - use 'sudo gpu-toggle on' to start with GPU
