@@ -20,7 +20,7 @@
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
     kernelParams = [
-      "i915.enable_psr=2"  # PSR2 - saves power while avoiding PSR1 flickering on Framework 13 Intel
+      "i915.enable_psr=1"  # PSR1 - PSR2 causes i915 atomic update failures on Meteor Lake Arc, hanging Firefox GPU process
       "pcie_aspm=force"    # Force PCIe Active State Power Management for better battery life
       "acpi_backlight=native"  # Use Intel GPU native backlight control (required after blacklisting nvidia_wmi_ec_backlight)
       "quiet"           # Suppress most kernel messages

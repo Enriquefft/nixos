@@ -12,7 +12,7 @@ nix flake check
 nix build .#nixosConfigurations.nixos.config.system.build.toplevel
 
 # Rebuild and activate (use this after changes are working)
-sudo nixos-rebuild switch --option eval-cache false --flake /etc/nixos#nixos
+sudo nixos-rebuild switch --impure --option eval-cache false --flake /etc/nixos#nixos
 
 # Commit and push
 gpush "commit message"  # or just `gpush` for default "chore: regular commit"
@@ -37,6 +37,7 @@ NixOS flake-based configuration for a single machine (`nixos`) running NixOS 25.
 | `security.nix` | Sudo whitelist (NOPASSWD rules) |
 | `virtualisation.nix` | Docker configuration |
 | `hardware-configuration.nix` | Auto-generated hardware config |
+| `zeroclaw/` | ZeroClaw agent config — skills, cron jobs, programs, documents (see `zeroclaw/CLAUDE.md`) |
 | `openclaw/` | Legacy OpenClaw config (no longer imported, kept for reference/migration) |
 | `shared/colors.nix` | Shared color palette |
 | `shared/constants.nix` | GPU PCI addresses, hardware constants |
@@ -82,7 +83,7 @@ All defined in `scripts.nix`, available on PATH:
 | `kiro-browser` | Dedicated Chrome profile for ZeroClaw agent |
 | `md2pdf` | Markdown to PDF via pandoc (xelatex/typst engines) |
 | **ZeroClaw** | |
-| `cron-sync` | Sync YAML job definitions to ZeroClaw gateway |
+| `cron-sync` | Sync YAML job definitions to ZeroClaw cron DB |
 
 ### System Details
 - Desktop: Hyprland (Wayland) with UWSM
