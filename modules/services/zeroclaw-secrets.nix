@@ -34,6 +34,10 @@
       sopsFile = ../../secrets/zeroclaw.yaml;
       owner = "hybridz";
     };
+    "zeroclaw/spacemail-password" = {
+      sopsFile = ../../secrets/zeroclaw.yaml;
+      owner = "hybridz";
+    };
   };
 
   # Render a single env file from all secrets for the systemd service
@@ -46,6 +50,7 @@
       KAPSO_PHONE_NUMBER_ID=${config.sops.placeholder."zeroclaw/kapso-phone-number-id"}
       GOG_KEYRING_PASSWORD=${config.sops.placeholder."zeroclaw/gog-keyring-password"}
       BRAVE_API_KEY=${config.sops.placeholder."zeroclaw/brave-api-key"}
+      SPACEMAIL_PASSWORD=${config.sops.placeholder."zeroclaw/spacemail-password"}
     '';
     owner = "hybridz";
   };

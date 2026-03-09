@@ -312,6 +312,168 @@
           '';
         };
 
+        audio-toggle = pkgs.writeShellApplication {
+          name = "audio-toggle";
+          runtimeInputs = [
+            pkgs.pipewire
+            pkgs.bluez
+            pkgs.libnotify
+            pkgs.gnugrep
+            pkgs.coreutils
+          ];
+          text = ''
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            # Device names
+            SPEAKER_PATTERN="Meteor Lake-P HD Audio Controller Speaker"
+            HEADPHONE_PATTERN="Audeze Maxwell BT"
+            SPEAKER_CARD_ID="50"
+            SPEAKER_PROFILE_ON="2"
+            SPEAKER_PROFILE_OFF="0"
+
+            # Get current default sink (marked with *)
+            get_default_sink() {
+              wpctl status | grep "\\*.*[0-9]\\+\\." | awk '{
+                for(i=1; i<=NF; i++) {
+                  if($i ~ /^[0-9]+\./) {
+                    gsub(/\./, "", $i)
+                    print $i
+                    exit
+                  }
+                }
+              }'
+            }
+
+            # Get sink ID by name pattern (only matches audio sinks, not device nodes)
+            get_sink_id_by_pattern() {
+              local pattern="$1"
+              wpctl status | grep "Sinks:" -A 20 | grep "$pattern.*\[" | awk '{
+                for(i=1; i<=NF; i++) {
+                  if($i ~ /^[0-9]+\./) {
+                    gsub(/\./, "", $i)
+                    print $i
+                    exit
+                  }
+                }
+              }' | head -1
+            }
+
+            # Get sink name by ID
+            get_sink_name() {
+              local sink_id="$1"
+              wpctl status | grep "$sink_id\\." | sed "s/.*$sink_id\\. //" | sed 's/ \[vol.*//' | sed 's/^[[:space:]]*//'
+            }
+
+            # Check if bluetooth is powered on
+            is_bluetooth_on() {
+              bluetoothctl show | grep -q "Powered: yes"
+            }
+
+            # Power on bluetooth
+            bluetooth_power_on() {
+              bluetoothctl power on >/dev/null 2>&1
+            }
+
+            # Power off bluetooth
+            bluetooth_power_off() {
+              bluetoothctl power off >/dev/null 2>&1
+            }
+
+            # Enable speakers (set card profile to on)
+            enable_speakers() {
+              wpctl set-profile "$SPEAKER_CARD_ID" "$SPEAKER_PROFILE_ON" >/dev/null 2>&1
+              # Wait a moment for the sink to appear
+              sleep 1
+            }
+
+            # Disable speakers (set card profile to off)
+            disable_speakers() {
+              wpctl set-profile "$SPEAKER_CARD_ID" "$SPEAKER_PROFILE_OFF" >/dev/null 2>&1
+            }
+
+            # Wait for bluetooth device to connect and return the sink ID
+            wait_for_headphones() {
+              local max_wait=30  # seconds
+              local elapsed=0
+              local sink_id=""
+
+              while [ $elapsed -lt $max_wait ]; do
+                sink_id=$(get_sink_id_by_pattern "$HEADPHONE_PATTERN")
+                if [ -n "$sink_id" ]; then
+                  # Verify the sink actually exists
+                  if wpctl inspect "$sink_id" >/dev/null 2>&1; then
+                    echo "$sink_id"
+                    return 0
+                  fi
+                fi
+                sleep 1
+                elapsed=$((elapsed + 1))
+              done
+
+              return 1
+            }
+
+            # Send notification
+            notify() {
+              notify-send -u normal "Audio Toggle" "$1" -i audio-card
+            }
+
+            # Main toggle logic
+            current_sink=$(get_default_sink)
+            current_name=$(get_sink_name "$current_sink")
+
+            if echo "$current_name" | grep -qi "$HEADPHONE_PATTERN"; then
+              # Currently on headphones -> switch to speakers
+              notify "Switching to speakers..."
+
+              # Enable speakers
+              enable_speakers
+
+              # Switch to speakers
+              speaker_sink=$(get_sink_id_by_pattern "$SPEAKER_PATTERN")
+              if [ -n "$speaker_sink" ]; then
+                wpctl set-default "$speaker_sink"
+              fi
+
+              # Power off bluetooth
+              if is_bluetooth_on; then
+                bluetooth_power_off
+              fi
+
+              notify "Switched to speakers, Bluetooth OFF"
+
+            elif echo "$current_name" | grep -qi "$SPEAKER_PATTERN"; then
+              # Currently on speakers -> switch to headphones
+              notify "Switching to headphones..."
+
+              # Power on bluetooth if not already on
+              if ! is_bluetooth_on; then
+                bluetooth_power_on
+              fi
+
+              # Wait for headphones to connect and get sink ID
+              headphone_sink=$(wait_for_headphones)
+              if [ -n "$headphone_sink" ]; then
+                # Switch to headphones
+                wpctl set-default "$headphone_sink"
+
+                # Disable speakers
+                disable_speakers
+
+                notify "Switched to headphones (Audeze Maxwell BT)"
+              else
+                notify "Failed to connect headphones"
+                exit 1
+              fi
+
+            else
+              notify "Unknown current device: $current_name"
+              exit 1
+            fi
+          '';
+        };
+
         md2pdf = pkgs.writeShellApplication {
           name = "md2pdf";
           runtimeInputs = [
@@ -790,6 +952,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         gpush
         uwsm-start-logged
         audio-switcher
+        audio-toggle
         md2pdf
         gpu-toggle
         create-issue

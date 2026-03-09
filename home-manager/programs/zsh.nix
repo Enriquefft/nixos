@@ -39,18 +39,12 @@
     '';
 
     initContent = lib.mkBefore ''
-      # ZeroClaw wrapper - loads secrets only when needed
-      zeroclaw() {
-        local bin
-        bin=$(whence -p zeroclaw)
-        if [ -f /run/secrets/rendered/zeroclaw.env ]; then
-          env $(cat /run/secrets/rendered/zeroclaw.env | xargs) "$bin" "$@"
-        else
-          "$bin" "$@"
-        fi
-      }
-
-      alias claw=zeroclaw
+      # Load ZeroClaw secrets into the environment if available
+      if [ -f /run/secrets/rendered/zeroclaw.env ]; then
+        set -a
+        source /run/secrets/rendered/zeroclaw.env
+        set +a
+      fi
 
       # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
       # Initialization code that may require console input (password prompts, [y/n]
@@ -100,6 +94,7 @@
 
       # ClawHub — skill registry
       clawhub = "clawhub --workdir ~/.zeroclaw/workspace";
+      claw = "zeroclaw";
 
     };
 
