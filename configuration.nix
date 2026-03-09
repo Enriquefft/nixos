@@ -42,6 +42,7 @@ in
     ./modules/services/desktop.nix
     ./modules/services/display.nix
     ./modules/services/input.nix
+    ./modules/services/yap.nix
     ./modules/services/ollama.nix
     ./modules/services/zeroclaw-secrets.nix
     ./modules/services/tailscale.nix

@@ -3,8 +3,8 @@
 
   inputs = {
 
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -19,7 +19,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -32,6 +32,11 @@
       url = "github:zeroclaw-labs/zeroclaw";
     };
 
+    nix-steipete-tools = {
+      url = "github:openclaw/nix-steipete-tools";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     kapso-whatsapp-plugin = {
       url = "path:/home/hybridz/Projects/openclaw-kapso-whatsapp";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +44,11 @@
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    yap = {
+      url = "path:/home/hybridz/Projects/yap";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -74,6 +84,7 @@
           inputs.home-manager.nixosModules.default
           inputs.nix-index-database.nixosModules.nix-index
           inputs.sops-nix.nixosModules.sops
+          inputs.yap.nixosModules.default
           (import ./configuration.nix flake-overlays)
         ];
       };
