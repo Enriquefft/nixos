@@ -1,4 +1,4 @@
-{ pkgs, antigravity, ... }:
+{ pkgs, antigravity, inputs, ... }:
 
 {
 
@@ -60,6 +60,7 @@
       yazi
       btop
       lazygit
+      himalaya
 
       # ─────────────────────────────────────────────────────────
       # Development Tools
@@ -68,6 +69,7 @@
       gnumake
       openssl
       nodejs
+      bun
       uv
 
       # Development Applications
@@ -101,7 +103,7 @@
       wlogout
 
       # Desktop Tools
-      xfce.thunar
+      thunar
       cliphist
       grim
       slurp
@@ -133,6 +135,7 @@
       # ─────────────────────────────────────────────────────────
       (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
       google-chrome
+      chromedriver
 
       # ─────────────────────────────────────────────────────────
       # Communication
@@ -193,7 +196,7 @@
       bottles
       prismlauncher
       pokemmo-installer
-      (import ./packages/gogcli.nix { inherit pkgs; })
+      inputs.nix-steipete-tools.packages.${pkgs.stdenv.hostPlatform.system}.gogcli
 
       # ─────────────────────────────────────────────────────────
       # Hardware & Peripherals
@@ -206,7 +209,6 @@
       # ─────────────────────────────────────────────────────────
       openvpn
       protonvpn-gui
-      certbot-full
 
       # ─────────────────────────────────────────────────────────
       # Custom Packages
