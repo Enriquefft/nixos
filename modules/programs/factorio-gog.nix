@@ -12,11 +12,11 @@ let
   runtimeLibs = with pkgs; [
     libGL
     libGLU
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXinerama
+    libx11
+    libxcursor
+    libxrandr
+    libxi
+    libxinerama
     alsa-lib
   ];
 

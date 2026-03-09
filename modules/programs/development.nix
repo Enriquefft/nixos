@@ -1,5 +1,6 @@
 # Development Tools
-# nix-ld for running unpatched binaries, nix-index for command-not-found, light for backlight control
+# nix-ld for running unpatched binaries, nix-index for command-not-found
+# brightnessctl (in applications.nix) for backlight control
 { pkgs, ... }:
 
 {
@@ -10,9 +11,6 @@
       enable = true;
       enableZshIntegration = true;
     };
-
-    # Backlight control
-    light.enable = true;
 
     # Run unpatched dynamic binaries on NixOS
     nix-ld = {
@@ -37,13 +35,13 @@
         gtk3
         pango
         cairo
-        xorg.libX11
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-        xorg.libxcb
+        libx11
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxrandr
+        libxcb
         mesa
         expat
         alsa-lib
