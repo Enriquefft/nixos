@@ -96,6 +96,9 @@
       clawhub = "clawhub --workdir ~/.zeroclaw/workspace";
       claw = "zeroclaw";
 
+      # Bitwarden — unlock vault for CLI access
+      bwu = "export BW_SESSION=\$(bw unlock)";
+
     };
 
     history = {
