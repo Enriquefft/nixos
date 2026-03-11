@@ -1215,7 +1215,10 @@ Use 'gh issue create' with appropriate --title and --body flags."
 
           app = App()
           app.load()
-          curses.wrapper(app.run)
+          try:
+              curses.wrapper(app.run)
+          except KeyboardInterrupt:
+              pass
         '';
 
         docker-rm = pkgs.writeShellApplication {
