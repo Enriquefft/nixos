@@ -891,6 +891,222 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        zc-watch = pkgs.writers.writePython3Bin "zc-watch" { flakeIgnore = [ "E" "W" ]; } ''
+          import curses
+          import json
+          import os
+          import threading
+          import time
+          from collections import defaultdict
+
+          TRACE = os.path.expanduser("~/.zeroclaw/workspace/state/runtime-trace.jsonl")
+
+          EVENT_COLORS = {
+              "llm_request":        3,
+              "llm_response":       2,
+              "tool_call_start":    6,
+              "tool_call_result":   2,
+              "turn_final_response": 5,
+          }
+
+          EVENT_ICONS = {
+              "llm_request":         "→ LLM   ",
+              "llm_response":        "← LLM   ",
+              "tool_call_start":     "⚙ TOOL  ",
+              "tool_call_result":    "✓ DONE  ",
+              "turn_final_response": "← REPLY ",
+          }
+
+          def fmt(d):
+              et = d.get("event_type", "?")
+              p  = d.get("payload", {})
+              ts = d.get("timestamp", "")[:19].replace("T", " ")
+              icon = EVENT_ICONS.get(et, f"  {et:<14}")
+              if et == "llm_request":
+                  msgs = p.get("messages", [])
+                  body = str(msgs[-1].get("content", "") if msgs else "")
+              elif et == "turn_final_response":
+                  body = p.get("text", "")
+              else:
+                  body = str(p)
+              return ts, et, icon + body[:200]
+
+          class App:
+              def __init__(self):
+                  self.channels   = defaultdict(list)
+                  self.ch_list    = []
+                  self.selected   = 0
+                  self.lock       = threading.Lock()
+                  self.dirty      = True
+                  self.auto_scroll = True
+                  self.scroll_off  = 0
+
+              def load(self):
+                  if not os.path.exists(TRACE):
+                      return
+                  with open(TRACE) as f:
+                      for line in f:
+                          self._ingest(line)
+
+              def _ingest(self, line):
+                  line = line.strip()
+                  if not line:
+                      return
+                  try:
+                      d = json.loads(line)
+                  except Exception:
+                      return
+                  ch = d.get("channel", "unknown")
+                  entry = fmt(d)
+                  with self.lock:
+                      self.channels[ch].append(entry)
+                      if ch not in self.ch_list:
+                          self.ch_list.append(ch)
+                          self.ch_list.sort()
+                      self.dirty = True
+
+              def tail(self):
+                  with open(TRACE) as f:
+                      f.seek(0, 2)
+                      while True:
+                          line = f.readline()
+                          if not line:
+                              time.sleep(0.1)
+                              continue
+                          self._ingest(line)
+
+              def run(self, scr):
+                  curses.curs_set(0)
+                  curses.use_default_colors()
+                  curses.start_color()
+                  curses.init_pair(1, curses.COLOR_WHITE,   -1)
+                  curses.init_pair(2, curses.COLOR_GREEN,   -1)
+                  curses.init_pair(3, curses.COLOR_YELLOW,  -1)
+                  curses.init_pair(4, curses.COLOR_BLUE,    -1)
+                  curses.init_pair(5, curses.COLOR_MAGENTA, -1)
+                  curses.init_pair(6, curses.COLOR_CYAN,    -1)
+                  curses.init_pair(7, curses.COLOR_BLACK,   curses.COLOR_WHITE)
+                  curses.init_pair(8, curses.COLOR_BLACK,   curses.COLOR_CYAN)
+                  scr.nodelay(True)
+                  scr.keypad(True)
+
+                  t = threading.Thread(target=self.tail, daemon=True)
+                  t.start()
+
+                  while True:
+                      key = scr.getch()
+                      if key == ord("q"):
+                          break
+                      elif key in (curses.KEY_UP, ord("k")):
+                          if self.selected > 0:
+                              self.selected -= 1
+                              self.auto_scroll = True
+                              self.scroll_off  = 0
+                              self.dirty = True
+                      elif key in (curses.KEY_DOWN, ord("j")):
+                          with self.lock:
+                              if self.selected < len(self.ch_list) - 1:
+                                  self.selected += 1
+                                  self.auto_scroll = True
+                                  self.scroll_off  = 0
+                                  self.dirty = True
+                      elif key == curses.KEY_PPAGE:
+                          self.scroll_off  = max(0, self.scroll_off - 10)
+                          self.auto_scroll = False
+                          self.dirty = True
+                      elif key == curses.KEY_NPAGE:
+                          self.scroll_off += 10
+                          self.dirty = True
+                      elif key == ord("G"):
+                          self.auto_scroll = True
+                          self.dirty = True
+                      elif key == curses.KEY_RESIZE:
+                          self.dirty = True
+
+                      with self.lock:
+                          if self.dirty:
+                              self._draw(scr)
+                              self.dirty = False
+                      time.sleep(0.05)
+
+              def _draw(self, scr):
+                  h, w = scr.getmaxyx()
+                  scr.erase()
+                  SW = 22  # sidebar width
+
+                  # ── header ──
+                  hdr = " ZeroClaw  [↑↓/jk] channel  [PgUp/Dn] scroll  [G] bottom  [q] quit"
+                  scr.attron(curses.color_pair(8) | curses.A_BOLD)
+                  scr.addstr(0, 0, hdr[:w].ljust(w))
+                  scr.attroff(curses.color_pair(8) | curses.A_BOLD)
+
+                  # ── sidebar ──
+                  for i, ch in enumerate(self.ch_list):
+                      y = i + 1
+                      if y >= h - 1:
+                          break
+                      count = len(self.channels[ch])
+                      label = f" {ch[:13]:<13} {count:>5} "
+                      if i == self.selected:
+                          scr.attron(curses.color_pair(7) | curses.A_BOLD)
+                          scr.addstr(y, 0, label[:SW].ljust(SW))
+                          scr.attroff(curses.color_pair(7) | curses.A_BOLD)
+                      else:
+                          scr.addstr(y, 0, label[:SW])
+
+                  for y in range(1, h - 1):
+                      try:
+                          scr.addch(y, SW, "│")
+                      except curses.error:
+                          pass
+
+                  # ── log panel ──
+                  lx = SW + 1
+                  lw = w - lx
+                  lh = h - 2
+
+                  if not self.ch_list:
+                      scr.addstr(2, lx + 2, "Waiting for zeroclaw events…")
+                  else:
+                      ch     = self.ch_list[self.selected]
+                      events = self.channels[ch]
+                      total  = len(events)
+                      if self.auto_scroll:
+                          start = max(0, total - lh)
+                      else:
+                          start = min(self.scroll_off, max(0, total - lh))
+
+                      for i, (ts, et, text) in enumerate(events[start: start + lh]):
+                          y = i + 1
+                          color = EVENT_COLORS.get(et, 1)
+                          time_s = ts[11:] if len(ts) >= 19 else ts
+                          line   = f" {time_s}  {text}"
+                          try:
+                              scr.attron(curses.color_pair(color))
+                              scr.addstr(y, lx, line[:lw])
+                              scr.attroff(curses.color_pair(color))
+                          except curses.error:
+                              pass
+
+                  # ── status bar ──
+                  ch_name = self.ch_list[self.selected] if self.ch_list else "-"
+                  total_ev = sum(len(v) for v in self.channels.values())
+                  scroll_s = "[auto]" if self.auto_scroll else "[scroll]"
+                  status   = f" channel: {ch_name}  events: {total_ev}  {scroll_s}"
+                  try:
+                      scr.attron(curses.color_pair(8))
+                      scr.addstr(h - 1, 0, status[:w].ljust(w))
+                      scr.attroff(curses.color_pair(8))
+                  except curses.error:
+                      pass
+
+                  scr.refresh()
+
+          app = App()
+          app.load()
+          curses.wrapper(app.run)
+        '';
+
         docker-rm = pkgs.writeShellApplication {
           name = "docker-rm";
           text = ''
@@ -964,6 +1180,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         camon
         camoff
         kiro-browser
+        zc-watch
       ];
   };
 }
