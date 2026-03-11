@@ -121,7 +121,43 @@
   # environment.
   home.packages = with pkgs; [
 
+    (python3.withPackages (ps: with ps; [
+      # --- Automation & Scripting ---
+      requests          # HTTP client
+      httpx             # async HTTP client
+      beautifulsoup4    # HTML/XML parsing
+      selenium          # browser automation
+      openpyxl          # Excel read/write
+      python-dotenv     # .env file loading
+      paramiko          # SSH automation
+      pydantic          # data validation / settings
+
+      # --- Data Science ---
+      numpy
+      pandas
+      matplotlib
+      scipy
+      scikit-learn
+      seaborn
+      plotly
+      polars            # fast dataframes
+
+      # --- Research / CS ---
+      networkx          # graph theory
+      sympy             # symbolic math
+      hypothesis        # property-based testing
+
+      # --- Dev Quality of Life ---
+      ipython           # better REPL
+      rich              # pretty terminal output
+      pillow            # image processing
+    ]))
+
     verible
+
+    # Password Manager & Browser
+    brave
+    bitwarden-cli
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
