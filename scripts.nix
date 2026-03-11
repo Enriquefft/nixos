@@ -895,51 +895,140 @@ Use 'gh issue create' with appropriate --title and --body flags."
           import curses
           import json
           import os
+          import textwrap
           import threading
           import time
           from collections import defaultdict
 
           TRACE = os.path.expanduser("~/.zeroclaw/workspace/state/runtime-trace.jsonl")
+          SW = 22  # sidebar width
 
-          EVENT_COLORS = {
-              "llm_request":        3,
-              "llm_response":       2,
-              "tool_call_start":    6,
-              "tool_call_result":   2,
+          COLORS = {
+              "llm_request":         3,
+              "llm_response":        2,
+              "tool_call_start":     6,
+              "tool_call_result":    2,
               "turn_final_response": 5,
           }
 
-          EVENT_ICONS = {
-              "llm_request":         "→ LLM   ",
-              "llm_response":        "← LLM   ",
-              "tool_call_start":     "⚙ TOOL  ",
-              "tool_call_result":    "✓ DONE  ",
-              "turn_final_response": "← REPLY ",
+          ICONS = {
+              "llm_request":         "→ LLM  ",
+              "llm_response":        "← LLM  ",
+              "tool_call_start":     "⚙ TOOL ",
+              "tool_call_result":    "✓ DONE ",
+              "turn_final_response": "← REPLY",
           }
 
-          def fmt(d):
-              et = d.get("event_type", "?")
+          def extract(d):
+              """Return (timestamp, event_type, header_line, detail_lines)."""
+              et = d.get("event_type", "unknown")
               p  = d.get("payload", {})
               ts = d.get("timestamp", "")[:19].replace("T", " ")
-              icon = EVENT_ICONS.get(et, f"  {et:<14}")
+              icon = ICONS.get(et, f" {et}")
+
+              detail = []
+
               if et == "llm_request":
                   msgs = p.get("messages", [])
-                  body = str(msgs[-1].get("content", "") if msgs else "")
+                  n = p.get("iteration", "?")
+                  last = msgs[-1] if msgs else {}
+                  role = last.get("role", "")
+                  content = last.get("content", "")
+                  if isinstance(content, list):
+                      content = " ".join(
+                          c.get("text", "") for c in content if isinstance(c, dict)
+                      )
+                  header = f"{icon}  iter={n}  [{role}]"
+                  detail = [content] if content else []
+
+              elif et == "llm_response":
+                  ms = p.get("duration_ms", "?")
+                  it = p.get("input_tokens", "?")
+                  ot = p.get("output_tokens", "?")
+                  header = f"{icon}  {it}in / {ot}out  {ms}ms"
+
+              elif et == "tool_call_start":
+                  tool = p.get("tool", p.get("name", "?"))
+                  n = p.get("iteration", "")
+                  raw_args = p.get("arguments", p.get("args", ""))
+                  if isinstance(raw_args, str):
+                      try:
+                          raw_args = json.loads(raw_args)
+                      except Exception:
+                          pass
+                  if isinstance(raw_args, dict):
+                      args_str = "  ".join(
+                          f"{k}={json.dumps(v)[:60]}" for k, v in raw_args.items()
+                      )
+                  else:
+                      args_str = str(raw_args)
+                  iter_s = f"  iter={n}" if n else ""
+                  header = f"{icon}  {tool}{iter_s}"
+                  detail = [args_str] if args_str else []
+
+              elif et == "tool_call_result":
+                  tool = p.get("tool", p.get("name", "?"))
+                  ms = p.get("duration_ms", "")
+                  raw_out = p.get("output", p.get("result", ""))
+                  if isinstance(raw_out, str):
+                      try:
+                          raw_out = json.loads(raw_out)
+                      except Exception:
+                          pass
+                  if isinstance(raw_out, dict):
+                      out_str = json.dumps(raw_out, indent=None)
+                  else:
+                      out_str = str(raw_out)
+                  ms_s = f"  {ms}ms" if ms else ""
+                  header = f"{icon}  {tool}{ms_s}"
+                  detail = [out_str] if out_str else []
+
               elif et == "turn_final_response":
-                  body = p.get("text", "")
+                  text = p.get("text", "")
+                  header = f"{icon}"
+                  detail = [text] if text else []
+
               else:
-                  body = str(p)
-              return ts, et, icon + body[:200]
+                  header = f"{icon}"
+                  detail = [str(p)] if p else []
+
+              return ts, et, header, detail
+
+          def render(entry, lw):
+              """Expand one entry into list of (color, text) display rows."""
+              ts, et, header, detail = entry
+              color = COLORS.get(et, 1)
+              time_s = ts[11:19] if len(ts) >= 19 else ts
+              indent = " " * (len(time_s) + 2)
+
+              rows = []
+              first = f" {time_s}  {header}"
+              rows.append((color, first))
+
+              for chunk in detail:
+                  chunk = chunk.strip()
+                  if not chunk:
+                      continue
+                  wrapped = textwrap.wrap(
+                      chunk, width=max(20, lw - len(indent) - 1),
+                      subsequent_indent=indent,
+                  )
+                  for line in (wrapped or [chunk[:lw]]):
+                      rows.append((color, indent + line))
+
+              return rows
 
           class App:
               def __init__(self):
-                  self.channels   = defaultdict(list)
-                  self.ch_list    = []
-                  self.selected   = 0
-                  self.lock       = threading.Lock()
-                  self.dirty      = True
+                  self.channels    = defaultdict(list)
+                  self.ch_list     = []
+                  self.selected    = 0
+                  self.lock        = threading.Lock()
+                  self.dirty       = True
                   self.auto_scroll = True
                   self.scroll_off  = 0
+                  self._lw_cache   = 0
+                  self._row_cache  = {}
 
               def load(self):
                   if not os.path.exists(TRACE):
@@ -957,12 +1046,13 @@ Use 'gh issue create' with appropriate --title and --body flags."
                   except Exception:
                       return
                   ch = d.get("channel", "unknown")
-                  entry = fmt(d)
+                  entry = extract(d)
                   with self.lock:
                       self.channels[ch].append(entry)
                       if ch not in self.ch_list:
                           self.ch_list.append(ch)
                           self.ch_list.sort()
+                      self._row_cache.pop(ch, None)
                       self.dirty = True
 
               def tail(self):
@@ -974,6 +1064,17 @@ Use 'gh issue create' with appropriate --title and --body flags."
                               time.sleep(0.1)
                               continue
                           self._ingest(line)
+
+              def _get_rows(self, ch, lw):
+                  """Return flat list of (color, text) display rows for channel."""
+                  if self._row_cache.get(ch) and self._lw_cache == lw:
+                      return self._row_cache[ch]
+                  rows = []
+                  for entry in self.channels[ch]:
+                      rows.extend(render(entry, lw))
+                  self._row_cache[ch] = rows
+                  self._lw_cache = lw
+                  return rows
 
               def run(self, scr):
                   curses.curs_set(0)
@@ -990,8 +1091,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
                   scr.nodelay(True)
                   scr.keypad(True)
 
-                  t = threading.Thread(target=self.tail, daemon=True)
-                  t.start()
+                  threading.Thread(target=self.tail, daemon=True).start()
 
                   while True:
                       key = scr.getch()
@@ -1021,6 +1121,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
                           self.auto_scroll = True
                           self.dirty = True
                       elif key == curses.KEY_RESIZE:
+                          self._row_cache.clear()
                           self.dirty = True
 
                       with self.lock:
@@ -1032,12 +1133,14 @@ Use 'gh issue create' with appropriate --title and --body flags."
               def _draw(self, scr):
                   h, w = scr.getmaxyx()
                   scr.erase()
-                  SW = 22  # sidebar width
 
                   # ── header ──
                   hdr = " ZeroClaw  [↑↓/jk] channel  [PgUp/Dn] scroll  [G] bottom  [q] quit"
                   scr.attron(curses.color_pair(8) | curses.A_BOLD)
-                  scr.addstr(0, 0, hdr[:w].ljust(w))
+                  try:
+                      scr.addnstr(0, 0, hdr.ljust(w), w)
+                  except curses.error:
+                      pass
                   scr.attroff(curses.color_pair(8) | curses.A_BOLD)
 
                   # ── sidebar ──
@@ -1047,13 +1150,17 @@ Use 'gh issue create' with appropriate --title and --body flags."
                           break
                       count = len(self.channels[ch])
                       label = f" {ch[:13]:<13} {count:>5} "
-                      if i == self.selected:
-                          scr.attron(curses.color_pair(7) | curses.A_BOLD)
-                          scr.addstr(y, 0, label[:SW].ljust(SW))
-                          scr.attroff(curses.color_pair(7) | curses.A_BOLD)
-                      else:
-                          scr.addstr(y, 0, label[:SW])
+                      try:
+                          if i == self.selected:
+                              scr.attron(curses.color_pair(7) | curses.A_BOLD)
+                              scr.addnstr(y, 0, label.ljust(SW), SW)
+                              scr.attroff(curses.color_pair(7) | curses.A_BOLD)
+                          else:
+                              scr.addnstr(y, 0, label, SW)
+                      except curses.error:
+                          pass
 
+                  # ── divider ──
                   for y in range(1, h - 1):
                       try:
                           scr.addch(y, SW, "│")
@@ -1062,45 +1169,47 @@ Use 'gh issue create' with appropriate --title and --body flags."
 
                   # ── log panel ──
                   lx = SW + 1
-                  lw = w - lx
+                  lw = max(1, w - lx - 1)  # -1: never write into last column
                   lh = h - 2
 
                   if not self.ch_list:
-                      scr.addstr(2, lx + 2, "Waiting for zeroclaw events…")
+                      try:
+                          scr.addnstr(2, lx + 2, "Waiting for zeroclaw events…", lw)
+                      except curses.error:
+                          pass
                   else:
-                      ch     = self.ch_list[self.selected]
-                      events = self.channels[ch]
-                      total  = len(events)
+                      ch   = self.ch_list[self.selected]
+                      rows = self._get_rows(ch, lw)
+                      total = len(rows)
+
                       if self.auto_scroll:
                           start = max(0, total - lh)
                       else:
                           start = min(self.scroll_off, max(0, total - lh))
 
-                      for i, (ts, et, text) in enumerate(events[start: start + lh]):
+                      for i, (color, text) in enumerate(rows[start: start + lh]):
                           y = i + 1
-                          color = EVENT_COLORS.get(et, 1)
-                          time_s = ts[11:] if len(ts) >= 19 else ts
-                          line   = f" {time_s}  {text}"
                           try:
                               scr.attron(curses.color_pair(color))
-                              scr.addstr(y, lx, line[:lw])
+                              scr.addnstr(y, lx, text, lw)
                               scr.attroff(curses.color_pair(color))
                           except curses.error:
                               pass
 
                   # ── status bar ──
-                  ch_name = self.ch_list[self.selected] if self.ch_list else "-"
+                  ch_name  = self.ch_list[self.selected] if self.ch_list else "-"
                   total_ev = sum(len(v) for v in self.channels.values())
                   scroll_s = "[auto]" if self.auto_scroll else "[scroll]"
                   status   = f" channel: {ch_name}  events: {total_ev}  {scroll_s}"
                   try:
                       scr.attron(curses.color_pair(8))
-                      scr.addstr(h - 1, 0, status[:w].ljust(w))
+                      scr.addnstr(h - 1, 0, status.ljust(w), w)
                       scr.attroff(curses.color_pair(8))
                   except curses.error:
                       pass
 
                   scr.refresh()
+
 
           app = App()
           app.load()
