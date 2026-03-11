@@ -920,36 +920,32 @@ Use 'gh issue create' with appropriate --title and --body flags."
           }
 
           def extract(d):
-              """Return (timestamp, event_type, header_line, detail_lines)."""
+              """Return (timestamp, event_type, header_line, detail_lines).
+              Only show what the LLM is actually thinking/doing — no metadata noise."""
               et = d.get("event_type", "unknown")
               p  = d.get("payload", {})
               ts = d.get("timestamp", "")[:19].replace("T", " ")
               icon = ICONS.get(et, f" {et}")
-
               detail = []
 
               if et == "llm_request":
                   msgs = p.get("messages", [])
-                  n = p.get("iteration", "?")
+                  # Show last user/tool message content only
                   last = msgs[-1] if msgs else {}
-                  role = last.get("role", "")
                   content = last.get("content", "")
                   if isinstance(content, list):
                       content = " ".join(
                           c.get("text", "") for c in content if isinstance(c, dict)
                       )
-                  header = f"{icon}  iter={n}  [{role}]"
+                  header = f"{icon}"
                   detail = [content] if content else []
 
               elif et == "llm_response":
-                  ms = p.get("duration_ms", "?")
-                  it = p.get("input_tokens", "?")
-                  ot = p.get("output_tokens", "?")
-                  header = f"{icon}  {it}in / {ot}out  {ms}ms"
+                  # Nothing meaningful to show — LLM finished thinking
+                  header = f"{icon}"
 
               elif et == "tool_call_start":
                   tool = p.get("tool", p.get("name", "?"))
-                  n = p.get("iteration", "")
                   raw_args = p.get("arguments", p.get("args", ""))
                   if isinstance(raw_args, str):
                       try:
@@ -957,30 +953,36 @@ Use 'gh issue create' with appropriate --title and --body flags."
                       except Exception:
                           pass
                   if isinstance(raw_args, dict):
-                      args_str = "  ".join(
-                          f"{k}={json.dumps(v)[:60]}" for k, v in raw_args.items()
-                      )
+                      # Show key=value pairs, skip internal/noisy keys
+                      skip = {"action_id", "session_id", "trace_id"}
+                      parts = [
+                          f"{k}={str(v)[:80]}"
+                          for k, v in raw_args.items()
+                          if k not in skip
+                      ]
+                      args_str = "  ".join(parts)
                   else:
-                      args_str = str(raw_args)
-                  iter_s = f"  iter={n}" if n else ""
-                  header = f"{icon}  {tool}{iter_s}"
+                      args_str = str(raw_args)[:200]
+                  header = f"{icon}  {tool}"
                   detail = [args_str] if args_str else []
 
               elif et == "tool_call_result":
                   tool = p.get("tool", p.get("name", "?"))
-                  ms = p.get("duration_ms", "")
                   raw_out = p.get("output", p.get("result", ""))
                   if isinstance(raw_out, str):
                       try:
-                          raw_out = json.loads(raw_out)
+                          parsed = json.loads(raw_out)
+                          # If it's a dict, pull out the meaningful field
+                          if isinstance(parsed, dict):
+                              raw_out = parsed.get(
+                                  "content", parsed.get("text", parsed.get("output", raw_out))
+                              )
+                              if not isinstance(raw_out, str):
+                                  raw_out = json.dumps(raw_out)
                       except Exception:
                           pass
-                  if isinstance(raw_out, dict):
-                      out_str = json.dumps(raw_out, indent=None)
-                  else:
-                      out_str = str(raw_out)
-                  ms_s = f"  {ms}ms" if ms else ""
-                  header = f"{icon}  {tool}{ms_s}"
+                  out_str = str(raw_out).strip()
+                  header = f"{icon}  {tool}"
                   detail = [out_str] if out_str else []
 
               elif et == "turn_final_response":
