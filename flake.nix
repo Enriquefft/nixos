@@ -29,7 +29,7 @@
     };
 
     zeroclaw = {
-      url = "github:zeroclaw-labs/zeroclaw";
+      url = "github:zeroclaw-labs/zeroclaw/v0.1.8";
     };
 
     nix-steipete-tools = {

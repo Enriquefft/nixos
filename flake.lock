@@ -165,8 +165,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1773013223,
-        "narHash": "sha256-x3gKvnI0tNkU6Ad410g4iGQm+vD1fJmkPOuG6wLZdWY=",
+        "lastModified": 1773230695,
+        "narHash": "sha256-wyzQrH77T6VkMztc9RyZesEhJqYx57PyzACzrVvLNgc=",
         "path": "/home/hybridz/Projects/openclaw-kapso-whatsapp",
         "type": "path"
       },
@@ -433,15 +433,16 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1772940792,
-        "narHash": "sha256-lFehpOKJJuOrbAcMHPu2ZAFYKz/jb1g0tlXkJ8wWncE=",
+        "lastModified": 1772692418,
+        "narHash": "sha256-6EVUk+wp3Rjhk/q2htXq41TMD+rGFO0nJbVWNbLWj5U=",
         "owner": "zeroclaw-labs",
         "repo": "zeroclaw",
-        "rev": "f7fefd4b6cd8f08eab21129eb929480e009abb50",
+        "rev": "709411d5336f58090b72985881096efd2cf73bd1",
         "type": "github"
       },
       "original": {
         "owner": "zeroclaw-labs",
+        "ref": "v0.1.8",
         "repo": "zeroclaw",
         "type": "github"
       }
