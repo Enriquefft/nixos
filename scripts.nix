@@ -909,6 +909,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
               "tool_call_start":     6,
               "tool_call_result":    2,
               "turn_final_response": 5,
+              "debug_frame":         4,
           }
 
           ICONS = {
@@ -917,6 +918,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
               "tool_call_start":     "⚙ TOOL ",
               "tool_call_result":    "✓ DONE ",
               "turn_final_response": "← REPLY",
+              "debug_frame":         "? RAW  ",
           }
 
           def extract(d):
@@ -941,8 +943,9 @@ Use 'gh issue create' with appropriate --title and --body flags."
                   detail = [content] if content else []
 
               elif et == "llm_response":
-                  # Nothing meaningful to show — LLM finished thinking
+                  text = p.get("raw_response", "")
                   header = f"{icon}"
+                  detail = [text] if text else []
 
               elif et == "tool_call_start":
                   tool = p.get("tool", p.get("name", "?"))
