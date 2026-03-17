@@ -31,7 +31,10 @@
 
   services.gnome-keyring = {
     enable = true;
-    components = [ "secrets" "ssh" ];
+    components = [
+      "secrets"
+      "ssh"
+    ];
   };
 
   xdg = {
@@ -121,37 +124,42 @@
   # environment.
   home.packages = with pkgs; [
 
-    (python3.withPackages (ps: with ps; [
-      # --- Automation & Scripting ---
-      requests          # HTTP client
-      httpx             # async HTTP client
-      beautifulsoup4    # HTML/XML parsing
-      selenium          # browser automation
-      openpyxl          # Excel read/write
-      python-dotenv     # .env file loading
-      paramiko          # SSH automation
-      pydantic          # data validation / settings
+    poppler-utils # PDF utilities (e.g. pdftotext)
 
-      # --- Data Science ---
-      numpy
-      pandas
-      matplotlib
-      scipy
-      scikit-learn
-      seaborn
-      plotly
-      polars            # fast dataframes
+    (python3.withPackages (
+      ps: with ps; [
+        # --- Automation & Scripting ---
+        requests # HTTP client
+        httpx # async HTTP client
+        beautifulsoup4 # HTML/XML parsing
+        selenium # browser automation
+        openpyxl # Excel read/write
+        python-dotenv # .env file loading
+        paramiko # SSH automation
+        pydantic # data validation / settings
+        pypdf # PDF text extraction
 
-      # --- Research / CS ---
-      networkx          # graph theory
-      sympy             # symbolic math
-      hypothesis        # property-based testing
+        # --- Data Science ---
+        numpy
+        pandas
+        matplotlib
+        scipy
+        scikit-learn
+        seaborn
+        plotly
+        polars # fast dataframes
 
-      # --- Dev Quality of Life ---
-      ipython           # better REPL
-      rich              # pretty terminal output
-      pillow            # image processing
-    ]))
+        # --- Research / CS ---
+        networkx # graph theory
+        sympy # symbolic math
+        hypothesis # property-based testing
+
+        # --- Dev Quality of Life ---
+        ipython # better REPL
+        rich # pretty terminal output
+        pillow # image processing
+      ]
+    ))
 
     verible
 

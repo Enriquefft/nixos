@@ -105,6 +105,9 @@
             cmd = ["biome" "lsp-proxy"];
           };
 
+          # Astro
+          astro.enable = true;
+
           # Svelte/Volar/Prism
           # svelte.enable = true;       # Svelte language support
           # volar.enable = true;        # Vue.js language support

@@ -38,7 +38,7 @@
       sopsFile = ../../secrets/zeroclaw.yaml;
       owner = "hybridz";
     };
-  };
+};
 
   # Render a single env file from all secrets for the systemd service
   sops.templates."zeroclaw.env" = {

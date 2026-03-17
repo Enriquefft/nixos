@@ -322,28 +322,13 @@
             pkgs.coreutils
           ];
           text = ''
-            #!/usr/bin/env bash
-            set -euo pipefail
-
             # Device names
             SPEAKER_PATTERN="Meteor Lake-P HD Audio Controller Speaker"
             HEADPHONE_PATTERN="Audeze Maxwell BT"
+            HEADPHONE_MAC="E0:49:ED:04:7A:64"
             SPEAKER_CARD_ID="50"
             SPEAKER_PROFILE_ON="2"
             SPEAKER_PROFILE_OFF="0"
-
-            # Get current default sink (marked with *)
-            get_default_sink() {
-              wpctl status | grep "\\*.*[0-9]\\+\\." | awk '{
-                for(i=1; i<=NF; i++) {
-                  if($i ~ /^[0-9]+\./) {
-                    gsub(/\./, "", $i)
-                    print $i
-                    exit
-                  }
-                }
-              }'
-            }
 
             # Get sink ID by name pattern (only matches audio sinks, not device nodes)
             get_sink_id_by_pattern() {
@@ -357,12 +342,6 @@
                   }
                 }
               }' | head -1
-            }
-
-            # Get sink name by ID
-            get_sink_name() {
-              local sink_id="$1"
-              wpctl status | grep "$sink_id\\." | sed "s/.*$sink_id\\. //" | sed 's/ \[vol.*//' | sed 's/^[[:space:]]*//'
             }
 
             # Check if bluetooth is powered on
@@ -389,7 +368,16 @@
 
             # Disable speakers (set card profile to off)
             disable_speakers() {
-              wpctl set-profile "$SPEAKER_CARD_ID" "$SPEAKER_PROFILE_OFF" >/dev/null 2>&1
+              # WirePlumber may restore the profile; retry until it sticks
+              local attempts=5
+              for _ in $(seq 1 $attempts); do
+                wpctl set-profile "$SPEAKER_CARD_ID" "$SPEAKER_PROFILE_OFF" >/dev/null 2>&1
+                sleep 0.5
+                # Verify it stuck
+                if ! wpctl status | grep -q "Sinks:" || ! wpctl status | grep "Sinks:" -A 20 | grep -qi "$SPEAKER_PATTERN"; then
+                  return 0
+                fi
+              done
             }
 
             # Wait for bluetooth device to connect and return the sink ID
@@ -419,19 +407,18 @@
               notify-send -u normal "Audio Toggle" "$1" -i audio-card
             }
 
-            # Main toggle logic
-            current_sink=$(get_default_sink)
-            current_name=$(get_sink_name "$current_sink")
+            # Main toggle logic — detect by headphone sink presence, not default sink name
+            headphone_sink=$(get_sink_id_by_pattern "$HEADPHONE_PATTERN" || true)
 
-            if echo "$current_name" | grep -qi "$HEADPHONE_PATTERN"; then
-              # Currently on headphones -> switch to speakers
+            if [ -n "$headphone_sink" ]; then
+              # Headphones present -> switch to speakers
               notify "Switching to speakers..."
 
               # Enable speakers
               enable_speakers
 
               # Switch to speakers
-              speaker_sink=$(get_sink_id_by_pattern "$SPEAKER_PATTERN")
+              speaker_sink=$(get_sink_id_by_pattern "$SPEAKER_PATTERN" || true)
               if [ -n "$speaker_sink" ]; then
                 wpctl set-default "$speaker_sink"
               fi
@@ -443,17 +430,21 @@
 
               notify "Switched to speakers, Bluetooth OFF"
 
-            elif echo "$current_name" | grep -qi "$SPEAKER_PATTERN"; then
-              # Currently on speakers -> switch to headphones
+            else
+              # Headphones absent -> switch to headphones
               notify "Switching to headphones..."
 
               # Power on bluetooth if not already on
               if ! is_bluetooth_on; then
                 bluetooth_power_on
+                sleep 1
               fi
 
+              # Explicitly connect to headphones
+              bluetoothctl connect "$HEADPHONE_MAC" >/dev/null 2>&1 || true
+
               # Wait for headphones to connect and get sink ID
-              headphone_sink=$(wait_for_headphones)
+              headphone_sink=$(wait_for_headphones || true)
               if [ -n "$headphone_sink" ]; then
                 # Switch to headphones
                 wpctl set-default "$headphone_sink"
@@ -466,10 +457,6 @@
                 notify "Failed to connect headphones"
                 exit 1
               fi
-
-            else
-              notify "Unknown current device: $current_name"
-              exit 1
             fi
           '';
         };
@@ -884,9 +871,10 @@ Use 'gh issue create' with appropriate --title and --body flags."
         kiro-browser = pkgs.writeShellApplication {
           name = "kiro-browser";
           text = ''
-            exec /usr/bin/google-chrome-stable \
+            exec ${pkgs.brave}/bin/brave \
               --class=kiro-browser \
-              --user-data-dir="$HOME/.zeroclaw/browser/zeroclaw/user-data" \
+              --user-data-dir="$HOME/.zeroclaw/browser/kiro/user-data" \
+              --remote-debugging-port=9222 \
               "$@"
           '';
         };
@@ -1276,6 +1264,176 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        claude-provider = pkgs.writeShellApplication {
+          name = "claude-provider";
+          checkPhase = "";
+          runtimeInputs = [
+            pkgs.jq
+            pkgs.coreutils
+          ];
+          text = ''
+            set -euo pipefail
+
+            CONFIG_DIR="$HOME/.claude"
+            CONFIG_FILE="$CONFIG_DIR/settings.json"
+            SOPS_ENV="/run/secrets/rendered/zeroclaw.env"
+
+            log_info() {
+              echo "[*] $*"
+            }
+
+            log_success() {
+              echo "[+] $*"
+            }
+
+            log_error() {
+              echo "[-] $*" >&2
+            }
+
+            show_usage() {
+              cat <<'USAGE_END'
+            Usage: claude-provider [command]
+
+            Commands:
+              status          Show currently active provider
+              anthropic       Switch to Anthropic (default)
+              zai             Switch to Z.AI (reads endpoint from sops secrets)
+              help            Show this help message
+
+            Examples:
+              claude-provider status
+              claude-provider zai
+              claude-provider anthropic
+            USAGE_END
+            }
+
+            ensure_config_dir() {
+              if [ ! -d "$CONFIG_DIR" ]; then
+                mkdir -p "$CONFIG_DIR"
+                log_success "Created config directory: $CONFIG_DIR"
+              fi
+            }
+
+            ensure_config_file() {
+              if [ ! -f "$CONFIG_FILE" ]; then
+                jq -n '{env: {}}' > "$CONFIG_FILE"
+              fi
+            }
+
+            get_current_provider() {
+              if [ ! -f "$CONFIG_FILE" ]; then
+                echo "default"
+                return
+              fi
+
+              base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$CONFIG_FILE" 2>/dev/null || echo "")
+
+              if echo "$base_url" | grep -q "z.ai"; then
+                echo "zai"
+              elif [ -z "$base_url" ]; then
+                echo "default"
+              else
+                echo "custom"
+              fi
+            }
+
+            show_status() {
+              provider=$(get_current_provider)
+
+              log_info "Current Claude Code Provider:"
+              echo ""
+
+              case "$provider" in
+                zai)
+                  echo "  Provider:  Z.AI"
+                  echo "  Endpoint:  https://api.z.ai/api/anthropic"
+                  ;;
+                default)
+                  echo "  Provider:  Anthropic (default)"
+                  echo "  Endpoint:  Default Anthropic API"
+                  ;;
+                custom)
+                  base_url=$(jq -r '.env.ANTHROPIC_BASE_URL' "$CONFIG_FILE" 2>/dev/null || echo "unknown")
+                  echo "  Provider:  Custom"
+                  echo "  Endpoint:  $base_url"
+                  ;;
+              esac
+
+              echo ""
+              log_info "Config file: $CONFIG_FILE"
+            }
+
+            switch_to_zai() {
+              log_info "Switching to Z.AI provider..."
+
+              if [ ! -f "$SOPS_ENV" ]; then
+                log_error "Sops secrets file not found: $SOPS_ENV"
+                log_error "Make sure sops is configured and secrets are decrypted"
+                exit 1
+              fi
+
+              # Source the sops env file to get ZAI_API_KEY
+              # shellcheck source=/dev/null
+              . "$SOPS_ENV"
+
+              if [ -z "''${ZAI_API_KEY:-}" ]; then
+                log_error "ZAI_API_KEY not found in sops secrets"
+                exit 1
+              fi
+
+              ensure_config_file
+
+              # Update settings with Z.AI API key and endpoint
+              jq \
+                --arg token "''${ZAI_API_KEY}" \
+                '.env.ANTHROPIC_AUTH_TOKEN = $token |
+                 .env.ANTHROPIC_BASE_URL = "https://api.z.ai/api/anthropic"' \
+                "$CONFIG_FILE" > "$CONFIG_FILE.tmp"
+              mv "$CONFIG_FILE.tmp" "$CONFIG_FILE"
+
+              log_success "Switched to Z.AI provider"
+              log_info "API Key: Set from sops secrets"
+              log_info "Endpoint: https://api.z.ai/api/anthropic"
+            }
+
+            switch_to_anthropic() {
+              log_info "Switching to Anthropic provider..."
+
+              ensure_config_file
+
+              # Remove Z.AI-specific fields: endpoint and auth token
+              jq 'del(.env.ANTHROPIC_BASE_URL, .env.ANTHROPIC_AUTH_TOKEN)' \
+                "$CONFIG_FILE" > "$CONFIG_FILE.tmp"
+              mv "$CONFIG_FILE.tmp" "$CONFIG_FILE"
+
+              log_success "Switched to Anthropic provider (default)"
+              log_info "API Key: Using environment variable"
+              log_info "Endpoint: Default Anthropic API"
+            }
+
+            case "''${1:-status}" in
+              status)
+                show_status
+                ;;
+              zai)
+                switch_to_zai
+                ;;
+              anthropic)
+                switch_to_anthropic
+                ;;
+              help|-h|--help)
+                show_usage
+                ;;
+              *)
+                log_error "Unknown command: $1"
+                echo ""
+                show_usage
+                exit 1
+                ;;
+            esac
+          '';
+        };
+
 
       in
       [
@@ -1290,6 +1448,7 @@ Use 'gh issue create' with appropriate --title and --body flags."
         gpu-toggle
         create-issue
         project-init
+        claude-provider
         up
         con
         airplane
