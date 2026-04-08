@@ -1,29 +1,18 @@
-# overlay/features.toml — declarative QMK features for Voyager
+# overlay/features.toml — declarative QMK features.
 
 [config]
 tapping_term_ms = 200
-permissive_hold = false
-hold_on_other_key_press = false
+# permissive_hold = false
+# hold_on_other_key_press = false
 
-# Achordion: one-hand-friendly tap-hold behavior
-# Prevents accidental holds when typing fast with one hand
-[achordion]
-enabled = true
-chord_strategy = "opposite_hands"
+# [achordion]
+# enabled = true
+# chord_strategy = "opposite_hands"
 
-# Key overrides: remap modifier+key combinations
-# Uncomment examples below to enable
 # [[key_overrides]]
 # mods  = ["LSHIFT"]
 # key   = "BSPC"
 # sends = "DELETE"
-# comment = "Shift+Backspace sends Delete"
-
-# [[key_overrides]]
-# mods  = ["LCTRL"]
-# key   = "Z"
-# sends = "Y"
-# comment = "Ctrl+Z sends Ctrl+Y (redo in some apps)"
 
 [features]
 key_overrides = false
