@@ -1,0 +1,17 @@
+# kb.toml — project configuration for voyager
+
+[layout]
+geometry = "voyager"
+
+[layout.local]
+file = "layout.toml"
+
+[build]
+backend = "docker"      # v0.1 supports `docker` (or `auto`)
+
+[sync]
+auto_pull = "never"     # local mode has nothing to pull
+
+[lint]
+ignore = []
+strict = false

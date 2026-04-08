@@ -25,6 +25,7 @@ in
     ./modules/system/locale.nix
     ./modules/system/users.nix
     ./modules/system/nix.nix
+    ./modules/system/server-hardening.nix
 
     # Hardware modules
     ./modules/hardware/graphics.nix
@@ -32,10 +33,12 @@ in
     ./modules/hardware/bluetooth.nix
     ./modules/hardware/audio.nix
     ./modules/hardware/peripherals.nix
+    ./modules/hardware/keyboard.nix
 
     # Power management
     ./modules/power/battery.nix
     ./modules/power/thermal.nix
+    ./modules/power/server-mode.nix
 
     # Services
     ./modules/services/databases.nix
@@ -46,6 +49,8 @@ in
     ./modules/services/ollama.nix
     ./modules/services/zeroclaw-secrets.nix
     ./modules/services/tailscale.nix
+    ./modules/services/webhook-proxy.nix
+    ./modules/services/linear-webhook-receiver-secrets.nix
 
     # Programs
     ./modules/programs/hyprland.nix

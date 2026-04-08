@@ -52,6 +52,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    oryx-bench = {
+      url = "github:enriquefft/oryx-bench";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nix-xilinx = {
     #   url = "gitlab:doronbehar/nix-xilinx";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -85,6 +90,7 @@
           inputs.nix-index-database.nixosModules.nix-index
           inputs.sops-nix.nixosModules.sops
           inputs.yap.nixosModules.default
+          inputs.oryx-bench.nixosModules.default
           (import ./configuration.nix flake-overlays)
         ];
       };

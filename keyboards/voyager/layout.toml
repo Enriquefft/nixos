@@ -1,0 +1,138 @@
+# layout.toml — local-mode visual layout
+#
+# Hand-author the layout here. Positions default to KC_NO; use
+# `inherit = "<layer>"` on overlay layers to default to KC_TRNS instead.
+
+[meta]
+title    = "voyager"
+geometry = "voyager"
+
+[[layers]]
+name     = "Main"
+position = 0
+
+# Bind one position per line. Comments next to each binding are encouraged
+# — that's the main reason to author locally instead of via Oryx.
+[layers.keys]
+# Number row
+L_outer_num      = "1"
+L_pinky_num      = "2"
+L_ring_num       = "3"
+L_middle_num     = "4"
+L_index_num      = "5"
+L_inner_num      = "6"
+
+R_inner_num      = "7"
+R_index_num      = "8"
+R_middle_num     = "9"
+R_ring_num       = "0"
+R_pinky_num      = "MINS"
+R_outer_num      = "EQL"
+
+# Top row (QWERTY)
+L_outer_top      = "Q"
+L_pinky_top      = "W"
+L_ring_top       = "E"
+L_middle_top     = "R"
+L_index_top      = "T"
+L_inner_top      = "Y"
+
+R_inner_top      = "U"
+R_index_top      = "I"
+R_middle_top     = "O"
+R_ring_top       = "P"
+R_pinky_top      = "LBRC"
+R_outer_top      = "RBRC"
+
+# Home row
+L_outer_home     = "A"
+L_pinky_home     = "S"
+L_ring_home      = "D"
+L_middle_home    = "F"
+L_index_home     = "G"
+L_inner_home     = "H"
+
+R_inner_home     = "J"
+R_index_home     = "K"
+R_middle_home    = "L"
+R_ring_home      = "SCLN"
+R_pinky_home     = "QUOT"
+R_outer_home     = "BSLS"
+
+# Bottom row
+L_outer_bottom   = "Z"
+L_pinky_bottom   = "X"
+L_ring_bottom    = "C"
+L_middle_bottom  = "V"
+L_index_bottom   = "B"
+L_inner_bottom   = "N"
+
+R_inner_bottom   = "M"
+R_index_bottom   = "COMM"
+R_middle_bottom  = "DOT"
+R_ring_bottom    = "SLSH"
+R_pinky_bottom   = "LSFT"
+R_outer_bottom   = "RSFT"
+
+# Thumbs
+L_thumb_inner    = { tap = "SPC", hold = "LCTL" }
+L_thumb_outer    = { tap = "ESC", hold = "MO(1)" }
+
+R_thumb_inner    = { tap = "ENT", hold = "LALT" }
+R_thumb_outer    = { tap = "BSPC", hold = "MO(1)" }
+
+# ============================================================================
+# Layer 1: Function/Symbol layer
+# ============================================================================
+
+[[layers]]
+name     = "Sym"
+position = 1
+inherit  = "Main"
+
+[layers.keys]
+# Top row: function keys
+L_outer_top      = "F1"
+L_pinky_top      = "F2"
+L_ring_top       = "F3"
+L_middle_top     = "F4"
+L_index_top      = "F5"
+L_inner_top      = "F6"
+
+R_inner_top      = "F7"
+R_index_top      = "F8"
+R_middle_top     = "F9"
+R_ring_top       = "F10"
+R_pinky_top      = "F11"
+R_outer_top      = "F12"
+
+# Home row: symbol layer navigation
+L_outer_home     = "PGUP"
+L_pinky_home     = "HOME"
+L_ring_home      = "UP"
+L_middle_home    = "END"
+
+R_index_home     = "LEFT"
+R_middle_home    = "DOWN"
+R_ring_home      = "RIGHT"
+R_pinky_home     = "PGDN"
+
+# Bottom row: numbers and operators
+L_outer_bottom   = "LBRC"
+L_pinky_bottom   = "7"
+L_ring_bottom    = "8"
+L_middle_bottom  = "9"
+L_index_bottom   = "RBRC"
+
+R_index_bottom   = "MINS"
+R_middle_bottom  = "4"
+R_ring_bottom    = "5"
+R_pinky_bottom   = "6"
+R_outer_bottom   = "EQL"
+
+# Thumbs stay the same
+L_thumb_inner    = "0"
+L_thumb_outer    = "MO(1)"  # Hold for this layer
+
+R_thumb_inner    = "ENT"
+R_thumb_outer    = "MO(1)"  # Hold for this layer

@@ -136,6 +136,24 @@
         "type": "github"
       }
     },
+    "flake-utils_5": {
+      "inputs": {
+        "systems": "systems_6"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -165,8 +183,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1773230695,
-        "narHash": "sha256-wyzQrH77T6VkMztc9RyZesEhJqYx57PyzACzrVvLNgc=",
+        "lastModified": 1774806591,
+        "narHash": "sha256-oE1wHl+KX8OP3QCFlz/+eVSUI4Hqg8uYxlZnNNyVH58=",
         "path": "/home/hybridz/Projects/openclaw-kapso-whatsapp",
         "type": "path"
       },
@@ -282,6 +300,27 @@
         "type": "github"
       }
     },
+    "oryx-bench": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775623571,
+        "narHash": "sha256-exSaucnXKlkwIaXdoGCHbpj9t6kIpCBe/EyeMdWsK5I=",
+        "owner": "enriquefft",
+        "repo": "oryx-bench",
+        "rev": "c6c24abc3586ad6287cf813fcc63b417b5e17165",
+        "type": "github"
+      },
+      "original": {
+        "owner": "enriquefft",
+        "repo": "oryx-bench",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "antigravity-nix": "antigravity-nix",
@@ -291,6 +330,7 @@
         "nix-steipete-tools": "nix-steipete-tools",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
+        "oryx-bench": "oryx-bench",
         "sops-nix": "sops-nix",
         "yap": "yap",
         "zeroclaw": "zeroclaw"
@@ -408,9 +448,24 @@
         "type": "github"
       }
     },
+    "systems_6": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "yap": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_4",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -429,7 +484,7 @@
     "zeroclaw": {
       "inputs": {
         "fenix": "fenix",
-        "flake-utils": "flake-utils_4",
+        "flake-utils": "flake-utils_5",
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {

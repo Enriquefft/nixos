@@ -1,0 +1,15 @@
+# Build outputs
+*.bin
+*.hex
+*.elf
+
+# oryx-bench transient files
+.oryx-bench/
+result
+result-*
+
+# Editor
+.idea/
+.vscode/
+*.swp
+.DS_Store
