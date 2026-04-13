@@ -8,17 +8,16 @@ in {
   networking = {
     hostName = constants.hostname;
     networkmanager.enable = true;
-    firewall.enable = true;
+    firewall = {
+      enable = true;
 
-    # Open ports in the firewall
-    firewall.allowedTCPPorts = [
-      80
-      443
-    ];
-    firewall.allowedUDPPorts = [
-      80
-      443
-    ];
+      # Trust Tailscale interface — all traffic between your devices is allowed
+      trustedInterfaces = [ "tailscale0" ];
+
+      # Public-facing ports (local network only — Tailscale handles remote access)
+      allowedTCPPorts = [ 80 443 ];
+      allowedUDPPorts = [ 80 443 ];
+    };
 
     nameservers = [
       constants.dns.primary

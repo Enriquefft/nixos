@@ -26,6 +26,10 @@ in {
     };
   };
 
+  # Auto-login on tty1 (skip username/password prompt)
+  # Hyprland starts automatically via zsh loginExtra
+  services.getty.autologinUser = constants.user.name;
+
   systemd.tmpfiles.rules = [
     # Grant user write access to /etc/nixos for flake-based configuration management
     # Format: A+ (add ACL), path, -, -, -, -, user:permissions

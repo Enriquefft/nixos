@@ -5,6 +5,9 @@ let
 in {
   services.tailscale = {
     enable = true;
-    extraSetFlags = [ "--operator=${constants.user.name}" ];
+    extraSetFlags = [
+      "--operator=${constants.user.name}"
+      "--accept-dns=false"
+    ];
   };
 }
