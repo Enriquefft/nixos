@@ -1,4 +1,9 @@
-{ pkgs, antigravity, inputs, ... }:
+{
+  pkgs,
+  antigravity,
+  inputs,
+  ...
+}:
 
 {
 
@@ -68,8 +73,9 @@
       binutils
       gnumake
       openssl
-      nodejs
       bun
+      nodejs
+
       uv
 
       # Development Applications
@@ -109,6 +115,9 @@
       slurp
       wl-clipboard
 
+      # Virtual Keyboard & Input
+      wvkbd
+
       # Audio Control
       pavucontrol
       pamixer
@@ -136,6 +145,7 @@
       (pkgs.wrapFirefox (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { })
       google-chrome
       chromedriver
+      (import ./packages/dicloak.nix { inherit pkgs; })
 
       # ─────────────────────────────────────────────────────────
       # Communication
@@ -208,7 +218,7 @@
       # Security & Networking
       # ─────────────────────────────────────────────────────────
       openvpn
-      protonvpn-gui
+      proton-vpn
 
       # ─────────────────────────────────────────────────────────
       # Custom Packages
