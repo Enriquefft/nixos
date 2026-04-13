@@ -11,11 +11,20 @@
       "$mainMod, D, exec, uwsm app -- wofi --show drun"
       "$mainMod, E, exec, uwsm app -- kitty -e yazi"
       "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
-      "$mainMod, L, exec, hyprlock"
+      "$mainMod SHIFT, L, exec, hyprlock"
       "$mainMod, N, exec, pkill hyprsunset || hyprsunset -t 4500"
       "$mainMod, X, exec, wlogout"
       "$mainMod, B, exec, audio-toggle"
       "$mainMod, Escape, exec, hyprlock"
+
+      # Voice dictation — press $mainMod+R to start, press again to stop.
+      # GROQ_API_KEY is sourced from the sops-managed secret at
+      # /run/secrets/yap/groq-api-key so it never lands in the Nix store.
+      ''$mainMod, R, exec, GROQ_API_KEY="$(cat /run/secrets/yap/groq-api-key)" yap toggle''
+
+      # Voice → Claude Code — press $mainMod+SHIFT+R to start, press again to stop.
+      # Records voice, transcribes, routes to project via Haiku, opens Claude Code session.
+      ''$mainMod SHIFT, R, exec, GROQ_API_KEY="$(cat /run/secrets/yap/groq-api-key)" yap toggle --exec claude-voice-router''
 
       # Window management
       "$mainMod, F, fullscreen"
@@ -72,6 +81,12 @@
       # Brightness control (SwayOSD - explicit device required after nvidia_wmi_ec_backlight blacklist)
       ", XF86MonBrightnessDown, exec, swayosd-client --brightness lower --device intel_backlight"
       ", XF86MonBrightnessUp, exec, swayosd-client --brightness raise --device intel_backlight"
+    ];
+
+    # Locked bindings (work even when lock screen is active)
+    bindl = [
+      ", switch:on:Lid Switch, exec, server-mode on"
+      "$mainMod, O, exec, pkill -SIGRTMIN wvkbd-mobintl || wvkbd-mobintl"
     ];
 
     # Mouse bindings
