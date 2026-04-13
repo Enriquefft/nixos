@@ -27,6 +27,7 @@
     ./programs/nixvim.nix
     ./programs/swayosd.nix
     /etc/nixos/zeroclaw/module.nix
+    /etc/nixos/linear-webhook-receiver/module.nix
   ];
 
   services.gnome-keyring = {
@@ -35,6 +36,13 @@
       "secrets"
       "ssh"
     ];
+  };
+
+  # Override gnome-keyring service to auto-unlock with blank password (auto-login has no PAM password)
+  systemd.user.services.gnome-keyring.Service = {
+    ExecStart = lib.mkForce "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --unlock --foreground --components=secrets,ssh";
+    StandardInput = "data";
+    StandardInputData = "Cg=="; # base64("\n") — empty password
   };
 
   xdg = {
@@ -56,8 +64,8 @@
     };
     userDirs = {
       createDirectories = true;
-
       enable = true;
+      setSessionVariables = false;
     };
 
     portal = {
@@ -101,8 +109,11 @@
       gtk-application-prefer-dark-theme = true;
     };
 
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
+    gtk4 = {
+      theme = null;
+      extraConfig = {
+        gtk-application-prefer-dark-theme = true;
+      };
     };
   };
 
@@ -230,6 +241,8 @@
     git = {
 
       enable = true;
+
+      signing.format = null;
 
       settings = {
         user = {
