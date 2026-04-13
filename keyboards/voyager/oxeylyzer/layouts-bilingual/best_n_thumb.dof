@@ -1,0 +1,23 @@
+{
+    "name": "best_n_thumb",
+    "board": [
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k"
+    ],
+    "layers": {
+        "main": [
+            "y o ' , k w b l m v",
+            "i a e h . d c r t s",
+            "/ x z u ñ g p j q f",
+            "n"
+        ]
+    },
+    "fingering": [
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "RT"
+    ]
+}

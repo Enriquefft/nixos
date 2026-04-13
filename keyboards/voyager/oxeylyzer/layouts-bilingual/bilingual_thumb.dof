@@ -1,0 +1,18 @@
+{
+    "name": "bilingual_thumb",
+    "board": "ortho",
+    "layers": {
+        "main": [
+            "~ y h ~ ~ w g k p x",
+            "e i r a ~ f m t n s",
+            "~ ñ j o / v c d b z",
+            ", u . ' l q"
+        ]
+    },
+    "fingering": [
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LT LT LT RT RT RT"
+    ]
+}

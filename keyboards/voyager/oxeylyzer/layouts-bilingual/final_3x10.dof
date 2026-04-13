@@ -1,0 +1,11 @@
+{
+    "name": "final_3x10",
+    "board": "ortho",
+    "layers": {
+        "main": [
+            "j p h g q . v o z ñ",
+            "s n r t d w u a e i",
+            "f b l c m k , x / y"
+        ]
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "bilingual_improved",
+    "board": "ortho",
+    "layers": {
+        "main": [
+            "b l d w q k v o z ñ",
+            "n r t s g , u a e i",
+            "p j m c f . h x / y"
+        ]
+    }
+}

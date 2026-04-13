@@ -1,0 +1,23 @@
+{
+    "name": "voyager_thumb_best",
+    "board": [
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k"
+    ],
+    "layers": {
+        "main": [
+            "q g n f w ñ j x ' /",
+            "s t r d c . u o e i",
+            "v m l p b , h a z y",
+            "k"
+        ]
+    },
+    "fingering": [
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "RT"
+    ]
+}

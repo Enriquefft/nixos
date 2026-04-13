@@ -1,0 +1,23 @@
+{
+    "name": "final_r_thumb",
+    "board": [
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k k k k k k k k k k",
+        "k"
+    ],
+    "layers": {
+        "main": [
+            "ñ z o u k b w l f q",
+            "i e a h , c d n s t",
+            "y ' / . x p g j v m",
+            "r"
+        ]
+    },
+    "fingering": [
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "LP LR LM LI LI RI RI RM RR RP",
+        "RT"
+    ]
+}

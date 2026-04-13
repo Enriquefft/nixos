@@ -1,0 +1,24 @@
+{
+    "name": "seed_e_thumb",
+    "board": [
+        "k k k k k  k k k k k",
+        "k k k k k  k k k k k",
+        "k k k k k  k k k k k",
+        "              k      "
+    ],
+    "anchor": [0, 0],
+    "layers": {
+        "main": [
+            "q w r t y  u i o p ñ",
+            "a s d f g  h j k l '",
+            "z x c v b  n m , . /",
+            "              e      "
+        ]
+    },
+    "fingering": [
+        "LP LR LM LI LI  RI RI RM RR RP",
+        "LP LR LM LI LI  RI RI RM RR RP",
+        "LP LR LM LI LI  RI RI RM RR RP",
+        "              RT      "
+    ]
+}

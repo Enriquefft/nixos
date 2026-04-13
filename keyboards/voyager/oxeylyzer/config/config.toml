@@ -1,0 +1,52 @@
+corpus = "./static/language_data/bilingual_mixed.json"
+layouts = [
+    "./static/layouts/voyager/*.dof",
+    "./static/layouts/english/*.dof",
+    "./static/layouts/bilingual_mixed/*.dof",
+]
+corpus_configs = "./static/corpus_configs/**/*.toml"
+trigram_precision = 1000
+max_cores = 32
+
+[weights]
+# SFB/DSFB penalties — high priority for health at 10hr/day
+sfbs = -7.0
+sfs = -1.0
+lateral_penalty = 1.2     # slightly penalize lateral stretches (columnar split)
+stretches = -0.4          # stronger stretch penalty for health
+pinky_ring_bigrams = -0.3 # reduce pinky-ring stress
+
+# Roll rewards — high rolls are comfortable and fast
+inrolls = 2.5
+outrolls = 2.4
+onehands = 0.9
+
+# Alternation
+alternates = 0.4
+alternates_sfs = 0.1
+
+# Redirect penalties — slightly increased for comfort
+redirects = -3.5
+redirects_sfs = -4.3
+bad_redirects = -5.0
+bad_redirects_sfs = -5.6
+
+[weights.finger_weights]
+lp = 1.4
+lr = 3.6
+lm = 4.8
+li = 5.5
+lt = 3.3
+rt = 3.3
+ri = 5.5
+rm = 4.8
+rr = 3.6
+rp = 1.4
+
+[weights.max_finger_use]
+penalty = 2.5    # ENABLED — enforce finger balance for health
+pinky = 8.0      # strict pinky cap (was 9.0)
+ring = 14.0
+middle = 20.0
+index = 20.0
+thumb = 20.0

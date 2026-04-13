@@ -1,0 +1,11 @@
+{
+    "name": "bilingual_3x10",
+    "board": "ortho",
+    "layers": {
+        "main": [
+            "g f d j q k w o z ñ",
+            "p s t n r . , a e i",
+            "c b m h l v u x / y"
+        ]
+    }
+}
