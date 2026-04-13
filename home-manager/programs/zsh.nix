@@ -31,14 +31,12 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    loginExtra = ''
-      if [[ $(tty) == /dev/tty1 ]] && uwsm check may-start; then
-          exec uwsm start hyprland-uwsm.desktop
-        # exec uwsm-start-logged start hyprland-uwsm.desktop # Logged version
-      fi
-    '';
-
     initContent = lib.mkBefore ''
+      # Auto-start Hyprland on tty1 (guards prevent running in regular terminals)
+      if [[ $(tty) == /dev/tty1 ]] && uwsm check may-start && [[ ! -f /tmp/server-mode ]]; then
+          exec uwsm start hyprland-uwsm.desktop
+      fi
+
       # Load ZeroClaw secrets into the environment if available
       if [ -f /run/secrets/rendered/zeroclaw.env ]; then
         set -a
@@ -67,7 +65,9 @@
       la = "${ls} --all";
       ll = "${ls} --all --long --header --group";
       llt = "${ll} --tree";
-      tree = "${ls} --tree";
+      tree = "${ls} --tree --git-ignore";
+
+      grep = "${pkgs.ripgrep}/bin/rg";
 
       # Interactive & informative
       cp = "cp -iv";
@@ -87,7 +87,9 @@
 
 
       svim = "sudoedit";
+      cc = "claude";
       sclaude = "IS_SANDBOX=1 claude --dangerously-skip-permissions";
+      scc = sclaude;
 
       gc = "git clone";
       gpull = "git pull --rebase";
