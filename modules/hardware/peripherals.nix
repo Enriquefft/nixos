@@ -1,8 +1,12 @@
 # Peripheral Devices Configuration
-# udev rules for special hardware (ZSA keyboards, etc.)
-{ ... }:
+# udev rules for special hardware (ZSA keyboards, security keys, etc.)
+{ pkgs, ... }:
 
 {
+  # FIDO2/WebAuthn security key support
+  services.pcscd.enable = true;
+  services.udev.packages = [ pkgs.libfido2 ];
+
   services.udev.extraRules = ''
     # ZSA Keyboards (Voyager, Moonlander, Ergodox EZ)
     # Required for Oryx web flashing and Keymapp

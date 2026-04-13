@@ -1,17 +1,21 @@
 # ZSA Voyager keyboard configuration via oryx-bench
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   programs.oryx-bench = {
     enable = true;
+    package = inputs.oryx-bench.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
-    keyboards.voyager = {
-      enable = true;
-      source = /etc/nixos/keyboards/voyager;
-      version = "0.1.0";
-    };
+    # Keyboard builds disabled — oryx-bench build requires a writable
+    # directory and cannot run inside the nix sandbox.  Use `oryx-bench
+    # build` manually or `flash-voyager` directly instead.
+    # keyboards.voyager = {
+    #   enable = true;
+    #   source = /etc/nixos/keyboards/voyager;
+    #   version = "0.1.0";
+    # };
 
-    enableFlashScripts = true;
+    enableFlashScripts = false;
   };
 
   # HID/udev rules for keyboard access without sudo
