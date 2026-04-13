@@ -17,7 +17,6 @@
           cmp = {
             enable = true;
             menu = {
-              copilot = "[copilot]";
               nvim_lsp = "[LSP]";
               nvim_lua = "[api]";
               path = "[path]";

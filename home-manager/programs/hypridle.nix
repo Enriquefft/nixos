@@ -18,22 +18,20 @@
           on-timeout = "brightnessctl -s set 10%";
           on-resume = "brightnessctl -r";
         }
-        # Lock after 10 minutes
-        {
-          timeout = 600;
-          on-timeout = "loginctl lock-session";
-        }
+        # Auto-lock disabled — no fingerprint reader and keyboard keys are unreliable
+        # Lock manually with Super+L when you have a working keyboard
+        # {
+        #   timeout = 600;
+        #   on-timeout = "loginctl lock-session";
+        # }
         # Turn off screen after 15 minutes
         {
           timeout = 900;
           on-timeout = "hyprctl dispatch dpms off";
           on-resume = "hyprctl dispatch dpms on";
         }
-        # Suspend after 30 minutes
-        {
-          timeout = 1800;
-          on-timeout = "systemctl suspend";
-        }
+        # No auto-suspend — AC-only system, no battery
+        # Use wlogout (Super+X) for manual suspend
       ];
     };
   };
