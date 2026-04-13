@@ -1264,6 +1264,169 @@ Use 'gh issue create' with appropriate --title and --body flags."
           '';
         };
 
+        server-mode = pkgs.writeShellApplication {
+          name = "server-mode";
+          runtimeInputs = [
+            pkgs.systemd
+            pkgs.coreutils
+            claude-spawn
+          ];
+          text = ''
+            FLAG="/tmp/server-mode"
+            TLP="/run/current-system/sw/bin/tlp"
+
+            mode_on() {
+              echo "Entering server mode..."
+              touch "$FLAG"
+              sudo "$TLP" bat
+              # Spawn a Claude remote session in current dir
+              claude-spawn /etc/nixos
+              # Stop Hyprland session (drops to TTY)
+              uwsm stop 2>/dev/null || true
+              echo "Server mode active. System in low-power state."
+            }
+
+            mode_off() {
+              echo "Exiting server mode..."
+              claude-spawn stop
+              sudo "$TLP" ac
+              rm -f "$FLAG"
+              sudo systemctl restart getty@tty1
+              echo "Desktop mode restored."
+            }
+
+            mode_status() {
+              if [ -f "$FLAG" ]; then
+                echo "Mode:    server (low-power)"
+              else
+                echo "Mode:    desktop (performance)"
+              fi
+              echo "TLP:     $(tlp-stat -s 2>/dev/null | grep 'Power profile' | sed 's/.*= //')"
+              claude-spawn status
+            }
+
+            case "''${1:-status}" in
+              on)     mode_on ;;
+              off)    mode_off ;;
+              status) mode_status ;;
+              *)
+                echo "Usage: server-mode {on|off|status}"
+                echo "  on     - Kill Hyprland, switch to low-power, spawn Claude remote"
+                echo "  off    - Stop Claude sessions, restore performance, restart Hyprland"
+                echo "  status - Show current mode"
+                exit 1
+                ;;
+            esac
+          '';
+        };
+
+        claude-spawn = pkgs.writeShellApplication {
+          name = "claude-spawn";
+          text = ''
+            PIDDIR="/tmp/claude-spawn"
+            mkdir -p "$PIDDIR"
+
+            PROJECTS_DIR="$HOME/Projects"
+
+            # Resolve dir: absolute path used as-is, bare name resolves to ~/Projects/<name>
+            resolve_dir() {
+              local arg="$1"
+              if [[ "$arg" = /* ]]; then
+                echo "$arg"
+              else
+                echo "$PROJECTS_DIR/$arg"
+              fi
+            }
+
+            spawn_session() {
+              local dir
+              dir="$(resolve_dir "$1")"
+              local name
+              name="$(basename "$dir")"
+
+              if ! [ -d "$dir" ]; then
+                echo "Not a directory: $dir"
+                return 1
+              fi
+
+              CLAUDE_BIN="$HOME/.local/bin/claude"
+              if ! [ -x "$CLAUDE_BIN" ]; then
+                echo "  claude not found at $CLAUDE_BIN"
+                return 1
+              fi
+
+              echo "Spawning: $name ($dir)"
+              setsid bash -c "cd \"$dir\" && \"$CLAUDE_BIN\" remote-control --name \"$name\"" </dev/null &>/tmp/claude-spawn-"$name".log &
+              echo $! > "$PIDDIR/$name.pid"
+              echo "  PID: $!  — visible in Claude app as \"$name\""
+            }
+
+            show_status() {
+              echo "Active Claude remote sessions:"
+              local found=false
+              for pidfile in "$PIDDIR"/*.pid; do
+                [ -f "$pidfile" ] || continue
+                local name pid
+                name="$(basename "$pidfile" .pid)"
+                pid="$(cat "$pidfile")"
+                if kill -0 "$pid" 2>/dev/null; then
+                  echo "  $name (PID: $pid)"
+                  found=true
+                else
+                  rm -f "$pidfile"
+                fi
+              done
+              $found || echo "  (none)"
+            }
+
+            stop_all() {
+              for pidfile in "$PIDDIR"/*.pid; do
+                [ -f "$pidfile" ] || continue
+                local name pid
+                name="$(basename "$pidfile" .pid)"
+                pid="$(cat "$pidfile")"
+                if kill -0 "$pid" 2>/dev/null; then
+                  kill -- -"$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
+                  echo "Stopped: $name (PID: $pid)"
+                fi
+                rm -f "$pidfile"
+              done
+            }
+
+            case "''${1:-}" in
+              status)
+                show_status
+                ;;
+              stop)
+                stop_all
+                ;;
+              --help|-h)
+                echo "Usage: claude-spawn [name|dir] [name2|dir2] ..."
+                echo "       claude-spawn status"
+                echo "       claude-spawn stop"
+                echo ""
+                echo "Spawns independent Claude remote-control sessions."
+                echo "Bare names resolve to ~/Projects/<name>."
+                echo "Absolute paths used as-is. No args = /etc/nixos."
+                echo ""
+                echo "Examples:"
+                echo "  claude-spawn myapp backend    # ~/Projects/myapp + ~/Projects/backend"
+                echo "  claude-spawn /etc/nixos       # absolute path"
+                echo "  claude-spawn                  # /etc/nixos (default)"
+                exit 0
+                ;;
+              "")
+                spawn_session /etc/nixos
+                ;;
+              *)
+                for dir in "$@"; do
+                  spawn_session "$dir"
+                done
+                ;;
+            esac
+          '';
+        };
+
         claude-provider = pkgs.writeShellApplication {
           name = "claude-provider";
           checkPhase = "";
