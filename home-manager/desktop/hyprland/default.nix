@@ -28,6 +28,7 @@ in {
         "uwsm app -- hyprpaper"
         "uwsm app -- wl-paste --watch cliphist store"
         "uwsm app -- ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+        "wvkbd-mobintl --hidden"  # On-screen keyboard (toggle with Super+O)
       ];
 
       xwayland.force_zero_scaling = true;

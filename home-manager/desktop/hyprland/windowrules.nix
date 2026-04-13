@@ -12,6 +12,9 @@
 
       # Whispering — float with a comfortable size
       "match:class whispering, float on, size 900 650, center on"
+
+      # wvkbd — on-screen keyboard: float, pin on top, no focus steal
+      "match:class wvkbd, float on, pin on, no_focus on"
     ];
   };
 }

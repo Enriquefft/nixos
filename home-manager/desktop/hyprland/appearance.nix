@@ -15,16 +15,16 @@ in {
       "col.inactive_border" = "rgb(${colors.border})";
     };
 
-    # Decorations (blur and shadow disabled by default for battery life)
+    # Decorations (AC-only — effects enabled)
     decoration = {
       rounding = 8;
       blur = {
-        enabled = false;
+        enabled = true;
         size = 6;
         passes = 2;
       };
       shadow = {
-        enabled = false;
+        enabled = true;
         color = "rgba(${colors.accent_orange}33)";
       };
     };
