@@ -8,6 +8,12 @@
 result
 result-*
 
+# Oxeylyzer cloned repo (large, not needed in version control)
+oxeylyzer/repo/
+
+# Local agent settings
+.claude/settings.local.json
+
 # Editor
 .idea/
 .vscode/
