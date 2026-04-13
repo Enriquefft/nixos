@@ -1,0 +1,20 @@
+# sentry-linear-bridge — managed by NixOS, do not edit manually
+listen_addr = ":8765"
+
+[sentry]
+webhook_secret = "@SENTRY_WEBHOOK_SECRET@"
+
+[linear]
+api_key = "@LINEAR_API_KEY@"
+team_id = "@LINEAR_TEAM_ID@"
+webhook_secret = "@LINEAR_WEBHOOK_SECRET@"
+
+[ai]
+base_url = "https://api.z.ai/api/coding/paas/v4"
+api_key = "@ZAI_API_KEY@"
+model = "glm-5-turbo"
+
+[[projects]]
+id = "tiendakit-2"
+workspace = "/home/hybridz/Projects/tiendakit-2"
+sentry_project = "tiendakit"
