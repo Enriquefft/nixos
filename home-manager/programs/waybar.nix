@@ -15,7 +15,7 @@ in {
         # Module layout per rice.md
         modules-left = [ "custom/logo" "hyprland/workspaces" "hyprland/window" ];
         modules-center = [ "cpu" "memory" "network" ];
-        modules-right = [ "mpris" "pulseaudio" "battery" "clock" "tray" ];
+        modules-right = [ "mpris" "pulseaudio" "clock" "tray" ];
 
         # Custom logo module
         "custom/logo" = {
@@ -87,20 +87,6 @@ in {
           tooltip-format = "{desc}\nVolume: {volume}%";
         };
 
-        # Battery
-        "battery" = {
-          states = {
-            warning = 20;
-            critical = 10;
-          };
-          format = "{icon} {capacity}%";
-          format-charging = "󰂄 {capacity}%";
-          format-plugged = "󰚥 {capacity}%";
-          format-full = "󰁹 {capacity}%";
-          format-icons = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
-          tooltip-format = "{timeTo}\nCapacity: {capacity}%\nHealth: {health}%";
-        };
-
         # Clock
         "clock" = {
           format = "󰃰 {:%b %d  %H:%M}";
@@ -155,36 +141,6 @@ in {
 
       #pulseaudio.muted {
         color: #${colors.fg_dim};
-      }
-
-      #battery {
-        color: #${colors.fg_bright};
-        padding: 0 12px;
-      }
-
-      #battery.charging, #battery.plugged, #battery.full {
-        color: #${colors.success};
-      }
-
-      #battery.warning:not(.charging) {
-        color: #${colors.accent_orange};
-      }
-
-      #battery.critical:not(.charging) {
-        color: #${colors.error};
-        animation: blink 1s ease-in-out infinite;
-      }
-
-      @keyframes blink {
-        0% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-        100% {
-          opacity: 1;
-        }
       }
 
       #clock {
