@@ -1598,6 +1598,111 @@ Use 'gh issue create' with appropriate --title and --body flags."
         };
 
 
+        claude-voice-router = pkgs.writeShellApplication {
+          name = "claude-voice-router";
+          runtimeInputs = with pkgs; [ jq libnotify ];
+          checkPhase = "";
+          text = ''
+            # claude-voice-router — receives transcript on stdin from yap --exec,
+            # routes to a project directory via Haiku, and opens an interactive
+            # Claude Code session in kitty.
+
+            TRANSCRIPT=$(cat)
+
+            if [ -z "$TRANSCRIPT" ]; then
+              notify-send -u critical "Claude Voice" "Empty transcript"
+              exit 1
+            fi
+
+            notify-send "Claude Voice" "Routing: $TRANSCRIPT"
+
+            PROJECTS_DIR="$HOME/Projects"
+            DOCUMENTS_DIR="$HOME/Documents"
+            CLAUDE_BIN="$HOME/.local/bin/claude"
+
+            if [ ! -x "$CLAUDE_BIN" ]; then
+              CLAUDE_BIN=$(command -v claude 2>/dev/null || true)
+              if [ -z "$CLAUDE_BIN" ]; then
+                notify-send -u critical "Claude Voice" "claude not found"
+                exit 1
+              fi
+            fi
+
+            # Build dynamic project listing (directories only)
+            PROJECTS=$(find "$PROJECTS_DIR" -maxdepth 1 -mindepth 1 -type d -printf '%f, ' 2>/dev/null || true)
+
+            # Route via Haiku
+            SYSTEM_PROMPT="You route voice commands to project directories.
+            Input: a voice transcript (usually Spanish).
+            Output: ONLY raw JSON, no markdown fences, no explanation.
+            Format: {\"path\":\"/absolute/path\",\"instruction\":\"task in original language\"}
+
+            Special directories:
+            - nixos, config, pc → /etc/nixos
+            - voyager, keyboard, teclado → /etc/nixos/keyboards/voyager
+            - OS, sistema operativo → $DOCUMENTS_DIR/OS
+            - ML, machine learning → $DOCUMENTS_DIR/ML
+
+            Projects in $PROJECTS_DIR/:
+            $PROJECTS
+
+            Rules:
+            - Fuzzy-match project names phonetically (Spanish speakers)
+            - The instruction is everything after the project reference
+            - If no instruction, set instruction to empty string
+            - If you cannot determine the project, set path to empty string
+            - Always return absolute paths"
+
+            # Run from /tmp to prevent CLAUDE.md auto-discovery from polluting
+            # the routing prompt. Disallow all tools so Haiku only returns text.
+            ROUTE=$(cd /tmp && timeout 30 "$CLAUDE_BIN" --model haiku -p "User said: $TRANSCRIPT" \
+              --output-format text \
+              --disallowedTools "Bash,Edit,Write,Read,Glob,Grep,Agent,WebSearch,WebFetch,NotebookEdit" \
+              --system-prompt "$SYSTEM_PROMPT" 2>/dev/null || true)
+
+            if [ -z "''${ROUTE:-}" ]; then
+              notify-send -u critical "Claude Voice" "Routing failed (Haiku timeout or error)"
+              exit 1
+            fi
+
+            # Extract JSON — use jq to find first valid JSON object, fallback to
+            # non-greedy grep for simple single-line responses.
+            JSON=$(echo "$ROUTE" | jq -R 'try fromjson' 2>/dev/null | jq -s 'map(select(. != null)) | first' 2>/dev/null || true)
+
+            if [ -z "''${JSON:-}" ] || [ "$JSON" = "null" ]; then
+              # Fallback: non-greedy extraction for simple {key:value} objects
+              JSON=$(echo "$ROUTE" | grep -oP '\{[^{}]+\}' | head -1 || true)
+            fi
+
+            if [ -z "''${JSON:-}" ] || [ "$JSON" = "null" ]; then
+              notify-send -u critical "Claude Voice" "No JSON in response: $ROUTE"
+              exit 1
+            fi
+
+            PROJECT_PATH=$(echo "$JSON" | jq -r '.path // empty')
+            INSTRUCTION=$(echo "$JSON" | jq -r '.instruction // empty')
+
+            # Resolve ~ in path
+            PROJECT_PATH="''${PROJECT_PATH/#\~/$HOME}"
+
+            if [ -z "$PROJECT_PATH" ] || [ ! -d "$PROJECT_PATH" ]; then
+              notify-send -u critical "Claude Voice" "Directory not found: ''${PROJECT_PATH:-<empty>} (from: $TRANSCRIPT)"
+              exit 1
+            fi
+
+            PROJECT_NAME=$(basename "$PROJECT_PATH")
+            notify-send "Claude Voice" "Opening $PROJECT_NAME"
+
+            # Launch Claude Code in sandboxed mode (no permission prompts)
+            # so the voice-launched session runs autonomously.
+            if [ -n "$INSTRUCTION" ]; then
+              IS_SANDBOX=1 uwsm app -- kitty -d "$PROJECT_PATH" -e "$CLAUDE_BIN" --dangerously-skip-permissions "$INSTRUCTION"
+            else
+              IS_SANDBOX=1 uwsm app -- kitty -d "$PROJECT_PATH" -e "$CLAUDE_BIN" --dangerously-skip-permissions
+            fi
+          '';
+        };
+
       in
       [
         manteinance
@@ -1612,6 +1717,9 @@ Use 'gh issue create' with appropriate --title and --body flags."
         create-issue
         project-init
         claude-provider
+        server-mode
+        claude-spawn
+        claude-voice-router
         up
         con
         airplane
