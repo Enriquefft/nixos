@@ -1,21 +1,103 @@
-# overlay/features.toml — declarative QMK features.
+# overlay/features.toml — declarative QMK features
+#
+# Bilingual r-thumb layout: achordion for home-row mods + layer-taps,
+# combos for Escape/Repeat/CapsWord, key overrides, operator macros.
 
 [config]
 tapping_term_ms = 200
-# permissive_hold = false
-# hold_on_other_key_press = false
+# permissive_hold disabled — achordion handles disambiguation
+# hold_on_other_key_press disabled — same reason
 
-# [achordion]
-# enabled = true
-# chord_strategy = "opposite_hands"
+# ─── Achordion ────────────────────────────────────────────────────────────────
+[achordion]
+enabled        = true
+chord_strategy = "opposite_hands"
 
-# [[key_overrides]]
-# mods  = ["LSHIFT"]
-# key   = "BSPC"
-# sends = "DELETE"
+# Tighter timeouts for high-frequency layer-tap keys on thumbs
+[[achordion.timeout]]
+binding = "LT(Symbols, KC_ENT)"
+ms      = 600
 
+[[achordion.timeout]]
+binding = "LT(Nav, KC_BSPC)"
+ms      = 600
+
+# R/GUI thumb — slightly longer tapping term via per-key override
+[[tapping_term_per_key]]
+binding = "LGUI_T(KC_R)"
+ms      = 250
+
+# ─── Key Overrides ────────────────────────────────────────────────────────────
+[[key_overrides]]
+mods  = ["LSHIFT"]
+key   = "BSPC"
+sends = "DELETE"
+
+[[key_overrides]]
+mods  = ["RSHIFT"]
+key   = "BSPC"
+sends = "DELETE"
+
+[[key_overrides]]
+mods  = ["LSHIFT"]
+key   = "ESC"
+sends = "S(GRAVE)"
+
+[[key_overrides]]
+mods  = ["RSHIFT"]
+key   = "ESC"
+sends = "S(GRAVE)"
+
+# ─── Combos ───────────────────────────────────────────────────────────────────
+# Escape — right index + middle home (D + N). Adjacent, fast for Neovim.
+[[combos]]
+keys       = ["R_index_home", "R_middle_home"]
+sends      = "ESC"
+layer      = "Main"
+timeout_ms = 40
+
+# Repeat key — both inner home keys (, + C). Opposite hands, easy chord.
+[[combos]]
+keys       = ["L_inner_home", "R_inner_home"]
+sends      = "QK_REP"
+timeout_ms = 40
+
+# Semicolon — comma + period. Mnemonic: ; = , + . stacked.
+[[combos]]
+keys       = ["L_inner_home", "L_index_bottom"]
+sends      = "SCLN"
+layer      = "Main"
+timeout_ms = 40
+
+# ─── Macros ───────────────────────────────────────────────────────────────────
+# :: — Rust path separator, Nix
+[[macros]]
+name  = "CK_DCOLN"
+sends = "::"
+
+# := — Go short variable declaration
+[[macros]]
+name  = "CK_COLNEQ"
+sends = ":="
+
+# => — fat arrow (TS, Zig, Rust match)
+[[macros]]
+name  = "CK_FATARROW"
+sends = "=>"
+
+# -> — thin arrow (Rust return, Python annotation, Nix function, C/C++)
+[[macros]]
+name  = "CK_THINARROW"
+sends = "->"
+
+# != — inequality (universal)
+[[macros]]
+name  = "CK_NOTEQ"
+sends = "!="
+
+# ─── Feature Flags ────────────────────────────────────────────────────────────
 [features]
-key_overrides = false
-combos        = false
-caps_word     = false
-mouse_keys    = false
+key_overrides = true
+combos        = true
+caps_word     = true
+mouse_keys    = true

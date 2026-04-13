@@ -1,26 +1,258 @@
-# layout.toml — local-mode visual layout
+# layout.toml — Custom bilingual layout optimized for 50/50 EN/ES + polyglot programming
 #
-# Hand-author the layout here. Positions default to KC_NO; use
-# `inherit = "<layer>"` on overlay layers to default to KC_TRNS instead.
+# Base: Oxeylyzer-generated r-thumb layout (0.570% SFB bilingual, 0.310% Spanish)
+# Eliminates the ue/eu SFB that plagues Enthium/Colemak-DH/Sturdy on Spanish
+# Home-row mods: ACS (Alt/Ctrl/Shift) on pinky/ring/middle, GUI on thumb
+# Accented vowels mirror base positions on symbol layer
+# Symbol layer data-driven from TS/Go/Zig/Rust/Python frequency analysis
 
 [meta]
-title    = "voyager"
+title    = "Bilingual r-thumb — EN/ES Optimized"
 geometry = "voyager"
 
+# ─── Layer 0: Main (Oxeylyzer bilingual r-thumb) ─────────────────────────────
+#
+#   ñ z o u k   b w l f q
+#   i e a h ,   c d n s t   r (thumb)
+#   y ' / . x   p g j v m
+#
 [[layers]]
 name     = "Main"
 position = 0
-
-# Bind one position per line. Comments next to each binding are encouraged
-# — that's the main reason to author locally instead of via Oryx.
 [layers.keys]
-L_pinky_home = "A"
-L_ring_home = "S"
-L_middle_home = "D"
-L_index_home = "F"
-R_index_home = "J"
-R_middle_home = "K"
-R_ring_home = "L"
-R_pinky_home = "SCLN"
-L_thumb_inner = "SPC"
-R_thumb_inner = "ENT"
+# Number row
+L_outer_num  = "KC_GRV"
+L_pinky_num  = "KC_1"
+L_ring_num   = "KC_2"
+L_middle_num = "KC_3"
+L_index_num  = "KC_4"
+L_inner_num  = "KC_5"
+R_inner_num  = "KC_6"
+R_index_num  = "KC_7"
+R_middle_num = "KC_8"
+R_ring_num   = "KC_9"
+R_pinky_num  = "KC_0"
+R_outer_num  = "KC_MUTE"
+
+# Top row: ñ z o u k | b w l f q
+L_outer_top  = "KC_TAB"
+L_pinky_top  = "RALT(KC_N)"
+L_ring_top   = "KC_Z"
+L_middle_top = "KC_O"
+L_index_top  = "KC_U"
+L_inner_top  = "KC_K"
+R_inner_top  = "KC_B"
+R_index_top  = "KC_W"
+R_middle_top = "KC_L"
+R_ring_top   = "KC_F"
+R_pinky_top  = "KC_Q"
+R_outer_top  = "KC_BSLS"
+
+# Home row: i e a h , | c d n s t
+# Home-row mods: ACS (Alt/Ctrl/Shift) on pinky/ring/middle
+L_outer_home  = "KC_MINS"
+L_pinky_home  = "LALT_T(KC_I)"
+L_ring_home   = "LCTL_T(KC_E)"
+L_middle_home = "LSFT_T(KC_A)"
+L_index_home  = "KC_H"
+L_inner_home  = "KC_COMM"
+R_inner_home  = "KC_C"
+R_index_home  = "KC_D"
+R_middle_home = "RSFT_T(KC_N)"
+R_ring_home   = "RCTL_T(KC_S)"
+R_pinky_home  = "RALT_T(KC_T)"
+R_outer_home  = "KC_EQL"
+
+# Bottom row: y ' / . x | p g j v m
+L_outer_bottom = "KC_ESC"
+L_pinky_bottom = "KC_Y"
+L_ring_bottom  = "KC_QUOT"
+L_middle_bottom = "KC_SLSH"
+L_index_bottom = "KC_DOT"
+L_inner_bottom = "KC_X"
+R_inner_bottom = "KC_P"
+R_index_bottom = "KC_G"
+R_middle_bottom = "KC_J"
+R_ring_bottom  = "KC_V"
+R_pinky_bottom = "KC_M"
+R_outer_bottom = "KC_PSCR"
+
+# Thumbs — R/GUI, Space, Enter/Symbols, Backspace/Nav
+L_thumb_outer = "KC_SPC"
+L_thumb_inner = "LGUI_T(KC_R)"
+R_thumb_inner = "LT(Symbols, KC_ENT)"
+R_thumb_outer = "LT(Nav, KC_BSPC)"
+
+# ─── Layer 1: Symbols + Spanish ──────────────────────────────────────────────
+#
+# Accented vowels mirror base positions:
+#   í(L_pinky_home) é(L_ring_home) á(L_middle_home) ó(L_middle_top) ú(L_index_top)
+#   ñ already on base at L_pinky_top
+# Right hand: index=open, middle=close bracket pattern
+# Macros: :: := => -> != on dedicated keys
+#
+[[layers]]
+name     = "Symbols"
+position = 1
+[layers.keys]
+# Number row — media controls
+L_pinky_num  = "KC_MPRV"
+L_ring_num   = "KC_MNXT"
+L_middle_num = "KC_MPLY"
+L_index_num  = "KC_VOLD"
+L_inner_num  = "KC_VOLU"
+
+# Top row — left: symbols + ó ú; right: < { } >
+L_outer_top   = "KC_ASTR"
+L_pinky_top   = "KC_BSLS"
+L_ring_top    = "KC_HASH"
+L_middle_top  = "RALT(KC_O)"
+L_index_top   = "RALT(KC_U)"
+L_inner_top   = "KC_PIPE"
+R_inner_top   = "KC_LABK"
+R_index_top   = "KC_LCBR"
+R_middle_top  = "KC_RCBR"
+R_ring_top    = "KC_RABK"
+R_pinky_top   = "KC_QUES"
+R_outer_top   = "KC_AT"
+
+# Home row — left: ^ í é á _ ; right: : ( ) ñ ` ::
+L_outer_home  = "KC_CIRC"
+L_pinky_home  = "RALT(KC_I)"
+L_ring_home   = "RALT(KC_E)"
+L_middle_home = "RALT(KC_A)"
+L_index_home  = "KC_DQUO"
+L_inner_home  = "KC_UNDS"
+R_inner_home  = "KC_COLN"
+R_index_home  = "KC_LPRN"
+R_middle_home = "KC_RPRN"
+R_ring_home   = "RALT(KC_N)"
+R_pinky_home  = "KC_GRV"
+R_outer_home  = "CK_DCOLN"
+
+# Bottom row — left: low-freq; right: := [ ] => -> !=
+L_outer_bottom = "KC_PERC"
+L_pinky_bottom = "KC_EXLM"
+L_ring_bottom  = "KC_DLR"
+L_middle_bottom = "KC_AMPR"
+L_index_bottom = "KC_PLUS"
+L_inner_bottom = "KC_TILD"
+R_inner_bottom = "CK_COLNEQ"
+R_index_bottom = "KC_LBRC"
+R_middle_bottom = "KC_RBRC"
+R_ring_bottom  = "CK_FATARROW"
+R_pinky_bottom = "CK_THINARROW"
+R_outer_bottom = "CK_NOTEQ"
+
+# ─── Layer 2: Navigation + Numpad + F-keys ───────────────────────────────────
+[[layers]]
+name     = "Nav"
+position = 2
+[layers.keys]
+# Number row — F-keys
+L_outer_num  = "KC_F1"
+L_pinky_num  = "KC_F2"
+L_ring_num   = "KC_F3"
+L_middle_num = "KC_F4"
+L_index_num  = "KC_F5"
+L_inner_num  = "KC_F6"
+R_inner_num  = "KC_F7"
+R_index_num  = "KC_F8"
+R_middle_num = "KC_F9"
+R_ring_num   = "KC_F10"
+R_pinky_num  = "KC_F11"
+R_outer_num  = "KC_F12"
+
+# Top row — navigation
+L_pinky_top  = "KC_INS"
+L_ring_top   = "KC_HOME"
+L_middle_top = "KC_UP"
+L_index_top  = "KC_END"
+L_inner_top  = "KC_PGUP"
+
+# Home row — arrow cross
+L_ring_home   = "KC_LEFT"
+L_middle_home = "KC_DOWN"
+L_index_home  = "KC_RIGHT"
+L_inner_home  = "KC_PGDN"
+
+# Right — numpad
+R_index_top   = "KC_7"
+R_middle_top  = "KC_8"
+R_ring_top    = "KC_9"
+R_index_home  = "KC_4"
+R_middle_home = "KC_5"
+R_ring_home   = "KC_6"
+R_inner_bottom = "KC_0"
+R_index_bottom = "KC_1"
+R_middle_bottom = "KC_2"
+R_ring_bottom  = "KC_3"
+R_pinky_bottom = "KC_DOT"
+R_outer_bottom = { double_tap = "TO(Gaming)" }
+
+# ─── Layer 3: Gaming (QWERTY, no mod-taps) ──────────────────────────────────
+[[layers]]
+name     = "Gaming"
+position = 3
+[layers.keys]
+# Number row
+L_outer_num  = "KC_ESC"
+L_pinky_num  = "KC_1"
+L_ring_num   = "KC_2"
+L_middle_num = "KC_3"
+L_index_num  = "KC_4"
+L_inner_num  = "KC_5"
+R_inner_num  = "KC_6"
+R_index_num  = "KC_7"
+R_middle_num = "KC_8"
+R_ring_num   = "KC_9"
+R_pinky_num  = "KC_0"
+R_outer_num  = "KC_TILD"
+
+# Top row — QWERTY
+L_outer_top  = "KC_TAB"
+L_pinky_top  = "KC_Q"
+L_ring_top   = "KC_W"
+L_middle_top = "KC_E"
+L_index_top  = "KC_R"
+L_inner_top  = "KC_T"
+R_inner_top  = "KC_Y"
+R_index_top  = "KC_U"
+R_middle_top = "KC_I"
+R_ring_top   = "KC_O"
+R_pinky_top  = "KC_P"
+R_outer_top  = "KC_MINS"
+
+# Home row — plain
+L_outer_home  = "LSFT"
+L_pinky_home  = "KC_A"
+L_ring_home   = "KC_S"
+L_middle_home = "KC_D"
+L_index_home  = "KC_F"
+L_inner_home  = "KC_G"
+R_inner_home  = "KC_H"
+R_index_home  = "KC_J"
+R_middle_home = "KC_K"
+R_ring_home   = "KC_L"
+R_pinky_home  = "KC_SCLN"
+R_outer_home  = "KC_QUOT"
+
+# Bottom row — plain
+L_outer_bottom = "LCTL"
+L_pinky_bottom = "KC_Z"
+L_ring_bottom  = "KC_X"
+L_middle_bottom = "KC_C"
+L_index_bottom = "KC_V"
+L_inner_bottom = "KC_B"
+R_inner_bottom = "KC_N"
+R_index_bottom = "KC_M"
+R_middle_bottom = "KC_COMMA"
+R_ring_bottom  = "KC_DOT"
+R_pinky_bottom = "KC_SLASH"
+R_outer_bottom = { double_tap = "TO(Main)" }
+
+# Thumbs — plain for gaming
+L_thumb_outer = "KC_SPC"
+L_thumb_inner = "LCTL"
+R_thumb_inner = "KC_ENT"
+R_thumb_outer = "KC_BSPC"
