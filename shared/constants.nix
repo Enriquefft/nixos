@@ -21,10 +21,11 @@
   battery = {
     device = "BAT0";
 
-    # TLP charge thresholds (battery longevity)
+    # TLP charge thresholds (no hardware driver support on m16 R2 — these are ignored)
+    # TODO: replace swollen battery, then remove this note
     charge = {
-      start = 40;  # Begin charging when below 40%
-      stop = 60;   # Stop charging at 60% (reduced to minimize stress on degraded battery)
+      start = 40;
+      stop = 60;
     };
 
     # Low battery warnings
