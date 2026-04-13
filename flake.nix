@@ -53,14 +53,14 @@
     };
 
     oryx-bench = {
-      url = "github:enriquefft/oryx-bench";
+      url = "path:/home/hybridz/Projects/oryx-bench";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-xilinx = {
-    #   url = "gitlab:doronbehar/nix-xilinx";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    openscreen = {
+      url = "path:/home/hybridz/Projects/openscreen";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
@@ -91,6 +91,7 @@
           inputs.sops-nix.nixosModules.sops
           inputs.yap.nixosModules.default
           inputs.oryx-bench.nixosModules.default
+          inputs.openscreen.nixosModules.default
           (import ./configuration.nix flake-overlays)
         ];
       };

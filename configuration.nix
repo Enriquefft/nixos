@@ -46,6 +46,7 @@ in
     ./modules/services/display.nix
     ./modules/services/input.nix
     ./modules/services/yap.nix
+    ./modules/services/yap-secrets.nix
     ./modules/services/ollama.nix
     ./modules/services/zeroclaw-secrets.nix
     ./modules/services/tailscale.nix
@@ -60,6 +61,7 @@ in
     ./modules/programs/obs.nix
     ./modules/programs/development.nix
     ./modules/programs/factorio-gog.nix
+    ./modules/programs/openscreen.nix
 
     inputs.home-manager.nixosModules.default
   ];
